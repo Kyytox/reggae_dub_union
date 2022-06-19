@@ -1,0 +1,63 @@
+<div class="navbar">
+    <li id="home"><a class="navbar-li-a" href="{{ url_for('index') }}">Vinyls Dub Scrap</a></li>
+    {% if not session %}
+      <li id="connexion"><a class="navbar-li-a" href="{{ url_for('login') }}">Login</a></li>
+      <li id="signup"><a class="navbar-li-a" href="{{ url_for('signup') }}">Sign Up</a></li>
+    {% endif %}
+    {% if session %}
+    <li id="favoris"><a class="navbar-li-a" href="{{ url_for('favoris') }}">Favoris</a></li>
+    {% endif %}
+
+
+    <li id="site">
+      <a class="navbar-li-a" href="">Jah Waggys <i class="fa fa-navbar-down"></i></a>
+      <ul class="submenu"> 
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys7') }}">New Vinyls 7"</a></li>
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys10') }}">New Vinyls 10"</a></li>
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys12') }}">New Vinyls 12"</a></li>
+      </ul> 
+    </li>
+    
+    <li id="site">
+      <a class="navbar-li-a" href=>Only Roots Reggae <i class="fa fa-navbar-down"></i></a>
+      <ul class="submenu">
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggae7') }}">New Vinyls 7"</a></li>
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggae1012') }}">New Vinyls 10 / 12"</a></li>
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggaeLP') }}">New Vinyls LP"</a></li>
+      </ul>
+    </li>
+    
+    <li id="site">
+      <a class="navbar-li-a" href=>Control Tower Records <i class="fa fa-navbar-down"></i></a>
+      <ul class="submenu">
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'ControlTowerRecords') }}">New Vinyls</a></li>
+      </ul>
+    </li>
+    
+    <li id="site">
+      <a class="navbar-li-a" href=>Deep Roots Reggae Shop <i class="fa fa-navbar-down"></i></a>
+      <ul class="submenu">
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'DeepRootsReggaeShop') }}">New Vinyls</a></li>
+      </ul>
+    </li>
+    
+    <li id="site">
+      <a class="navbar-li-a" href=>Unearthed Sounds <i class="fa fa-navbar-down"></i></a>
+      <ul class="submenu">
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'UnearthedSounds') }}">New Vinyls</a></li>
+      </ul>
+    </li>
+    
+    {% if session %}
+    <li  id="logout"><a class="navbar-li-a" href="{{ url_for('logout') }}">logout</a></li>
+    <li  id="login"><p>Logged : <i class="fa fa-bars-logged"></i><p></li>
+    {% else%}
+    <li  id="login"><p>Not Logged : <i class="fa fa-bars-no-logged"></i></p></li>
+    {% endif %}
+  </div>
+
+
+
+
+
+

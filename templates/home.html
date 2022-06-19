@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="main">
+
+  {% include "navbar.html" %}
+
+  <div class="main-home-content">
+    <section class="section-1">
+
+      <div class="home-sponso">
+        <h5>By Tunguska Sound System</h5>
+        <a href="https://www.youtube.com/channel/UC86FkHx40dChij4e9suWG6w/featured"><i class='fa fa-youtube'></i></a>
+        <a href="https://www.instagram.com/tunguska_soundsystem/"><i class='fa fa-instagram'></i></a>
+        <a href="https://www.facebook.com/association.tunguska/"><i class='fa fa-facebook'></i></a>
+      </div>
+
+      <div class="home-entete">
+        <h1>Vinyls Dub Scrap</h1>
+        <br>
+        <h3>Ecouter les nouveaux extraits de vinyls des Shops : </h3>
+      </div>
+
+
+      <div class="navigation-box">
+
+        <div class="box">
+          <h3>Jah Waggys</h3>
+          <hr>
+          <div class="box-lien">
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys7') }}">New Vinlys 7"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys10') }}">New Vinlys 10"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys12') }}">New Vinlys 12"</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <h3>Only Roots Reggae</h3>
+          <hr>
+          <div class="box-lien">
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggae7') }}">New Vinlys 7"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggae1012') }}">New Vinlys 10 / 12"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggaeLP') }}">New Vinlys LP"</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <h3>Control Tower Records</h3>
+          <hr>
+          <div class="box-lien">
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'ControlTowerRecords') }}">New Vinlys</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <h3>Deep Roots Reggae Shop</h3>
+          <hr>
+          <div class="box-lien">
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'DeepRootsReggaeShop') }}">New Vinlys</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <h3>Unearthed Sounds</h3>
+          <hr>
+          <div class="box-lien">
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'UnearthedSounds') }}">New Vinlys</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+
+      <div class="loader">
+        <p>Loading ...</p>
+        <img src="{{ url_for('static', filename= 'img/disque_vinyls.jpg') }}" alt="">
+      </div>
+
+      <div class="div-title-section-2">
+        <h3>Custom Search</h3>
+      </div>
+
+      <div class="div-search">
+
+        <div class="div-search-form">
+          {% if msg != '' %}
+          <h2 class="search-msg">{{msg}}</h2>
+          {% endif %}
+          <form id="form" name="form1" role="search" action="{{ url_for('customSearch') }}" method="GET" accept-charset="utf-8">
+            <input id="search" name="req" type="text" placeholder="Search...">
+              <button type="submit" onClick="loading();">Search</button>
+            </input>    
+          </form>
+          <div class="div-search-form-exemple">
+            <p>Exemple: </p>
+            <p id="exemple-p1"><i onClick="copyExemple('exemple-p1');" alt="Search" class='fa fa-search'></i>https://controltower.fr/fr/42-salomon-heritage</p>
+            <p id="exemple-p2"><i onClick="copyExemple('exemple-p2');" alt="Search" class='fa fa-search'></i>https://controltower.fr/fr/33-imperial-roots</p>
+            <p id="exemple-p3"><i onClick="copyExemple('exemple-p3');" alt="Search" class='fa fa-search'></i>https://controltower.fr/fr/36-moa-anbessa</p>
+            <p id="exemple-p4"><i onClick="copyExemple('exemple-p4');" alt="Search" class='fa fa-search'></i>https://www.onlyroots-reggae.com/fr/32-90-s</p>
+            <p id="exemple-p5"><i onClick="copyExemple('exemple-p5');" alt="Search" class='fa fa-search'></i>https://www.onlyroots-reggae.com/fr/36-onlyroots-records/s-6/-maxis_12_10_2</p>
+            <p id="exemple-p6"><i onClick="copyExemple('exemple-p6');" alt="Search" class='fa fa-search'></i>https://jahwaggysrecords.com/fr/42-top-ranking-sound-records</p>
+            <p id="exemple-p7"><i onClick="copyExemple('exemple-p7');" alt="Search" class='fa fa-search'></i>https://jahwaggysrecords.com/fr/28-king-shiloh-majestic-music-</p>
+            <p id="exemple-p8"><i onClick="copyExemple('exemple-p8');" alt="Search" class='fa fa-search'></i>https://jahwaggysrecords.com/fr/29-king-earthquake-records</p>
+            <p id="exemple-p9"><i onClick="copyExemple('exemple-p9');" alt="Search" class='fa fa-search'></i>http://www.deeprootsreggaeshop.com/epages/300210.sf/en_GB/?ObjectPath=/Shops/300210/Categories/digital_roots</p>
+          </div>
+        </div>
+
+        <div class="box-img-explic">
+          <h3>C'est simple copier / coller l'url d'une page catégorie d'un des sites et vous pourez écouter les vinyls:</h3>
+          <div>
+            <a href="https://jahwaggysrecords.com/fr/">Jah Waggys</a>
+            <a href="https://www.onlyroots-reggae.com/fr/20-maxis-12-10/s-1/-10">Only Roots Reggae</a>
+            <a href="http://www.deeprootsreggaeshop.com/3000-sub-style/dubstep">Deep Roots Reggae Shop</a>
+            <a href="https://controltower.fr/fr/">Control Tower Records</a>
+            <a href="https://www.unearthedsounds.co.uk/collections/a-reggae-dub?sort_by=created-descending">Unearthed Sounds</a>
+          </div>
+          <br>
+          <br>
+        </div>
+      </div>
+
+      <div class="div-scroll-down-section-2">
+        <h3>Si vous voulez plus d'infos descendez plus bas.</h3>
+        <i class="fa fa-img-explic"></i>
+      </div>
+
+    </section>
+    
+    
+    <section class="section-3">  
+
+      <div class="content-explication">
+        <div class="explication">
+          <h3>Pour une recherche personnalisée il suffit d'aller sur un des sites du dessus.</h3>
+          <h3>Allez dans une catégorie (exemple dans le cadre rouge sur les images).</h3>
+          <h3>Cpoié l'URL de la page et coller le dans la barre ne recherche plus haut</h3>
+          <h3>Attendez quelques instants et vous pourrez écouter les extraits vniyls d'une catégorie qui vous intéresse</h3>
+        </div>
+        <div class="box-img-examples"> 
+          <div class="slide">
+            <img src="{{ url_for('static', filename= 'img/controltowerrecords.png') }}" alt="">
+          </div>
+          <div class="slide">
+            <img src="{{ url_for('static', filename= 'img/jahwaggys.png') }}" alt="">
+          </div>
+          <div class="slide">
+            <img src="{{ url_for('static', filename= 'img/onlyrootsreggae.png') }}" alt="">
+          </div>
+          <div class="slide">
+            <img src="{{ url_for('static', filename= 'img/deeprootsreggaeshop.png') }}" alt="">
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-sponso">
+          <h2>By Tunguska Sound System</h2>
+        </div>
+        <div class="footer-social-network">
+          <h2>Suivez Nous</h2>
+          <a href="https://www.instagram.com/tunguska_soundsystem/"><i class='fa fa-instagram'></i></a>
+          <a href="https://www.facebook.com/association.tunguska/"><i class='fa fa-facebook'></i></a>
+          <a href="https://www.youtube.com/channel/UC86FkHx40dChij4e9suWG6w/featured"><i class='fa fa-youtube'></i></a>
+        </div>
+
+        <div class="footer-categories">
+          <div>
+            <h5>Jah Waggys</h5>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys7') }}">New Vinlys 7"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys10') }}">New Vinlys 10"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'JahWaggys12') }}">New Vinlys 12"</a>
+            <br>
+          </div>
+
+          <div>
+            <h5>Only Roots Reggae</h5>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggae7') }}">New Vinlys 7"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggae1012') }}">New Vinlys 10 / 12"</a>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'OnlyRootsReggaeLP') }}">New Vinlys LP"</a>
+            <br>
+          </div>
+          
+          <div>
+            <h5>Control Tower Records</h5>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'ControlTowerRecords') }}">New Vinlys</a>
+            <br>
+          </div>
+          
+          <div>
+            <h5>Deep Roots Reggae Shop</h5>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'DeepRootsReggaeShop') }}">New Vinlys</a>
+            <br>
+          </div>
+          
+          <div>
+            <h5>Unearthed Sounds</h5>
+            <a href="{{ url_for('PagePlayerVinyl', variable = 'UnearthedSounds') }}">New Vinlys</a>
+            <br>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  $(".loader").hide();
+
+  function loading(){
+    $(".loader").show();
+    $(".section-1").hide();     
+    $(".div-scroll-down-section-2").hide();  
+    $(".div-title-section-2").hide();
+    $(".div-search").hide(); 
+    $(".section-3").hide(); 
+  }
+
+
+  function copyExemple(name_class){
+
+    var content = document.getElementById(name_class).innerText;
+
+    var input_text = document.getElementById("search")
+    input_text.value = content
+
+  }
+
+</script>      
+{% endblock %}
