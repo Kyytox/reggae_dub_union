@@ -2,6 +2,7 @@ from multiprocessing.dummy import active_children
 from flask import Flask, render_template, request, send_from_directory, session
 import json
 import sqlite3
+from numpy import var
 import validators
 import os
 from scripts.scrap_controltowerrecords import *
@@ -10,6 +11,7 @@ from scripts.scrap_jahwaggys import *
 from scripts.scrap_onlyrootsreggae import *
 from scripts.scrap_reggaefever import *
 from scripts.scrap_unearthedsounds import *
+from scripts.scrap_patateRecords import *
 
 
 def get_db_connection():
@@ -183,6 +185,12 @@ def PagePlayerVinyl(variable):
             file_json = 'json/outputDeepRootsReggaeShop.json'
         elif variable == 'UnearthedSounds':
             file_json = 'json/outputUnearthedSounds.json'
+        elif variable == 'PatateRecords7':
+            file_json = 'json/outputPatateRecords7.json'
+        elif variable == 'PatateRecords1012':
+            file_json = 'json/outputPatateRecords1012.json'
+        elif variable == 'PatateRecordsLP':
+            file_json = 'json/outputPatateRecordsLP.json'
 
         with open(file_json) as f:
             # returns JSON
@@ -231,23 +239,26 @@ def customSearch():
     sauv_search_input = search_input
 
     if 'controltower' in search_input:
-        print("It test1")
+        print("It controltower")
         scrap_controltowerrecords([search_input])
     elif 'deeprootsreggaeshop' in search_input:
-        print("It test2")
+        print("It deeprootsreggaeshop")
         scrap_deeprootsreggaeshop([search_input])
     elif 'jahwaggysrecords' in search_input:
-        print("It test3")
+        print("It jahwaggysrecords")
         scrap_jahwaggys([search_input])
     elif 'onlyroots' in search_input:
-        print("It test4")
+        print("It onlyroots")
         scrap_onlyrootsreggae([search_input])
     elif 'reggaefever' in search_input:
-        print("It test5")
+        print("It reggaefever")
         scrap_reggaefever([search_input])
     elif 'unearthedsounds' in search_input:
-        print("It test6")
+        print("It unearthedsounds")
         scrap_unearthedsounds([search_input])
+    elif 'patate' in search_input:
+        print("It patateRecords")
+        scrap_patateRecords([search_input])
     else:
         print('not Found')
         msg = "Invalid Url"

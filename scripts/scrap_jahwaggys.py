@@ -4,6 +4,7 @@ from urllib.request import urlretrieve
 from mutagen.mp3 import MP3
 import time
 import json
+import os
 
 
 def scrap_jahwaggys(list_url):
@@ -52,6 +53,7 @@ def scrap_jahwaggys(list_url):
                 audio = MP3(filename)
                 mp3_duration = time.strftime(
                     "%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                os.remove(filename)
 
                 mp3_title_vinyl = mp3['title']
                 list_data_vinyl.append(

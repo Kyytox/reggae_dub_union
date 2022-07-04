@@ -47,6 +47,15 @@
         <a href="{{ url_for('PagePlayerVinyl', variable = 'UnearthedSounds') }}">New Vinyls</a></li>
       </ul>
     </li>
+
+    <li id="site">
+      <a class="navbar-li-a" href=>Patate Records <i class="fa fa-navbar-down"></i></a>
+      <ul class="submenu">
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'PatateRecords7') }}">New Vinyls 7"</a></li>
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'PatateRecords1012') }}">New Vinyls 10 / 12"</a></li>
+        <a href="{{ url_for('PagePlayerVinyl', variable = 'PatateRecordsLP') }}">New Vinyls LP"</a></li>
+      </ul>
+    </li>
     
     {% if session %}
     <li  id="logout"><a class="navbar-li-a" href="{{ url_for('logout') }}">logout</a></li>

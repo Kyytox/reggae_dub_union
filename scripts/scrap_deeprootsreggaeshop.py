@@ -4,6 +4,7 @@ from urllib.request import urlretrieve
 from mutagen.mp3 import MP3
 import time
 import json
+import os
 
 
 # sourcery skip: use-assigned-variable
@@ -28,6 +29,7 @@ def scrap_deeprootsreggaeshop(list_url):
             audio = MP3(filename)
             mp3_duration = time.strftime(
                 "%H:%M:%S", time.gmtime(audio.info.length))[3:]
+            os.remove(filename)
 
             list_data_vinyl.append({'titre': title_vinyl, 'url': url_vinyl, 'img': img_vinyl,
                                     'songTitle': mp3_title_vinyl, 'songUrl': mp3_url_vinyl, 'songDuration': mp3_duration})
