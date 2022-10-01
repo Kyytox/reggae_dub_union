@@ -85,17 +85,25 @@ hr {
 }
 
 ::-webkit-scrollbar {
-    width: 10px
+    width: 5px
 }
 
 ::-webkit-scrollbar-track {
     background: #ffffff;
-    border-radius: 10px
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
     background: rgb(0, 0, 0);
-    border-radius: 10px
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -133,19 +141,19 @@ hr {
 .navbar #home {
     text-align: left;
     width: 60%;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 .navbar #home a {
     padding: 0;
-    padding-top: 7px;
+    padding: 14px 16px;
     font-family: 'Gamlangdee', sans-serif;
     font-size: 60px;
 }
 
 .navbar #connexion {
     text-align: center;
-    width: 15%;
+    padding: 14px 16px;
 }
 
 .navbar #connexion a {
@@ -154,7 +162,6 @@ hr {
 
 .navbar #signup {
     text-align: center;
-    width: 15%;
 }
 
 .navbar #signup a {
@@ -187,16 +194,6 @@ hr {
     display: none;
 }
 
-/* .navbar #site {
-    text-align: center;
-    width: 49%;
-}
-
-.navbar #site a {
-    font-size: 30px;
-    width: 70%;
-} */
-
 .navbar #logout {
     position: absolute;
     left: 0;
@@ -224,7 +221,6 @@ hr {
     display: inline-block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
     text-decoration: none;
     font-size: 20px;
 }
@@ -273,11 +269,8 @@ hr {
 
 
 
-.box-img-explic {
-    text-align: center;
-}
 
-
+/* SECTION 1 */
 .main-home-content {
     scroll-snap-type: y mandatory;
     display: -webkit-box;
@@ -287,12 +280,13 @@ hr {
     justify-content: space-around;
     flex-direction: row;
     color: #fff;
-    padding-top: 14%;
+    padding-top: 10%;
 }
 
 .main-home-content section {
     background: var(--back-body);
     width: 100%;
+    padding-bottom: 5%;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -345,12 +339,14 @@ hr {
 }
 
 .box-lien {
+    width: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
-    align-content: center
+    align-content: center;
+    align-items: center;
 }
 
 .box-lien a {
@@ -391,7 +387,7 @@ hr {
 
 
 
-
+/* SECTION 2 */
 .main-home-content section:nth-child(2) {
     padding: 10% 0 5% 0;
     background: rgb(10, 8, 8);
@@ -473,20 +469,34 @@ input[id="search" i]::placeholder {
     padding-left: 11%;
 }
 
-.div-search-form-exemple p {
-    color: white;
-    font-size: 10px;
+.div-search-form-exemple span {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
+.div-search-form-exemple span p {
+    color: white;
+    font-size: 22px;
+    margin: 11px 0;
+}
+
+
 .div-search-form-exemple p:first-child {
-    font-size: 24px;
+    color: white;
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.div-search-form-exemple span i {
+    margin-right: 13px;
 }
 
 .fa-search:before {
     color: white;
-    margin-right: 10px;
     content: "\f002";
-    font-size: 27px;
+    font-size: 20px;
 }
 
 
@@ -498,6 +508,7 @@ input[id="search" i]::placeholder {
     flex-direction: column;
     align-items: center;
     flex-wrap: nowrap;
+    text-align: center;
 }
 
 .box-img-explic h3:nth-child(1) {
@@ -611,7 +622,7 @@ input[id="search" i]::placeholder {
 
 
 
-
+/* SECTION 3 */
 .main-home-content section:nth-child(3) {
     background: var(--back-body);
     display: flex;
@@ -722,7 +733,6 @@ input[id="search" i]::placeholder {
     flex-direction: column;
     -ms-flex-line-pack: center;
     align-content: center;
-    padding-top: 50px;
 }
 
 .player-ctn {
@@ -877,6 +887,7 @@ a.url-vinyl {
     overflow-y: scroll;
     max-height: 85vh;
     align-items: stretch;
+    padding-top: 50px;
 }
 
 .playlist-track-ctn {
@@ -966,8 +977,7 @@ i#btn_add_favoris {
     -o-border-radius: 10px;
 }
 
-.active-track>.playlist-info-track,
-.active-track>.playlist-duration,
+.active-track .playlist-info-track-title,
 .active-track>.playlist-btn-play {
     color: #faa424 !important
 }
@@ -1116,339 +1126,876 @@ input.btn {
 }
 
 
-/* .footer-categories {
-    width: 50%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    margin-left: 10px;
-}
-
-.footer-categories div {
-    display: flex;
-    flex-direction: column;
-    margin-right: 15px;
-}
-
-.footer-categories h5 {
-    font-size: 20px;
-    text-decoration: none;
-    margin-bottom: 5px;
-    margin-top: 5px;
-}
-
-.footer-categories a {
-    color: white;
-    font-size: 16px;
-} */
-
-/* 
-@media (max-width: 1024px) {
-
-    .playlist-track-ctn {
-        width: 99%;
-    }
-
-    .first-btn {
-        margin-right: 20px;
-    }
-
-    .last-btn {
-        margin-left: 20px;
-    }
-}
-
-
-
-
-@media only screen and (max-device-width: 600px) {
-
-
-    hr {
-        margin: 0px;
-    }
-
-    .navbar {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-    }
-
-    .navbar #favoris,
-    #signup {
-        border-right: none;
-    }
-
-    #site {
-        display: none;
-    }
-
-    .navbar a {
-        font-size: 42px;
+@media (min-width: 750px) {
+    .main-home-content {
+        padding-top: 5%;
     }
 
     .navbar #home a {
         font-size: 50px;
     }
 
-    .main-home-content section {
-        height: 137vh;
-        width: 100%;
-        -webkit-box-pack: space-evenly;
-        -ms-flex-pack: space-evenly;
-        justify-content: flex-start;
-    }
-
-
-    .home-sponso h5 {
-        margin: 10px;
-        font-size: 31px;
-    }
-
-    .home-sponso i:nth-child(1) {
-        margin-left: 11px;
+    .navbar #signup a {
         font-size: 20px;
     }
 
-    .fa-instagram:before,
-    .fa-facebook:before,
-    .fa-youtube:before {
-        font-size: 50px;
-    }
-
-    .home-entete {
-        margin-bottom: 20%;
-    }
-
-    .home-entete h1 {
-        font-size: 75px;
-        font-family: 'Gamlangdee', sans-serif;
+    .navbar #connexion a {
+        font-size: 20px;
     }
 
     .home-entete h3 {
-        font-size: 35px;
+        font-size: 30px;
+    }
+
+    .box-lien a {
+        font-size: 22px;
+    }
+
+    .box h3 {
+        font-size: 30px;
     }
 
     .navigation-box {
-        -ms-flex-direction: column;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        flex-direction: column;
-        font-size: 50px;
-        margin-top: 20px;
+        margin-top: 25px;
     }
-
-
-    .navigation-box h3 {
-        font-size: 40px;
-    }
-
-
-    .navigation-box a {
-        font-size: 35px;
-    }
-
 
     .box {
-        margin-bottom: 10%;
-    }
-
-
-    .div-search {
-        width: 95%;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-wrap: wrap;
-        flex-wrap: nowrap;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        padding: 15px;
-        color: white;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-
-
-
-    .content-explication {
-        text-align: center;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
-        -webkit-box-pack: start;
-        -ms-flex-pack: start;
-        -webkit-box-align: start;
-        -ms-flex-align: start;
-        align-items: center;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-
-    .main-home-content section:nth-child(2) {
-        -webkit-box-pack: start;
-        -ms-flex-pack: start;
-        justify-content: flex-start;
-        flex-direction: column;
-        -ms-flex-wrap: nowrap;
-        flex-wrap: nowrap;
+        margin-bottom: 7%;
     }
 
     .div-title-section-2 h3 {
-        margin-top: 30px;
-        font-size: 70px;
-    }
-
-    .box-img-explic {
-        width: 90%;
-    }
-
-
-    .box-img-explic h3:nth-child(1) {
-        font-size: 40px;
-    }
-
-    .box-img-explic div a {
-        font-size: 45px;
-        margin-bottom: 20%;
-        padding: 30px;
-    }
-
-    .explication h3,
-    .div-scroll-down-section-2 h3 {
-        font-size: 40px;
-    }
-
-    .explication {
-        margin-top: 100px;
-        margin-bottom: 10%;
-    }
-
-
-    .div-search-form {
-        width: 95%;
-        text-align: center;
-        margin-top: 100px;
-    }
-
-    .div-search-form form {
-        width: 100%;
+        font-size: 50px;
     }
 
     .div-search-form input {
-        border-radius: 5px;
-        width: 60%;
-        height: 70px;
+        width: 55%;
+        height: 35px;
+        margin-right: 15px;
     }
 
     .div-search-form button {
-        margin-top: 10px;
-        height: 65px;
-        width: 130px;
-        font-size: 32px;
+        height: 40px;
+        font-size: 21px;
     }
 
-    .player-ctn {
-        width: 90%;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        align-items: center;
+    .div-search-form-exemple {
+        padding-left: 16%;
     }
 
-    .player-entete {
-        width: 90%;
-        margin-left: 0;
+    .div-search-form-exemple span p {
+        font-size: 18px;
     }
 
-    .btn-url-vinyl {
-        padding-top: 34px;
-        margin-bottom: 63px;
+    .div-search-form-exemple span i {
+        margin-right: 10px;
     }
 
-    #myBar {
-        height: 8px;
+    .fa-search:before {
+        font-size: 18px;
     }
 
-
-    a.url-vinyl {
-        font-size: 28px;
+    .box-img-explic h3:nth-child(1) {
+        font-size: 27px;
     }
 
-    .btn-ctn {
-        width: 66%;
-        margin-right: 17%;
-        margin-left: 17%;
+    .box-img-explic div {
+        width: 39%;
     }
 
-    .fas {
-        font-size: 35px;
-    }
-
-    .title {
-        font-size: 35px;
-    }
-
-    .song {
-        font-size: 40px;
-    }
-
-    .first-btn i,
-    .last-btn i {
-        font-size: 80px;
-    }
-
-    .first-btn,
-    .last-btn {
-        width: 70px;
-    }
-
-    .duration,
-    .timer {
-        font-size: 22px;
-    }
-
-    .playlist-info-track h5 {
+    .box-img-explic div a {
+        padding: 19px;
         font-size: 25px;
     }
 
-    .playlist-info-track h3 {
-        font-size: 29px;
+    .div-scroll-down-section-2 h3 {
+        font-size: 25px;
     }
 
-    .playlist-duration {
+    .fa-img-explic:before {
+        font-size: 45px;
+    }
+
+    .box-img-examples .slide img {
+        height: 68%;
+    }
+
+    .box-login-signup {
+        width: 50%;
+    }
+
+    .box-login-signup h3 {
+        font-size: 32px;
+    }
+
+    input[id="username" i],
+    input[id="password" i] {
+        width: 55%;
+        height: 37px;
+    }
+
+    #username,
+    #password {
+        font-size: 24px;
+    }
+
+    input[id="username" i]::placeholder,
+    input[id="password" i]::placeholder {
         font-size: 22px;
     }
 
+    .box-login-signup p {
+        font-size: 20px;
+    }
+
+    input.btn {
+        width: 28%;
+        height: 50px;
+        font-size: 25px;
+    }
+
+    .box-login-signup a {
+        font-size: 23px;
+    }
+
+    .playlist-ctn {
+        max-height: 79vh;
+    }
+
     .playlist-track-ctn {
-        min-height: 120px;
+        width: 30%;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .playlist-info-track {
+        margin-bottom: 9px;
+    }
+
+    .playlist-song-img img {
+        width: 130px;
+        height: 130px;
+    }
+
+    .playlist-info-track h5 {
+        color: #b40303;
+        font-size: 18px;
+    }
+
+    .playlist-info-track h3 {
+        font-size: 20px;
+    }
+
+    .playlist-btn-play .fas {
+        font-size: 22px;
+    }
+
+    .timer {
+        margin-left: 3px;
+        margin-bottom: 0;
+        font-size: 16px;
+    }
+
+    .duration {
+        margin-right: 3px;
+        margin-bottom: 0;
+        font-size: 16px;
+    }
+
+    a.url-vinyl {
+        font-size: 20px;
+    }
+
+    .btn-ctn>div {
+        padding-right: 60px;
+    }
+
+    .btn-ctn>div i:before {
+        font-size: 22px;
+    }
+
+    .infos-ctn {
+        width: 60%;
+        margin-top: 5px;
     }
 
     .infos-ctn img {
-        height: 200px;
-        width: 200px;
+        height: 65px;
+        width: 65px;
     }
 
-    .infos-ctn .image {
-        width: 77%;
+    .title-song {
+        text-align: center;
     }
-} */
+
+    .title {
+        font-size: 22px;
+    }
+
+    .song {
+        font-size: 25px;
+    }
+
+    .footer-social-network h2 {
+        font-size: 22px;
+    }
+}
+
+
+@media (min-width: 1000px) {
+    .main-home-content {
+        padding-top: 5%;
+    }
+
+    .navbar #home {
+        width: 65%;
+    }
+
+    .navbar #home a {
+        font-size: 42px;
+    }
+
+    .navbar #signup a {
+        font-size: 18px;
+    }
+
+    .navbar #connexion a {
+        font-size: 18px;
+    }
+
+    .main-home-content section {
+        padding-bottom: 11%;
+    }
+
+    .home-entete h3 {
+        font-size: 21px;
+    }
+
+    .box {
+        margin-bottom: 10%;
+        width: 32%;
+    }
+
+    .box h3 {
+        font-size: 22px;
+    }
+
+    .box-lien a {
+        font-size: 18px;
+        padding: 15px 35px;
+    }
+
+    .navigation-box {
+        margin-top: 20px;
+    }
+
+    .main-home-content section:nth-child(2) {
+        padding: 5% 0 2% 0;
+    }
+
+    .div-search-form {
+        margin-top: 30px;
+    }
+
+    .div-title-section-2 h3 {
+        font-size: 40px;
+    }
+
+    .div-search-form input {
+        width: 50%;
+        height: 30px;
+        margin-right: 15px;
+    }
+
+    .div-search-form button {
+        height: 36px;
+        font-size: 18px;
+        width: 90px;
+    }
+
+    .div-search-form-exemple {
+        margin-top: 30px;
+        padding-left: 20%;
+    }
+
+    .div-search-form-exemple span p {
+        font-size: 15px;
+    }
+
+    .div-search-form-exemple span i {
+        margin-right: 8px;
+    }
+
+    .div-search-form-exemple p:first-child {
+        font-size: 22px;
+    }
+
+    input[id="search" i]::placeholder {
+        font-size: 16px;
+    }
+
+    .fa-search:before {
+        font-size: 18px;
+    }
+
+    .box-img-explic h3:nth-child(1) {
+        font-size: 21px;
+    }
+
+    .box-img-explic div {
+        width: 30%;
+    }
+
+    .box-img-explic div a {
+        padding: 17px;
+        font-size: 20px;
+    }
+
+    .div-scroll-down-section-2 h3 {
+        font-size: 20px;
+    }
+
+    .explication {
+        margin-top: 5%;
+    }
+
+    .explication h3 {
+        margin-bottom: 15px;
+        font-size: 17px;
+    }
+
+    .fa-img-explic:before {
+        font-size: 35px;
+    }
+
+    .box-img-examples .slide img {
+        height: 78%;
+        width: 83%;
+        margin-left: 6%;
+    }
+
+    .box-login-signup {
+        width: 35%;
+    }
+
+    .box-login-signup h3 {
+        font-size: 27px;
+    }
+
+    input[id="username" i],
+    input[id="password" i] {
+        width: 60%;
+        height: 25px;
+    }
+
+    #username,
+    #password {
+        font-size: 20px;
+    }
+
+    input[id="username" i]::placeholder,
+    input[id="password" i]::placeholder {
+        font-size: 18px;
+    }
+
+    .box-login-signup p {
+        font-size: 18px;
+    }
+
+    input.btn {
+        width: 32%;
+        height: 40px;
+        font-size: 21px;
+    }
+
+    .box-login-signup a {
+        font-size: 19px;
+    }
+
+    .playlist-ctn {
+        max-height: 76.5vh;
+    }
+
+    .playlist-track-ctn {
+        width: 30%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-bottom: 0;
+    }
+
+    .playlist-info-track {
+        margin-bottom: 5px;
+    }
+
+    .playlist-song-img img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .playlist-info-track h5 {
+        color: #b40303;
+        font-size: 14px;
+    }
+
+    .playlist-info-track h3 {
+        font-size: 17px;
+    }
+
+    .playlist-btn-play .fas {
+        font-size: 16px;
+    }
+
+    .timer {
+        margin-left: 3px;
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    .duration {
+        margin-right: 3px;
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    a.url-vinyl {
+        font-size: 16px;
+    }
+
+    .btn-ctn>div {
+        padding-right: 60px;
+    }
+
+    .btn-ctn>div i:before {
+        font-size: 20px;
+    }
+
+    .infos-ctn {
+        width: 60%;
+        margin-top: 0;
+    }
+
+    .infos-ctn img {
+        height: 45px;
+        width: 45px;
+    }
+
+    .title-song {
+        text-align: center;
+    }
+
+    .title {
+        font-size: 15px;
+    }
+
+    .song {
+        font-size: 18px;
+    }
+
+    .footer-sponso h2 {
+        font-size: 30px;
+    }
+
+    .footer-social-network h2 {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .navbar {
+        justify-content: flex-start;
+    }
+
+    .navbar #home {
+        width: 17%;
+        padding-left: 10px;
+    }
+
+    .navbar #home a {
+        font-size: 24px;
+    }
+
+    .navbar #site {
+        display: block;
+        text-align: center;
+        padding: 10px 12px;
+    }
+
+    .navbar #site a {
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .navbar #site a i {
+        margin-left: 5px;
+    }
+
+    .navbar #signup a {
+        font-size: 11px;
+    }
+
+    .navbar #connexion {
+        margin-left: 15px;
+    }
+
+    .navbar #connexion a {
+        font-size: 11px;
+    }
+
+    .submenu {
+        width: 8%;
+    }
+
+    .submenu a {
+        width: 100%;
+        padding: 10px 0;
+    }
+}
+
+
+@media (min-width: 1400px) {
+
+    .navbar #home {
+        width: 21%;
+    }
+
+    .navbar #home a {
+        font-size: 26px;
+    }
+
+    .navbar #connexion {
+        margin-left: 20px;
+    }
+
+    .submenu {
+        width: 8%;
+    }
+
+    .submenu a {
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .main-home-content {
+        padding-top: 2%;
+    }
+
+    .main-home-content section {
+        padding-bottom: 11%;
+    }
+
+    .home-entete h3 {
+        font-size: 21px;
+    }
+
+    .box {
+        margin-bottom: 10%;
+        width: 32%;
+    }
+
+    .box h3 {
+        font-size: 22px;
+    }
+
+    .box-lien a {
+        font-size: 18px;
+        padding: 15px 35px;
+    }
+
+    .navigation-box {
+        margin-top: 20px;
+    }
+
+    .main-home-content section:nth-child(2) {
+        padding: 5% 0 2% 0;
+    }
+
+    .div-search-form {
+        margin-top: 30px;
+    }
+
+    .div-title-section-2 h3 {
+        font-size: 40px;
+    }
+
+    .div-search-form input {
+        width: 40%;
+        height: 30px;
+        margin-right: 15px;
+    }
+
+    .div-search-form button {
+        height: 35px;
+        font-size: 18px;
+        width: 90px;
+    }
+
+    .div-search-form-exemple {
+        margin-top: 30px;
+        padding-left: 26.5%;
+    }
+
+    .div-search-form-exemple span p {
+        font-size: 12px;
+        margin: 8px 0;
+    }
+
+    .div-search-form-exemple span i {
+        margin-right: 5px;
+    }
+
+    .div-search-form-exemple p:first-child {
+        font-size: 22px;
+    }
+
+    .fa-search:before {
+        font-size: 18px;
+    }
+
+    .box-img-explic {
+        margin-top: 4%;
+    }
+
+    .box-img-explic h3:nth-child(1) {
+        font-size: 21px;
+    }
+
+    .box-img-explic div {
+        width: 22%;
+    }
+
+    .box-img-explic div a {
+        padding: 15px;
+        font-size: 20px;
+    }
+
+    .div-scroll-down-section-2 h3 {
+        font-size: 20px;
+    }
+
+    .explication {
+        margin-top: 5%;
+    }
+
+    .explication h3 {
+        margin-bottom: 15px;
+        font-size: 17px;
+    }
+
+    .fa-img-explic:before {
+        font-size: 35px;
+    }
+
+    .box-img-examples .slide img {
+        height: 94%;
+        width: 72%;
+        margin-left: 11%;
+    }
+
+    .box-login-signup {
+        width: 35%;
+    }
+
+    .box-login-signup h3 {
+        font-size: 27px;
+    }
+
+    input[id="username" i],
+    input[id="password" i] {
+        width: 60%;
+        height: 25px;
+    }
+
+    #username,
+    #password {
+        font-size: 20px;
+    }
+
+    input[id="username" i]::placeholder,
+    input[id="password" i]::placeholder {
+        font-size: 18px;
+    }
+
+    .box-login-signup p {
+        font-size: 18px;
+    }
+
+    input.btn {
+        width: 32%;
+        height: 40px;
+        font-size: 21px;
+    }
+
+    .box-login-signup a {
+        font-size: 19px;
+    }
+
+    .playlist-ctn {
+        max-height: 76.5vh;
+        padding-top: 25px;
+    }
+
+    .playlist-track-ctn {
+        width: 30%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-bottom: 0;
+    }
+
+    .playlist-info-track {
+        margin-bottom: 5px;
+    }
+
+    .playlist-song-img img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .playlist-info-track h5 {
+        color: #b40303;
+        font-size: 14px;
+    }
+
+    .playlist-info-track h3 {
+        font-size: 17px;
+    }
+
+    .playlist-btn-play .fas {
+        font-size: 16px;
+    }
+
+    .timer {
+        margin-left: 3px;
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    .duration {
+        margin-right: 3px;
+        margin-bottom: 0;
+        font-size: 12px;
+    }
+
+    a.url-vinyl {
+        font-size: 16px;
+    }
+
+    .btn-ctn>div {
+        padding-right: 60px;
+    }
+
+    .btn-ctn>div i:before {
+        font-size: 20px;
+    }
+
+    .infos-ctn {
+        width: 60%;
+        margin-top: 5px;
+    }
+
+    .infos-ctn img {
+        height: 45px;
+        width: 45px;
+    }
+
+    .title-song {
+        text-align: center;
+    }
+
+    .title {
+        font-size: 15px;
+    }
+
+    .song {
+        font-size: 18px;
+    }
+
+    .footer-sponso h2 {
+        font-size: 30px;
+    }
+
+    .footer-social-network h2 {
+        font-size: 18px;
+    }
+}
+
+
+@media (min-width: 1650px) {
+    .navbar {
+        justify-content: flex-start;
+    }
+
+    .navbar #home {
+        width: 14%;
+        padding-left: 10px;
+    }
+
+    .navbar #home a {
+        padding: 10px 5px;
+        font-size: 25px;
+    }
+
+    .navbar #site {
+        display: block;
+        text-align: center;
+        padding: 10px 12px;
+        width: 11%;
+    }
+
+    .navbar #site a {
+        font-size: 17px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .navbar #site a i {
+        margin-left: 5px;
+    }
+
+    .navbar #signup a {
+        font-size: 15px;
+    }
+
+    .navbar #connexion {
+        margin-left: 15px;
+    }
+
+    .navbar #connexion a {
+        font-size: 15px;
+    }
+
+    .submenu {
+        width: 11%;
+    }
+
+    .submenu a {
+        width: 100%;
+        padding: 7px 0;
+    }
+
+    .playlist-track-ctn {
+        width: 14%;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        margin-bottom: 0;
+        align-items: flex-start;
+        margin-bottom: 2%;
+    }
+
+    .playlist-info-track {
+        margin-bottom: 0;
+    }
+
+    .playlist-ctn {
+        max-height: 81.5vh;
+    }
+
+    .playlist-ctn {
+        justify-content: flex-start;
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+}

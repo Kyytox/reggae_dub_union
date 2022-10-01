@@ -52,7 +52,7 @@
           </div>
     
           <div class="btn-ctn">
-            <div class="btn-action" onclick="rewind()">
+            <div class="btn-action" onclick="previous()">
               <div id="btn-faws-rewind">
                 <i class='fas fa-backward'></i>
               </div>
@@ -65,7 +65,7 @@
               </div>
             </div>
             
-            <div class="btn-play" onclick="forward()">
+            <div class="btn-play" onclick="next()">
               <div id="btn-faws-forward">
                 <i class='fas fa-forward'></i>
               </div>
@@ -158,11 +158,6 @@
       trackInfoItemName.setAttribute("class", "playlist-info-track-name");
       trackInfoItemName.innerHTML = song
       document.querySelector("#pit-"+index).appendChild(trackInfoItemName);
-  
-      //var trackDurationItem = document.createElement('div');
-      //trackDurationItem.setAttribute("class", "playlist-duration");
-      //trackDurationItem.innerHTML = duration
-      //document.querySelector("#ptc-"+index).appendChild(trackDurationItem);
 
       var playBtnItem = document.createElement('div');
       playBtnItem.setAttribute("class", "playlist-btn-play");
@@ -383,7 +378,6 @@
     }
   
     function updateStylePlaylist(oldIndex,newIndex){
-      console.log('active track')
       document.querySelector('#ptc-'+oldIndex).classList.remove("active-track");
       this.pauseToPlay(oldIndex);
       document.querySelector('#ptc-'+newIndex).classList.add("active-track");
@@ -401,6 +395,7 @@
       var ele = document.querySelector('#p-img-'+index)
       ele.classList.remove("fa-pause");
       ele.classList.add("fa-play");
+      currentAudio.volume = 0.8
     }
   
   
@@ -421,9 +416,8 @@
 
 
 
-  if (document.querySelector("#login").innerText != "Logged : ") {
+  if (document.querySelector("#connexion").innerText == "Connexion") {
     const box = document.querySelectorAll('#btn_add_favoris');
-    console.log(box.length)
     for (let i = 0; i < box.length; i++) {
       box[i].style.display = 'none';
     }
@@ -433,9 +427,7 @@
   console.log(urlcourante.search("favoris"))
   if (urlcourante.search("favoris") != -1) {
     const btn_supp = document.querySelectorAll('.fa-btn-fav');
-    console.log(btn_supp)
     for (let i = 0; i < btn_supp.length; i++) {
-      console.log('test: ', btn_supp[i])
       btn_supp[i].classList.remove("fa-btn-fav");
       btn_supp[i].classList.add("fa-btn-fav-supp");
     }
