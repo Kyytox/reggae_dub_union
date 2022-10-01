@@ -29,60 +29,70 @@
 
     <div class="player-ctn">
       <div class="player-entete">
+        <div class="infos-ctn">
+          <div class="image">
+            <div class="btn-action first-btn" onclick="previous()">
+              <div id="btn-faws-back">
+                <i class='fas fa-chevron-left'></i>
+              </div>
+            </div>
+
+            <img class='img' src="">
+
+            <div class="btn-action last-btn" onclick="next()">
+              <div id="btn-faws-next">
+                <i class='fas fa-chevron-right'></i>
+              </div>
+            </div>
+          </div>
+          <div class="title"></div>
+          <div class="song"></div>
+        </div>
+        
         <div class="time-progress">
           <div class="timer">
-            00:00
-          </div>
-          <div class="duration">
             00:00
           </div>
           <div id="myProgress">
             <div id="myBar"></div>
           </div>
-        </div>
-        <div class="infos-song">
-          <div class="infos-ctn">
-            <div class="image">
-              <img class='img' src="">
-            </div>
-            <div class="title-song">
-              <div class="title"></div>
-              <div class="song"></div>
-            </div>
-          </div>
-    
-          <div class="btn-ctn">
-            <div class="btn-action" onclick="rewind()">
-              <div id="btn-faws-rewind">
-                <i class='fas fa-backward'></i>
-              </div>
-            </div>
-            
-            <div class="btn-action" onclick="toggleAudio()">
-              <div id="btn-faws-play-pause">
-                <i class='fas fa-play' id="icon-play"></i>
-                <i class='fas fa-pause' id="icon-pause" style="display: none"></i>
-              </div>
-            </div>
-            
-            <div class="btn-play" onclick="forward()">
-              <div id="btn-faws-forward">
-                <i class='fas fa-forward'></i>
-              </div>
-            </div>
-            
-            <div class="btn-mute" id="toggleMute" onclick="toggleMute()">
-              <div id="btn-faws-volume">
-                <i id="icon-vol-up" class='fas fa-volume-up'></i>
-                <i id="icon-vol-mute" class='fas fa-volume-mute' style="display: none"></i>
-              </div>
-            </div>
-          </div>
-          <div class="btn-url-vinyl">
-            <a href="" target="_blank" rel="noopener noreferrer" class="url-vinyl">Vinyl</a>
+          <div class="duration">
+            00:00
           </div>
         </div>
+        <div class="btn-ctn">
+          
+          <div class="btn-action" onclick="rewind()">
+            <div id="btn-faws-rewind">
+              <i class='fas fa-backward'></i>
+            </div>
+          </div>
+          
+          <div class="btn-action" onclick="toggleAudio()">
+            <div id="btn-faws-play-pause">
+              <i class='fas fa-play' id="icon-play"></i>
+              <i class='fas fa-pause' id="icon-pause" style="display: none"></i>
+            </div>
+          </div>
+          
+          <div class="btn-play" onclick="forward()">
+            <div id="btn-faws-forward">
+              <i class='fas fa-forward'></i>
+            </div>
+          </div>
+          
+          <div class="btn-mute" id="toggleMute" onclick="toggleMute()">
+            <div id="btn-faws-volume">
+              <i id="icon-vol-up" class='fas fa-volume-up'></i>
+              <i id="icon-vol-mute" class='fas fa-volume-mute' style="display: none"></i>
+            </div>
+          </div>
+        </div>
+      </div>  
+      <div class="btn-url-vinyl">
+        <a href="" target="_blank" rel="noopener noreferrer" class="url-vinyl">Go to Vinyl</a>
       </div>
+
     </div>
   </div>
 </div>
@@ -126,23 +136,24 @@
 
 
 
-  function createTrackItem(index, title, song, duration, image){
+  function createTrackItem(index, title, song, duration){
       var trackItem = document.createElement('div');
       trackItem.setAttribute("class", "playlist-track-ctn");
       trackItem.setAttribute("id", "ptc-"+index);
       trackItem.setAttribute("data-index", index);
       document.querySelector(".playlist-ctn").appendChild(trackItem);
-
-      var songImg = document.createElement('div');
-      songImg.setAttribute("class", "playlist-song-img");
-      songImg.setAttribute("id", "img-"+index);
-      document.querySelector("#ptc-"+index).appendChild(songImg);
   
-      var img = document.createElement('img');
-      img.setAttribute("class", "fas fa-img");
-      img.setAttribute("id", "s-img-"+index);
-      img.setAttribute("src", image);
-      document.querySelector("#img-"+index).appendChild(img);
+      var playBtnItem = document.createElement('div');
+      playBtnItem.setAttribute("class", "playlist-btn-play");
+      playBtnItem.setAttribute("id", "pbp-"+index);
+      document.querySelector("#ptc-"+index).appendChild(playBtnItem);
+  
+      var btnImg = document.createElement('i');
+      btnImg.setAttribute("class", "fas fa-play");
+      btnImg.setAttribute("height", "40");
+      btnImg.setAttribute("width", "40");
+      btnImg.setAttribute("id", "p-img-"+index);
+      document.querySelector("#pbp-"+index).appendChild(btnImg);
   
       var trackInfoItem = document.createElement('div');
       trackInfoItem.setAttribute("class", "playlist-info-track");
@@ -159,22 +170,10 @@
       trackInfoItemName.innerHTML = song
       document.querySelector("#pit-"+index).appendChild(trackInfoItemName);
   
-      //var trackDurationItem = document.createElement('div');
-      //trackDurationItem.setAttribute("class", "playlist-duration");
-      //trackDurationItem.innerHTML = duration
-      //document.querySelector("#ptc-"+index).appendChild(trackDurationItem);
-
-      var playBtnItem = document.createElement('div');
-      playBtnItem.setAttribute("class", "playlist-btn-play");
-      playBtnItem.setAttribute("id", "pbp-"+index);
-      document.querySelector("#ptc-"+index).appendChild(playBtnItem);
-  
-      var btnImg = document.createElement('i');
-      btnImg.setAttribute("class", "fas fa-play");
-      btnImg.setAttribute("height", "40");
-      btnImg.setAttribute("width", "40");
-      btnImg.setAttribute("id", "p-img-"+index);
-      document.querySelector("#pbp-"+index).appendChild(btnImg);
+      var trackDurationItem = document.createElement('div');
+      trackDurationItem.setAttribute("class", "playlist-duration");
+      trackDurationItem.innerHTML = duration
+      document.querySelector("#ptc-"+index).appendChild(trackDurationItem);
 
       var trackBtnAddFavoris = document.createElement('i');
       trackBtnAddFavoris.setAttribute("id", "btn_add_favoris");
@@ -198,6 +197,12 @@
     let titlemp3 = document.querySelectorAll("#mp3-title-song"); //collect all title mp3 of page
     let urlmp3 = document.querySelectorAll("#mp3-url-song"); //collect all url mp3 of page
     let durationmp3 = document.querySelectorAll("#mp3-duration-song"); //collect all duration mp3 of page
+    // console.log(titlevinyl)
+    // console.log(imgvinyl)
+    // console.log(titlemp3)
+    // console.log(urlmp3)
+    // console.log(durationmp3)
+    // console.log(urlvinyl)
 
     for (let i = 0; i < titlemp3.length; i++) {
 
@@ -215,7 +220,7 @@
 
   
     for (var i = 0; i < listAudio.length; i++) {
-        createTrackItem(i,listAudio[i].title, listAudio[i].song,listAudio[i].duration, listAudio[i].image);
+        createTrackItem(i,listAudio[i].title, listAudio[i].song,listAudio[i].duration);
     }
     var indexAudio = 0;
   
@@ -240,18 +245,9 @@
     }
   
     function getClickedElement(event) {
-      let eventTarget = "" 
-
-      // if tagName of element = H3, H5, Img => collect the third element in list event.path for collect div .playlist-track-ctn
-      if(event.target.tagName == "H3" || event.target.tagName == "H5" || event.target.tagName == "IMG"){
-        eventTarget = event.path[2]
-      }else {
-        eventTarget = event.path[0]
-      }
-      
       for (let i = 0; i < playListItems.length; i++){
-        if(playListItems[i] == eventTarget){
-          var clickedIndex = eventTarget.getAttribute("data-index")
+        if(playListItems[i] == event.target){
+          var clickedIndex = event.target.getAttribute("data-index")
           if (clickedIndex == this.indexAudio ) { // alert('Same audio');
               this.toggleAudio()
           }else{
@@ -283,7 +279,6 @@
       if (this.currentAudio.paused) {
         document.querySelector('#icon-play').style.display = 'none';
         document.querySelector('#icon-pause').style.display = 'block';
-        console.log('first active track')
         document.querySelector('#ptc-'+this.indexAudio).classList.add("active-track");
         document.querySelector('.img').classList.add("active");
         this.playToPause(this.indexAudio)
@@ -383,7 +378,6 @@
     }
   
     function updateStylePlaylist(oldIndex,newIndex){
-      console.log('active track')
       document.querySelector('#ptc-'+oldIndex).classList.remove("active-track");
       this.pauseToPlay(oldIndex);
       document.querySelector('#ptc-'+newIndex).classList.add("active-track");

@@ -1,11 +1,20 @@
 <div class="navbar">
     <li id="home"><a class="navbar-li-a" href="{{ url_for('index') }}">Vinyls Dub Scrap</a></li>
+
     {% if not session %}
       <li id="connexion"><a class="navbar-li-a" href="{{ url_for('login') }}">Login</a></li>
       <li id="signup"><a class="navbar-li-a" href="{{ url_for('signup') }}">Sign Up</a></li>
     {% endif %}
+
     {% if session %}
-    <li id="favoris"><a class="navbar-li-a" href="{{ url_for('favoris') }}">Favoris</a></li>
+      <li  id="logout"><a class="navbar-li-a" href="{{ url_for('logout') }}">logout</a></li>
+      <li  id="login"><i class="fa fa-bars-logged"></i></li>
+    {% else%}
+      <li  id="login"><i class="fa fa-bars-no-logged"></i></li>
+    {% endif %}
+
+    {% if session %}
+      <li id="favoris"><a class="navbar-li-a" href="{{ url_for('favoris') }}">Favoris</a></li>
     {% endif %}
 
 
@@ -56,14 +65,7 @@
         <a href="{{ url_for('PagePlayerVinyl', variable = 'PatateRecordsLP') }}">New Vinyls LP"</a></li>
       </ul>
     </li>
-    
-    {% if session %}
-    <li  id="logout"><a class="navbar-li-a" href="{{ url_for('logout') }}">logout</a></li>
-    <li  id="login"><p>Logged : <i class="fa fa-bars-logged"></i><p></li>
-    {% else%}
-    <li  id="login"><p>Not Logged : <i class="fa fa-bars-no-logged"></i></p></li>
-    {% endif %}
-  </div>
+</div>
 
 
 

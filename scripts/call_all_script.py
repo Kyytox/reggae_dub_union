@@ -1,3 +1,4 @@
+import imp
 from scrap_controltowerrecords import *
 from scrap_deeprootsreggaeshop import *
 from scrap_jahwaggys import *
@@ -5,6 +6,7 @@ from scrap_onlyrootsreggae import *
 from scrap_reggaefever import *
 from scrap_unearthedsounds import *
 from scrap_patateRecords import *
+from scrap_reggaeDub import *
 
 # list_1 = ["https://controltower.fr/fr/"]
 # scrap_controltowerrecords(list_1)
@@ -27,6 +29,11 @@ from scrap_patateRecords import *
 # list_5 = ["https://www.unearthedsounds.co.uk/collections/a-reggae-dub?sort_by=created-descending"]
 # scrap_unearthedsounds(list_5)
 
-list_6 = ["https://www.patate-records.com/shop/1/1/1/type/1/",
-          "https://www.patate-records.com/shop/1/1/1/type/2/", "https://www.patate-records.com/shop/1/1/1/type/3/"]
-scrap_patateRecords(list_6)
+
+# list_6 = ["https://www.patate-records.com/shop/1/1/1/type/1/",
+#           "https://www.patate-records.com/shop/1/1/1/type/2/", "https://www.patate-records.com/shop/1/1/1/type/3/"]
+# scrap_patateRecords(list_6)
+
+
+list_7 = ["https://www.reggaedub.org/fr/14-7"]
+scrap_reggaeDub(list_7)
