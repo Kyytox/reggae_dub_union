@@ -414,15 +414,6 @@
       }
     }
 
-
-
-  if (document.querySelector("#connexion").innerText == "Connexion") {
-    const box = document.querySelectorAll('#btn_add_favoris');
-    for (let i = 0; i < box.length; i++) {
-      box[i].style.display = 'none';
-    }
-  }
-
   var urlcourante = document.location.href; 
   console.log(urlcourante.search("favoris"))
   if (urlcourante.search("favoris") != -1) {
@@ -430,6 +421,13 @@
     for (let i = 0; i < btn_supp.length; i++) {
       btn_supp[i].classList.remove("fa-btn-fav");
       btn_supp[i].classList.add("fa-btn-fav-supp");
+    }
+  }
+
+  if (document.querySelector("#connexion").innerText == "Connexion") {
+    const box = document.querySelectorAll('#btn_add_favoris');
+    for (let i = 0; i < box.length; i++) {
+      box[i].style.display = 'none';
     }
   }
 
