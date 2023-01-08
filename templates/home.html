@@ -4,16 +4,16 @@
     {% include "navbar.html" %}
 
     <div class="main-home-content">
-        <div class="div-player-shops">
+        <div id="div-player-shops" class="div-player-shops inactive">
             <div class="div-player">{% include "playerAudio.html" %}</div>
 
-            <div class="div-shop-lst"></div>
+            <div class="div-shop-lst">{% include "lstShops.html" %}</div>
         </div>
 
-        <div class="main-app">
+        <div id="main-app" class="main-app">
             <div class="entete-app">
                 <h1>Home</h1>
-                <h2>Ecouter les nouveaux extraits de vinyls des Shops :</h2>
+                <h2>Ecouter les extraits des nouveaux vinyls des Shops :</h2>
             </div>
 
             <div class="app">{% include "lstTracks.html" %}</div>

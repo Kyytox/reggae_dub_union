@@ -1,0 +1,21 @@
+.div-shop-lst {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.div-shop-lst details {
+    width: 45%;
+}
+
+summary {
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    background-color: rgb(59, 59, 59);
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}

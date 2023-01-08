@@ -7,6 +7,9 @@
     --back-div-element: linear-gradient(333deg, rgb(29, 21, 21) 55%, rgba(163, 4, 4, 1) 90%);
     --back-survol-element-playlist: linear-gradient(148deg, #880000 0%, rgba(36, 18, 18, 0.7) 80%);
     --back-navbar: linear-gradient(333deg, rgba(48, 36, 36) 22%, rgb(180, 19, 19) 56%, rgb(96, 160, 76) 88%);
+
+
+    --borderRadius: 30px;
 }
 
 
@@ -63,10 +66,6 @@
 
 
 body {
-    /* background: var(--back-body); */
-    /* background: -o-linear-gradient(307deg, #007060 0%, #4a7e65 16%, #728c69 33%, #96996e 50%, #b9a772 66%, #dcb476 83%, #ffc17a 100%);
-    background: linear-gradient(143deg, #007060 0%, #4a7e65 16%, #728c69 33%, #96996e 50%, #b9a772 66%, #dcb476 83%, #ffc17a 100%); */
-    /* background-image: linear-gradient(to left top, #000000, #0c0c0c, #141414, #1b1b1b, #212121); */
     background-color: #000000;
     padding: 1px;
     margin: 0;
@@ -142,22 +141,30 @@ a {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    border-radius: 30px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    -ms-border-radius: 30px;
-    -o-border-radius: 30px;
+    border-radius: var(--borderRadius);
+    -webkit-border-radius: var(--borderRadius);
+    -moz-border-radius: var(--borderRadius);
+    -ms-border-radius: var(--borderRadius);
+    -o-border-radius: var(--borderRadius);
 }
 
 
 
 .main-home-content {
+    background: rgba(255, 255, 255, 0.3);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     margin-top: 10px;
     margin-right: 10px;
     margin-left: 7%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    border-radius: var(--borderRadius);
+    -webkit-border-radius: var(--borderRadius);
+    -moz-border-radius: var(--borderRadius);
+    -ms-border-radius: var(--borderRadius);
+    -o-border-radius: var(--borderRadius);
 }
 
 
@@ -165,13 +172,24 @@ a {
     background-color: white;
     padding: 20px;
     max-height: 94vh;
-    width: 70%;
+    width: 100%;
+    right: 0;
     overflow-y: scroll;
-    border-radius: 40px;
-    -webkit-border-radius: 40px;
-    -moz-border-radius: 40px;
-    -ms-border-radius: 40px;
-    -o-border-radius: 40px;
+    border-radius: var(--borderRadius);
+    -webkit-border-radius: var(--borderRadius);
+    -moz-border-radius: var(--borderRadius);
+    -ms-border-radius: var(--borderRadius);
+    -o-border-radius: var(--borderRadius);
+    transition: width 2s;
+    -webkit-transition: width 2s;
+    -moz-transition: width 2s;
+    -ms-transition: width 2s;
+    -o-transition: width 2s;
+}
+
+.main-app.reduce {
+    box-shadow: -4px 0 13.5px -3px black;
+    width: 73%;
 }
 
 

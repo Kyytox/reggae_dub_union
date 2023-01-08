@@ -27,21 +27,19 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
-    margin-top: 3px;
     cursor: pointer;
     width: 48%;
-    padding: 5px;
-    margin-bottom: 30px;
+    padding: 15px 10px 15px 5px;
 }
 
 .playlist-song-img img {
     width: 50px;
     height: 50px;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
 }
 
 .playlist-info-track {
@@ -56,8 +54,8 @@
 .playlist-info-track h5,
 .playlist-info-track h3 {
     width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 4px;
+    margin-bottom: 4px;
     word-break: break-word;
     text-align: center;
 }
@@ -65,7 +63,7 @@
 
 .playlist-info-track h5 {
     color: #b40303;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .playlist-info-track h3 {
@@ -74,20 +72,14 @@
 }
 
 
-.fa-heart:before {
-    margin-right: 5px;
-    content: "\f005";
-    font-size: 20px
+/* btn Favoris  */
+#btn_add_favoris {
+    margin-right: 10px;
 }
 
-.fa-arrow-up-right-from-square:before {
-    margin-right: 5px;
-    content: "\f005";
-    font-size: 20px
-}
-
+.fa-heart:before,
+.fa-arrow-up-right-from-square:before,
 .fa-btn-fav-supp:before {
-    content: "\f00d";
     font-size: 20px
 }
 

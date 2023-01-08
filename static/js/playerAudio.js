@@ -66,6 +66,7 @@ function createTrackItem(index, title, song, image, urlvinyl) {
     playBtnItem.setAttribute("id", "pbp-" + index);
     document.querySelector("#ptc-" + index).appendChild(playBtnItem);
 
+    // Button Favoris
     var trackBtnAddFavoris = document.createElement("i");
     trackBtnAddFavoris.setAttribute("id", "btn_add_favoris");
     trackBtnAddFavoris.setAttribute("class", "fa-solid fa-heart");
@@ -76,6 +77,7 @@ function createTrackItem(index, title, song, image, urlvinyl) {
     trackBtnAddFavoris.content = "";
     document.querySelector("#ptc-" + index).appendChild(trackBtnAddFavoris);
 
+    // Link vinyls
     var trackBtnLink = document.createElement("a");
     trackBtnLink.setAttribute("id", "btv" + index);
     trackBtnLink.setAttribute("class", "btn_link_vinyl");
@@ -89,6 +91,7 @@ function createTrackItem(index, title, song, image, urlvinyl) {
 }
 
 var listAudio = [];
+let shop = document.querySelectorAll("#shop-name"); //collect all shop name of page
 let titlevinyl = document.querySelectorAll("#titre-vinyl"); //collect all title vinyls of page
 let imgvinyl = document.querySelectorAll("#img-vinyl"); //collect img duration mp3 of page
 let urlvinyl = document.querySelectorAll("#url-vinyl"); //collect all url vinyls of page
@@ -97,6 +100,7 @@ let urlmp3 = document.querySelectorAll("#mp3-url-song"); //collect all url mp3 o
 
 for (let i = 0; i < titlemp3.length; i++) {
     listAudio.push({
+        shop: shop[i].innerText,
         title: titlevinyl[i].innerText,
         image: imgvinyl[i].innerText,
         url: urlvinyl[i].innerText,
@@ -111,12 +115,15 @@ for (var i = 0; i < listAudio.length; i++) {
 var indexAudio = 0;
 
 function loadNewTrack(index) {
+    console.log("test1");
     var player = document.querySelector("#source-audio");
     player.src = listAudio[index].file;
     document.querySelector(".img").src = listAudio[index].image;
     document.querySelector(".url-vinyl").href = listAudio[index].url;
     document.querySelector(".title").innerHTML = listAudio[index].title;
     document.querySelector(".song").innerHTML = listAudio[index].song;
+    document.querySelector("#shop-name-h3").innerText = listAudio[indexAudio].shop;
+
     this.currentAudio = document.getElementById("myAudio");
     this.currentAudio.load();
     this.toggleAudio();
@@ -131,6 +138,13 @@ for (let i = 0; i < playListItems.length; i++) {
 }
 
 function getClickedElement(event) {
+    var displayPlayer = document.getElementById("div-player-shops");
+    displayPlayer.classList.remove("inactive");
+    displayPlayer.classList.add("active");
+
+    var reduceMain = document.getElementById("main-app");
+    reduceMain.classList.add("reduce");
+
     let eventTarget = "";
 
     // if tagName of element = H3, H5, Img => collect the third element in list event.path for collect div .playlist-track-ctn
@@ -153,11 +167,30 @@ function getClickedElement(event) {
     }
 }
 
+// Load first track in Player Audio
 document.querySelector("#source-audio").src = listAudio[indexAudio].file;
 document.querySelector(".img").src = listAudio[indexAudio].image;
 document.querySelector(".url-vinyl").href = listAudio[indexAudio].url;
 document.querySelector(".title").innerHTML = listAudio[indexAudio].title;
 document.querySelector(".song").innerHTML = listAudio[indexAudio].song;
+document.querySelector("#shop-name-h3").innerText = listAudio[indexAudio].shop;
+
+// Add Button Favoris
+var playerFavoris = document.createElement("i");
+playerFavoris.setAttribute("id", "btn_favori");
+playerFavoris.setAttribute("class", "fa-solid fa-heart");
+playerFavoris.setAttribute("style", "display:block");
+playerFavoris.addEventListener("click", function () {
+    add_favoris(index);
+});
+playerFavoris.content = "";
+
+if (document.getElementById("btn_favori")) {
+    var oldBtnFav = document.getElementsByClassName("btn-favoris").children[0];
+    oldBtnFav.replaceChild(playerFavoris, oldBtnFav[0]);
+} else {
+    document.querySelector(".btn-favoris").appendChild(playerFavoris);
+}
 
 var currentAudio = document.getElementById("myAudio");
 
@@ -173,9 +206,9 @@ function toggleAudio() {
     if (this.currentAudio.paused) {
         document.querySelector("#icon-play").style.display = "none";
         document.querySelector("#icon-pause").style.display = "block";
-        console.log("first active track");
         document.querySelector("#ptc-" + this.indexAudio).classList.add("active-track");
         document.querySelector(".img").classList.add("active");
+        this.currentAudio.volume = 0.4;
         this.currentAudio.play();
     } else {
         document.querySelector("#icon-play").style.display = "block";
@@ -274,7 +307,7 @@ function updateStylePlaylist(oldIndex, newIndex) {
 }
 
 function pauseToPlay(index) {
-    currentAudio.volume = 0.8;
+    currentAudio.volume = 0.4;
 }
 
 function toggleMute() {
@@ -302,9 +335,9 @@ if (urlcourante.search("favoris") != -1) {
     }
 }
 
-if (document.querySelector("#connexion").innerText == "Connexion") {
-    const box = document.querySelectorAll("#btn_add_favoris");
-    for (let i = 0; i < box.length; i++) {
-        box[i].style.display = "none";
-    }
-}
+// if (document.querySelector("#connexion").innerText == "Connexion") {
+//     const box = document.querySelectorAll("#btn_add_favoris");
+//     for (let i = 0; i < box.length; i++) {
+//         box[i].style.display = "none";
+//     }
+// }

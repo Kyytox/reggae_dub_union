@@ -1,0 +1,10 @@
+{% for x in list_shops %}
+<details>
+    <summary>{{x.shop}}</summary>
+    <div class="description">
+        {% for f in x.formats %}
+        <a>{{f}}</a>
+        {% endfor %}
+    </div>
+</details>
+{% endfor %}
