@@ -4,6 +4,9 @@ from dataclasses import dataclass, asdict
 import csv
 import time
 import random
+import os
+from urllib.request import urlretrieve
+from mutagen.mp3 import MP3
 
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
@@ -12,7 +15,6 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 import asyncio
 import nest_asyncio
-import concurrent.futures # for multi-threading
 nest_asyncio.apply()
 
 @dataclass
@@ -75,7 +77,6 @@ urls_lionvibes = ["https://shop.lionvibes.com/search.php?mode=quicksearch&search
 urls_reggaemuseum = [f"https://www.reggae-museum.com/shop/15-ska-rocksteady-roots?n=60&orderby=position&orderway=asc&p={random.randint(1, 42)}",
 f"https://www.reggae-museum.com/shop/14-rub-a-dub-early-digital?id_category=14&n=60&p={random.randint(1, 21)}",
 f"https://www.reggae-museum.com/shop/16-dancehall-new-roots?n=60&orderby=position&orderway=asc&p={random.randint(1, 12)}",
-"https://www.reggae-museum.com/shop/17-12-singles",
 f"https://www.reggae-museum.com/shop/18-lp-albums?p={random.randint(1, 2)}"]
 
 
@@ -126,6 +127,11 @@ async def scrap_jahwaggysrecords(client, url):
                 mp3_title = mp3.attributes.get("title") 
                 mp3_link = "https://jahwaggysrecords.com/" + mp3.attributes.get("href")
                 
+                # filename, header = urlretrieve(mp3_link)
+                # audio = MP3(filename)
+                # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                # os.remove(filename)
+                
                 add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
     return results
@@ -162,7 +168,11 @@ async def scrap_onlyrootsreggae(client, url):
                 for mp3 in lst_mp3:
                     mp3_title = mp3.attributes.get("title")
                     mp3_link = "https://www.onlyroots-reggae.com" + mp3.attributes.get("src")
-
+                    
+                    # filename, header = urlretrieve(mp3_link)
+                    # audio = MP3(filename)
+                    # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                    # os.remove(filename)
 
                     add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
@@ -208,6 +218,11 @@ def scrap_controltower(url):
                 mp3_title = mp3.attributes.get("title")
                 mp3_link = mp3.attributes.get("src")
                 
+                # filename, header = urlretrieve(mp3_link)
+                # audio = MP3(filename)
+                # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                # os.remove(filename)
+                
                 add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
     return results
@@ -246,9 +261,13 @@ async def scrap_reggaefever(client, url):
 
             if item.css_matches('a[target=rfplayer]'):
                 mp3_link = item.css_first('a[target=rfplayer]').attributes.get('href')
+                
+                # filename, header = urlretrieve(mp3_link)
+                # audio = MP3(filename)
+                # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                # os.remove(filename)
 
-            
-            add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
+                add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
     return results
 
@@ -298,6 +317,11 @@ async def scrap_deeprootsreggae(client, url):
                 for mp3 in lst_mp3:
                     mp3_title = vinyl_title
                     mp3_link = mp3.attributes.get('href')
+                    
+                    # filename, header = urlretrieve(mp3_link)
+                    # audio = MP3(filename)
+                    # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                    # os.remove(filename)
 
                     add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
@@ -324,8 +348,6 @@ def scrap_rastavibes(url):
     for url_page in url:
         
         driver.get(url_page)
-        # time.sleep(0.5)
-
 
         # retreive div main with vinyls 
         div_main = driver.find_element(By.ID, "homecontent")
@@ -366,6 +388,11 @@ def scrap_rastavibes(url):
             for mp3 in lst_mp3:
                 mp3_title = text_title[2]
                 mp3_link = mp3.get_attribute('href')
+
+                # filename, header = urlretrieve(mp3_link)
+                # audio = MP3(filename)
+                # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                # os.remove(filename)
 
                 add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
@@ -421,6 +448,11 @@ async def scrap_pataterecords(client, url):
                     if mp3.css_matches("source"):
                         mp3_title = mp3.text().split('\n')[-1]
                         mp3_link = mp3.css_first("source").attributes.get("src")
+                        
+                        # filename, header = urlretrieve(mp3_link)
+                        # audio = MP3(filename)
+                        # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                        # os.remove(filename)
 
                         add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
@@ -473,6 +505,11 @@ async def scrap_toolboxrecords(client, url):
             for mp3 in lst_mp3[:-1]:
                 mp3_title = mp3.css_first("div.track-title").text()
                 mp3_link = "https://www.toolboxrecords.com/public/mp3/" + mp3.css_first("div.track-title").attributes.get("rel")
+                
+                # filename, header = urlretrieve(mp3_link)
+                # audio = MP3(filename)
+                # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                # os.remove(filename)
             
                 add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
             
@@ -511,6 +548,11 @@ async def scrap_lionvibes(client, url):
             for track in div_mp3.css("label"):
                 mp3_title = track.text()
                 mp3_link = "https://shop.lionvibes.com" + lst_mp3[1].attributes.get("filename")
+                
+                # filename, header = urlretrieve(mp3_link)
+                # audio = MP3(filename)
+                # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                # os.remove(filename)
 
                 add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
@@ -534,7 +576,6 @@ async def scrap_reggaemuseum(client, url):
             vinyl_image = vinyl.css_first("img.img-responsive").attributes.get("src")
             vinyl_link = vinyl.css_first("a.product_img_link").attributes.get("href")
             vinyl_title = vinyl.css_first("a.product_img_link").attributes.get("title")  
-            
             # open url link_vinyl for retrieve mp3 link 
             html_page_vinyl = await get_url(client2, vinyl_link)
 
@@ -554,12 +595,24 @@ async def scrap_reggaemuseum(client, url):
                 if lst_mp3[-2].css_matches("a"):
                     track_A = lst_mp3[1].css("td")[-1].text().lstrip().rstrip()
                     link_mp3_A = lst_mp3[-2].css_first("a").attributes.get("href")
+                    
+                    # filename, header = urlretrieve(link_mp3_A)
+                    # audio = MP3(filename)
+                    # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                    # os.remove(filename)
+
                     add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, track_A, link_mp3_A)
 
 
                 if lst_mp3[-1].css_matches("a"):
                     track_B = lst_mp3[4].css("td")[-1].text().lstrip().rstrip()
                     link_mp3_B = lst_mp3[-1].css_first("a").attributes.get("href")
+                    
+                    # filename, header = urlretrieve(link_mp3_B)
+                    # audio = MP3(filename)
+                    # mp3_duration = time.strftime("%H:%M:%S", time.gmtime(audio.info.length))[3:]
+                    # os.remove(filename)
+
                     add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, track_B, link_mp3_B)
             
     return results
@@ -642,8 +695,6 @@ async def scrap_reggaemuseum(client, url):
 
 #             break
 #     return True
-
-
 
 
 

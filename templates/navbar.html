@@ -1,9 +1,29 @@
 <div class="navbar">
     <div class="navbar-logo">
-        <img src="{{ url_for('static', filename= 'img/logo.png') }}" />
+        <a id="logo-home" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename= 'img/logo.png') }}" />
+        </a>
     </div>
 
     <div class="navbar-content">
-        <a id="home" href="{{ url_for('index') }}"><h1>Vinyls Dub Scrap</h1></a>
+        <div class="content-items">
+            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-music"></i>
+            <i class="fa-solid fa-folder"></i>
+
+            {% if session %}
+            <i class="fa-solid fa-heart"></i>
+            {% endif %}
+        </div>
+
+        <div class="user-items">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <i class="fa-solid fa-user-plus"></i>
+
+            {% if session %}
+            <i class="fa-solid fa-right-from-bracket"></i>
+            {% endif %}
+        </div>
     </div>
 </div>

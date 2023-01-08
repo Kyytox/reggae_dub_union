@@ -1,0 +1,146 @@
+.div-player-shops {
+    border: 1px solid green;
+    width: 30%;
+}
+
+
+.div-player {
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player-ctn {
+    width: 65%;
+    border: 1px solid blue;
+    padding: 20px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
+
+
+.logo {
+    fill: red
+}
+
+.infos-song {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.infos-ctn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.infos-ctn .image {
+    margin-bottom: 20px;
+}
+
+.infos-ctn img {
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+}
+
+.img.active {
+    -webkit-animation: rotation 5s linear infinite;
+    -moz-animation: rotation 5s linear infinite;
+    -ms-animation: rotation 5s linear infinite
+}
+
+.title-song {
+    width: -webkit-fill-available;
+    text-align: center;
+}
+
+.title {
+    width: 100%;
+    color: #b40303;
+    font-size: 26px;
+}
+
+.song {
+    margin-top: 50px;
+    width: 100%;
+    font-size: 24px;
+    color: black;
+}
+
+.btn-ctn {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+.btn-ctn>div {}
+
+.btn-ctn>div i:before {
+    font-size: 30px;
+}
+
+
+
+
+.time-progress {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px;
+    color: black;
+}
+
+#myProgress {
+    width: 100%;
+    background-color: black;
+    cursor: pointer;
+}
+
+#myBar {
+    width: 0;
+    height: 5px;
+    background-color: #c70505;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.timer {
+    margin-left: 5px;
+    margin-bottom: 3px;
+    font-size: 25px;
+}
+
+.duration {
+    margin-right: 5px;
+    margin-bottom: 3px;
+    font-size: 25px;
+}
+
+.btn-url-vinyl {}
+
+a.url-vinyl i::before {
+    color: white;
+    font-size: 30px;
+}
