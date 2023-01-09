@@ -5,9 +5,9 @@
 
     <div class="main-home-content">
         <div id="div-player-shops" class="div-player-shops inactive">
-            <div class="div-player">{% include "playerAudio.html" %}</div>
+            <div id="div-player" class="div-player inactive">{% include "playerAudio.html" %}</div>
 
-            <div class="div-shop-lst">{% include "lstShops.html" %}</div>
+            <div id="div-shop-lst" class="div-shop-lst inactive">{% include "lstShops.html" %}</div>
         </div>
 
         <div id="main-app" class="main-app">
@@ -24,5 +24,6 @@
 </div>
 
 <script type="text/javascript" src="../static/js/playerAudio.js"></script>
+<script type="text/javascript" src="../static/js/displayElements.js"></script>
 
 {% endblock %}

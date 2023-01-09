@@ -138,12 +138,7 @@ for (let i = 0; i < playListItems.length; i++) {
 }
 
 function getClickedElement(event) {
-    var displayPlayer = document.getElementById("div-player-shops");
-    displayPlayer.classList.remove("inactive");
-    displayPlayer.classList.add("active");
-
-    var reduceMain = document.getElementById("main-app");
-    reduceMain.classList.add("reduce");
+    displayPlayerAudio();
 
     let eventTarget = "";
 

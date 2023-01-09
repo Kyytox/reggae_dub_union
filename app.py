@@ -30,6 +30,17 @@ def getListShops(df):
 
 
 
+#
+#
+#
+@app.route('/<variable>', methods=['GET', 'POST'])
+def PagePlayerVinyl(variable):
+    print('variables: ', variable)
+    return True
+
+
+
+
 
 if __name__ == "__main__":
     print('------- Start App  -------')

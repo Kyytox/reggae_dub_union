@@ -1,13 +1,41 @@
-.div-shop-lst {
+.div-shop-lst.inactive {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    -webkit-transition: opacity 1.5s ease;
+    -moz-transition: opacity 1.5s ease;
+    -ms-transition: opacity 1.5s ease;
+    -o-transition: opacity 1.5s ease;
+}
+
+.div-shop-lst.inactive details {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    -webkit-transition: opacity 1.5s ease;
+    -moz-transition: opacity 1.5s ease;
+    -ms-transition: opacity 1.5s ease;
+    -o-transition: opacity 1.5s ease;
+}
+
+.div-shop-lst.active {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-around;
+    margin-top: 40px;
+    opacity: 1;
 }
 
-.div-shop-lst details {
+.div-shop-lst.active details {
     width: 45%;
+    opacity: 1;
+    margin-bottom: 2.4rem;
 }
 
 summary {
@@ -15,7 +43,15 @@ summary {
     color: rgb(255, 255, 255);
     background-color: rgb(59, 59, 59);
     padding: 1.2rem;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.6rem;
     border-radius: 0.5rem;
     cursor: pointer;
+}
+
+
+.list-shops {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
 }
