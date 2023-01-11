@@ -24,45 +24,6 @@
     }
 }
 
-@keyframes slowFade {
-    25% {
-        opacity: 1;
-        -webkit-transform: scale(1) rotate(0);
-        transform: scale(1) rotate(0)
-    }
-
-    40% {
-        opacity: 0
-    }
-}
-
-@-webkit-keyframes slowFade {
-    25% {
-        opacity: 1;
-        -webkit-transform: scale(1) rotate(0);
-        transform: scale(1) rotate(0)
-    }
-
-    40% {
-        opacity: 0
-    }
-}
-
-
-@-webkit-keyframes rotate {
-    100% {
-        -webkit-transform: rotate(360deg) translate(30px);
-        transform: rotate(360deg) translate(30px)
-    }
-}
-
-@keyframes rotate {
-    100% {
-        -webkit-transform: rotate(360deg) translate(30px);
-        transform: rotate(360deg) translate(30px)
-    }
-}
-
 
 
 body {
