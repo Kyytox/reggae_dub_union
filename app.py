@@ -13,9 +13,11 @@ def index():
         names=columns)
 
     list_shops = getListShops(df)
+    topAllVinyls = "False"
+    nbVinyls = df.shape[0]
     
     list_vinyls = df[:250].to_dict(orient='records')
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops)
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, topAllVinyls=topAllVinyls, nbVinyls=nbVinyls)
 
 
 def getListShops(df):
@@ -28,7 +30,19 @@ def getListShops(df):
     return lst_shop_format
 
 
+@app.route('/AllVinyls')
+def getAllVinyls():
 
+    columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
+    df = pd.read_csv('scripts_scrap/out.csv',
+        header=None,
+        names=columns)
+
+    list_shops = getListShops(df)
+    topAllVinyls = "True"
+    
+    list_vinyls = df.to_dict(orient='records')
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, topAllVinyls=topAllVinyls, nbVinyls="")
 
 #
 #

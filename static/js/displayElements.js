@@ -1,3 +1,10 @@
+// display all Vinyls
+var topAllVinyls = document.querySelector("#top-all-vinyls").innerHTML;
+if (topAllVinyls === "True") {
+    document.getElementById("btn-see-all").style.display = "none";
+    displayPlayerAudio();
+}
+
 function displayPlayerAudio() {
     var divPlayerShop = document.getElementById("div-player-shops");
     var reduceMain = document.getElementById("main-app");
