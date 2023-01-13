@@ -24,7 +24,7 @@
     -moz-transition: opacity 1s ease-in;
     -ms-transition: opacity 1s ease-in;
     -o-transition: opacity 1s ease-in;
-    transition-delay: 1s;
+    transition-delay: 0.4s;
     opacity: 1;
     margin-top: 200px;
     width: 75%;

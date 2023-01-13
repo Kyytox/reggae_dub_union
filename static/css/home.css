@@ -1,15 +1,12 @@
 :root {
-    --color-btn: #7c7979;
-    --box-shadow: 3.5px 3.5px 12.5px 3.5px #000000;
-    --back-body: rgb(207 207 207);
-    --back-body-dark-mode: black;
-    --back-active-track: linear-gradient(148deg, #1f9900 0%, rgba(36, 18, 18, 1) 80%);
-    --back-div-element: linear-gradient(333deg, rgb(29, 21, 21) 55%, rgba(163, 4, 4, 1) 90%);
-    --back-survol-element-playlist: linear-gradient(148deg, #880000 0%, rgba(36, 18, 18, 0.7) 80%);
-    --back-navbar: linear-gradient(333deg, rgba(48, 36, 36) 22%, rgb(180, 19, 19) 56%, rgb(96, 160, 76) 88%);
+    --borderRadius: 10px;
+    /* --background-content: rgba(255, 255, 255, 0.3); */
+    --background-content: linear-gradient(to left, #093028, #237a57);
+    /* --background-main: white; */
+    /* --background-main: linear-gradient(90deg, #1CB5E0 0%, #000851 100%); */
+    --background-main: linear-gradient(to left, #093028, #237a57);
+    --background-player-audio: rgba(255, 255, 255, 0.2);
 
-
-    --borderRadius: 30px;
 }
 
 
@@ -26,12 +23,46 @@
 
 
 
+/*  */
+/*  */
+/* SCROLL BAR */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    margin-top: 60px;
+    margin-bottom: 60px;
+    background: linear-gradient(143deg, #007060 0%, #4a7e65 16%, #728c69 33%, #96996e 50%, #b9a772 66%, #dcb476 83%, #ffc17a 100%);
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(36, 35, 35);
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #000000
+}
+
+
+
 body {
     background-color: #000000;
     padding: 1px;
     margin: 0;
     font-family: 'Share Tech', sans-serif;
     min-height: 100vh;
+    overflow-y: hidden;
 }
 
 a {
@@ -69,55 +100,24 @@ a {
 
 /*  */
 /*  */
-/* SCROLL BAR */
-::-webkit-scrollbar {
-    width: 3px
-}
-
-::-webkit-scrollbar-track {
-    background: linear-gradient(143deg, #007060 0%, #4a7e65 16%, #728c69 33%, #96996e 50%, #b9a772 66%, #dcb476 83%, #ffc17a 100%);
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgb(36, 35, 35);
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #000000
-}
-
-
+/* MAIN */
 .main {
     background: linear-gradient(to left top, #000000, #0c0c0c, #141414, #1b1b1b, #212121);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    border-radius: var(--borderRadius);
-    -webkit-border-radius: var(--borderRadius);
-    -moz-border-radius: var(--borderRadius);
-    -ms-border-radius: var(--borderRadius);
-    -o-border-radius: var(--borderRadius);
 }
 
 
 
 .main-home-content {
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--background-content);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
-    margin-top: 10px;
-    margin-right: 10px;
+    margin-top: 5px;
+    margin-right: 7px;
     margin-left: 6%;
+    padding-right: 5px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -130,9 +130,9 @@ a {
 
 
 .main-app {
-    background-color: white;
+    background: var(--background-main);
     padding: 20px;
-    max-height: 94vh;
+    max-height: 94.8vh;
     width: 100%;
     right: 0;
     overflow-y: scroll;
@@ -157,7 +157,20 @@ a {
 #btn-see-all {
     width: 100%;
     text-align: end;
+    color: white;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 /************************************/
 /************************************/

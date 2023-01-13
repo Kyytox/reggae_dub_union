@@ -16,8 +16,10 @@
             <div class="entete-app">
                 <h1>Home</h1>
                 <h2>Ecouter les extraits des nouveaux vinyls des Shops :</h2>
-                <p id="top-all-vinyls" style="display: none;">{{ topAllVinyls }}</p>
-                <a id="btn-see-all" href="{{ url_for('getAllVinyls') }}" style="display: block;">see All {{ nbVinyls }} vinyls </a>
+
+                <!-- Top for display all vinyls in home page -->
+                <p id="top-all-vinyls" style="display: none;">{{ top_all_vinyls }}</p>
+                <a id="btn-see-all" href="{{ url_for('getAllVinyls') }}" style="display: block;">see All {{ nb_vinyls }} vinyls </a>
             </div>
 
             <div class="app">{% include "lstTracks.html" %}</div>

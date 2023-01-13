@@ -29,7 +29,7 @@
     justify-content: space-between;
     cursor: pointer;
     width: 48%;
-    padding: 15px 10px 15px 5px;
+    padding: 12px 10px 12px 5px;
 }
 
 .playlist-song-img img {
@@ -47,8 +47,10 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    justify-content: center;
     padding-left: 15px;
     padding-right: 15px;
+    min-height: 65px;
 }
 
 .playlist-info-track h5,
@@ -62,12 +64,14 @@
 
 
 .playlist-info-track h5 {
-    color: #b40303;
+    color: black;
+    font-weight: 600;
     font-size: 14px;
 }
 
 .playlist-info-track h3 {
-    color: black;
+    color: white;
+    font-weight: 100;
     font-size: 15px;
 }
 
@@ -80,6 +84,7 @@
 .fa-heart:before,
 .fa-arrow-up-right-from-square:before,
 .fa-btn-fav-supp:before {
+    color: white;
     font-size: 20px
 }
 
@@ -94,10 +99,6 @@
     -o-border-radius: 10px;
 }
 
-.active-track>.playlist-btn-play {
-    color: #b40303 !important
-}
-
 .active-track .playlist-info-track-title {
-    color: #b40303 !important;
+    color: #bae400 !important;
 }

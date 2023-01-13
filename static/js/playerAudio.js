@@ -83,6 +83,8 @@ function createTrackItem(index, title, song, image, urlvinyl) {
     trackBtnLink.setAttribute("class", "btn_link_vinyl");
     trackBtnLink.setAttribute("style", "display:block");
     trackBtnLink.setAttribute("href", urlvinyl);
+    trackBtnLink.setAttribute("target", "_blank");
+    trackBtnLink.setAttribute("rel", "noopener noreferrer");
     document.querySelector("#ptc-" + index).appendChild(trackBtnLink);
 
     var trackImgLink = document.createElement("i");
@@ -110,12 +112,11 @@ for (let i = 0; i < titlemp3.length; i++) {
 }
 
 for (var i = 0; i < listAudio.length; i++) {
-    createTrackItem(i, listAudio[i].title, listAudio[i].song, listAudio[i].image, listAudio[i].urlvinyl);
+    createTrackItem(i, listAudio[i].title, listAudio[i].song, listAudio[i].image, listAudio[i].url);
 }
 var indexAudio = 0;
 
 function loadNewTrack(index) {
-    console.log("test1");
     var player = document.querySelector("#source-audio");
     player.src = listAudio[index].file;
     document.querySelector(".img").src = listAudio[index].image;
