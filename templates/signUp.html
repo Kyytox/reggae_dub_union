@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+    {% include "navbar.html" %}
+
+    <div class="main-auth-content">
+        <div class="div-form">
+            <h3 class="form-title">Sign Up</h3>
+            <div class="box">
+                <form id="form-auth" method="POST" action="/signup">
+                    <input class="input" type="text" name="name" placeholder="Name" autofocus="">
+                    <input class="input" type="password" name="password" placeholder="Password">
+                    <button class="btn-98">Sign Up</button>
+                </form>
+            </div>
+            {% with errors = get_flashed_messages() %}
+            {% if errors %}
+            <div class="msg-errors">
+                {% for err in errors %}
+                <p>{{ err }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

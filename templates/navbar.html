@@ -18,11 +18,12 @@
         </div>
 
         <div class="user-items">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            <i class="fa-solid fa-user-plus"></i>
-
-            {% if session %}
-            <i class="fa-solid fa-right-from-bracket"></i>
+            {% if session.username %}
+            <p>{{ session.username }}</p>
+            <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i></a>
+            <a href="{{ url_for('signup') }}" class="btn-signup"><i class="fa-solid fa-user-plus"></i></a>
             {% endif %}
         </div>
     </div>

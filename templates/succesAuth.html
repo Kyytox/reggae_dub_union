@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+    {% include "navbar.html" %}
+
+    <div class="main-auth-content">
+        <div class="div-form">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="msg-succes">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+
+                <!-- display name user -->
+                {% if session.username %}
+                <p>Welcome {{ session.username }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

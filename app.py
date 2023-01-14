@@ -1,9 +1,105 @@
-from flask import Flask, render_template, session
+from flask import Flask, flash, redirect, render_template, session, request, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
 import pandas as pd
+import os
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(12)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
+def get_db_connection():
+    conn = sqlite3.connect('vinyls_dub_scrap.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
+# SingUp
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/signup', methods=['POST'])
+def signup_post():
+    print('signup_post')
+
+    # connect BD
+    conn = get_db_connection()
+
+    # collect values form 
+    name = request.form.get('name')
+    password = request.form.get('password')
+
+    if not name:
+        flash('Name is required !')
+    elif not password:
+        flash('Password is required !')
+    elif account := conn.execute("SELECT * FROM users WHERE name = ?", (name,)).fetchone():
+        flash('Username already exists !')
+    else:
+        conn.execute("INSERT INTO users (name, password) VALUES (?, ?)", (name, generate_password_hash(password, method='sha256')))
+        conn.commit()
+        session['logged_in'] = True
+        session['username'] = name
+        flash('Successful account create !', "succes")
+        return render_template('succesAuth.html')
+
+
+    return render_template('signup.html')
+
+
+# Login
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login_post():
+    print('login_post')
+
+    # connect BD
+    conn = get_db_connection()
+
+    # collect values form 
+    name = request.form.get('name')
+    password = request.form.get('password')
+
+    if not name:
+        flash('Name is required !')
+    elif not password:
+        flash('Password is required !')
+    elif account := conn.execute("SELECT * FROM users WHERE name = ?", (name,)).fetchone():
+        if check_password_hash(account["password"], password):
+            session['logged_in'] = True
+            # session['id'] = account['id']
+            session['username'] = account['name']
+            flash('Successful connection !')
+            return render_template('succesAuth.html')
+        else:
+            flash('Password not correct !')
+    else:
+        flash('Username not exists !')
+
+    return render_template('login.html')
+
+
+# LogOut
+@app.route('/logout')
+def logout():
+    session.pop('id', None)
+    session.pop('username', None)
+    session.pop('logged_in', False)
+    return redirect(url_for('index'))
+
+
+
+
+
+
+
+
+
+# Home
 @app.route('/')
 def index():
 
@@ -67,7 +163,6 @@ def PagePlayerVinyl(shop_name, format_vinyl):
 
     # collect vinyls of one shops with format 
     list_vinyls = df.loc[(df['name_shop'] == shop_name) & (df['format_vinyl'] == format_vinyl)].to_dict(orient='records')
-    print("list_vinyls", list_vinyls)
     
     return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="")
 

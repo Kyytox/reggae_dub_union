@@ -1,0 +1,72 @@
+.main-auth-content {
+    margin-top: 5%;
+    margin-left: 40%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+
+.div-form {
+    background: var(--background-player-audio);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 45px;
+    width: 26%;
+    border-radius: var(--borderRadius);
+    -webkit-border-radius: var(--borderRadius);
+    -moz-border-radius: var(--borderRadius);
+    -ms-border-radius: var(--borderRadius);
+    -o-border-radius: var(--borderRadius);
+}
+
+.div-form h3 {
+    text-align: center;
+    color: white;
+    font-size: 30px;
+}
+
+.div-form .box {
+    width: 100%;
+}
+
+#form-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+#form-auth input.input {
+    margin-bottom: 40px;
+    width: 100%;
+    height: 35px;
+}
+
+label.checkbox {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+input[type="checkbox"] {
+    margin-right: 7px;
+}
+
+.div-form .btn-98 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.msg-errors p {
+    color: red;
+    font-size: 22px;
+}
+
+.msg-succes p {
+    color: white;
+    font-size: 22px;
+    text-align: center;
+}
