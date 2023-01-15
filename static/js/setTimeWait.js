@@ -6,39 +6,40 @@ function setTimeWait(nameShop) {
     const shop = nameShop;
     switch (shop) {
         case "jahwaggysrecords":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 45);
             break;
-        case "controltowerrecords":
-            if (document.getElementById(nameShop).checked) {
-                TimeWait += 1;
-            } else {
-                TimeWait -= 1;
-            }
-            break;
+        // case "controltowerrecords":
+        //     TimeWait += ischeck(nameShop, 7);
+        //     break;
         case "onlyrootsreggae":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 7);
             break;
         case "reggaefever":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 1);
             break;
         case "deeprootsreggae":
-            TimeWait += 1;
-            break;
-        case "rastavibes":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 25);
             break;
         case "pataterecords":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 22);
             break;
         case "toolboxrecords":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 5);
             break;
         case "lionvibes":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 1);
             break;
         case "reggaemuseum":
-            TimeWait += 1;
+            TimeWait += ischeck(nameShop, 1);
             break;
     }
     document.querySelector("#time-wait").innerHTML = TimeWait.toString();
+}
+
+function ischeck(nameShop, time) {
+    if (document.getElementById(nameShop).checked) {
+        return time;
+    } else {
+        return -time;
+    }
 }

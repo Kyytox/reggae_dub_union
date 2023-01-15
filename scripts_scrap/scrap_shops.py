@@ -137,7 +137,7 @@ async def scrap_onlyrootsreggae(client, url):
     print('url: ', url)
     results = []
     # reggea Shop name
-    name_shop = "controltower.fr"
+    name_shop = "onlyroots-reggae.com"
 
     # parse HTML 
     html = await get_url(client, url)
@@ -174,7 +174,7 @@ def scrap_controltower(url):
     print('url: ', url)
     results = []
     # reggea Shop name
-    name_shop = "onlyroots-reggae.com"
+    name_shop = "controltower.fr"
 
     # get acces to url
     res = httpx.get(url)
@@ -216,8 +216,10 @@ def scrap_controltower(url):
 async def scrap_reggaefever(client, url):
     print('url: ', url)
     results = []
-    date_ann = ['2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035']
+    date_ann = ['2017','2018','2019','2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035']
 
+    # if function call by customSearch don't skip the firsts articles
+    nb_art_no_take = 0 if "generic" in url else 2
     # reggea Shop name
     name_shop = "reggaefever.ch"
 
@@ -227,22 +229,24 @@ async def scrap_reggaefever(client, url):
     # retrieve all tags tr
     lst_articles = html.css("tr")
 
-    for item in lst_articles[2:]:
+    for item in lst_articles[nb_art_no_take:]:
         if item.text().lstrip()[:4] not in date_ann:
-
             if item.css_matches('td.articleFormat'):
                 format_vinyl = item.css_first('td.articleFormat').text()
-            
+
             if item.css_matches("td.artist"):
                 vinyl_title = item.css_first("td.artist").text() + ' - ' + item.css_first("td.title").text()
-            
+
             if item.css_matches("img.articleIcon"):
                 vinyl_image = item.css_first("img.articleIcon").attributes.get("src")
-            
+
             if item.css_matches("a"):
                 vinyl_link = 'https://www.reggaefever.ch/' + item.css_first("a").attributes.get("href")
 
-            mp3_title = item.css_first("td.title").text()
+            if item.css_matches("td.title"):
+                mp3_title = item.css_first("td.title").text()
+            else:
+                mp3_title= "version"
 
             if item.css_matches('a[target=rfplayer]'):
                 mp3_link = item.css_first('a[target=rfplayer]').attributes.get('href')
@@ -717,15 +721,15 @@ async def main():
 
 
 
-    # ---------------------------------------------------------------------------------
-    # REGGAE FEVER
-    tasks = []
-    async with httpx.AsyncClient(timeout=None) as client:
-        print('start scrap_reggaefever')
-        tasks.extend(scrap_reggaefever(client, url) for url in urls_reggaefever)
-        lst_reggaefever = await asyncio.gather(*tasks)
-    # insert in CSV
-    to_csv(lst_reggaefever)
+    # # ---------------------------------------------------------------------------------
+    # # REGGAE FEVER
+    # tasks = []
+    # async with httpx.AsyncClient(timeout=None) as client:
+    #     print('start scrap_reggaefever')
+    #     tasks.extend(scrap_reggaefever(client, url) for url in urls_reggaefever)
+    #     lst_reggaefever = await asyncio.gather(*tasks)
+    # # insert in CSV
+    # to_csv(lst_reggaefever)
 
 
 
@@ -817,11 +821,6 @@ async def main():
 
 
 
-
-
-
-
-asyncio.run(main())
 # main()
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    asyncio.run(main())

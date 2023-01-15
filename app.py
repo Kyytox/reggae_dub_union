@@ -1,8 +1,11 @@
+from customSearch import search, customSearch
+
 from flask import Flask, flash, redirect, render_template, session, request, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import pandas as pd
 import os
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(12)
@@ -210,9 +213,7 @@ def PagePlayerVinyl(shop_name, format_vinyl):
     print('variables: ', format_vinyl)
 
     columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
-    df = pd.read_csv('scripts_scrap/out.csv',
-        header=None,
-        names=columns)
+    df = pd.read_csv('scripts_scrap/out.csv',header=None, names=columns)
 
     # collect shops name 
     list_shops = getListShops(df)
@@ -223,10 +224,17 @@ def PagePlayerVinyl(shop_name, format_vinyl):
     
     return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="")
 
+# 
+# 
+# 
+# Search
+@app.route('/search_post', methods=['POST'])
+def search_post():
+    print("request.form: ", request.form["req"])
 
+    list_vinyls = search(request.form["req"])
 
-@app.route('/<search_text>', methods=['GET', 'POST'])
-def search(search_text):
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops="", top_all_vinyls="True", nb_vinyls="")
 
 
 
