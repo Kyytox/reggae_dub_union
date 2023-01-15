@@ -21,7 +21,9 @@
 
                 <!-- Top for display all vinyls in home page -->
                 <p id="top-all-vinyls" style="display: none;">{{ top_all_vinyls }}</p>
-                <a id="btn-see-all" href="{{ url_for('getAllVinyls') }}" style="display: block;">see All {{ nb_vinyls }} vinyls </a>
+                <div class="btn-see-all">
+                    <a id="btn-see-all" href="{{ url_for('getAllVinyls') }}" style="display: block;">see All {{ nb_vinyls }} vinyls </a>
+                </div>
             </div>
 
             <div class="app">{% include "lstTracks.html" %}</div>
@@ -32,8 +34,10 @@
 </div>
 
 <script type="text/javascript" src="../static/js/playerAudio.js"></script>
+<script type="text/javascript" src="../static/js/onLoad.js"></script>
 <script type="text/javascript" src="../static/js/displayElements.js"></script>
 <script type="text/javascript" src="../static/js/setTimeWait.js"></script>
+<script type="text/javascript" src="../static/js/favorisPost.js"></script>
 
 
 {% endblock %}

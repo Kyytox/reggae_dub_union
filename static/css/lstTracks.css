@@ -30,6 +30,7 @@
     cursor: pointer;
     width: 48%;
     padding: 12px 10px 12px 5px;
+    margin-bottom: 10px;
 }
 
 .playlist-song-img img {
@@ -77,14 +78,16 @@
 
 
 /* btn Favoris  */
-#btn_add_favoris {
+.fa-xmark,
+.fa-heart {
     margin-right: 10px;
 }
 
-.fa-heart:before,
-.fa-arrow-up-right-from-square:before,
-.fa-btn-fav-supp:before {
-    color: white;
+
+.fa-heart,
+.fa-xmark,
+.fa-arrow-up-right-from-square,
+.fa-btn-fav-supp {
     font-size: 20px
 }
 

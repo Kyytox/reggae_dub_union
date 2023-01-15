@@ -152,9 +152,15 @@ a {
 }
 
 
-#btn-see-all {
+
+.btn-see-all {
     width: 100%;
-    text-align: end;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+#btn-see-all {
+    width: fit-content;
     color: white;
 }
 

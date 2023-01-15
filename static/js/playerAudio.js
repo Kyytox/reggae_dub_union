@@ -1,33 +1,3 @@
-function add_favoris(index) {
-    console.log("function aad fav");
-    if (urlcourante.search("favoris") != -1) {
-        action_fav = "supp";
-        msg = "song deleted";
-        const btn = document.querySelectorAll(".fa-btn-fav-supp");
-        console.log(btn[index]);
-        btn[index].style.color = "red";
-    } else {
-        action_fav = "add";
-        msg = "song saved";
-        const btn = document.querySelectorAll(".fa-btn-fav");
-        console.log(btn[index]);
-        btn[index].style.color = "rgb(207 194 16)";
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/jahWaggys7",
-        data: {
-            title: titlevinyl[index].innerText,
-            image: imgvinyl[index].innerText,
-            url: urlvinyl[index].innerText,
-            song: titlemp3[index].innerText,
-            file: urlmp3[index].innerText,
-            action: action_fav,
-        },
-    });
-}
-
 function createTrackItem(index, title, song, image, urlvinyl) {
     var trackItem = document.createElement("div");
     trackItem.setAttribute("class", "playlist-track-ctn");
@@ -38,39 +8,46 @@ function createTrackItem(index, title, song, image, urlvinyl) {
     var songImg = document.createElement("div");
     songImg.setAttribute("class", "playlist-song-img");
     songImg.setAttribute("id", "img-" + index);
+    songImg.setAttribute("data-index", index);
     document.querySelector("#ptc-" + index).appendChild(songImg);
 
     var img = document.createElement("img");
     img.setAttribute("class", "fas fa-img");
     img.setAttribute("id", "s-img-" + index);
+    img.setAttribute("data-index", index);
     img.setAttribute("src", image);
     document.querySelector("#img-" + index).appendChild(img);
 
     var trackInfoItem = document.createElement("div");
     trackInfoItem.setAttribute("class", "playlist-info-track");
     trackInfoItem.setAttribute("id", "pit-" + index);
+    trackInfoItem.setAttribute("data-index", index);
     document.querySelector("#ptc-" + index).appendChild(trackInfoItem);
 
     var trackInfoItemTitle = document.createElement("h5");
     trackInfoItemTitle.setAttribute("class", "playlist-info-track-title");
+    trackInfoItemTitle.setAttribute("data-index", index);
     trackInfoItemTitle.innerHTML = title;
     document.querySelector("#pit-" + index).appendChild(trackInfoItemTitle);
 
     var trackInfoItemName = document.createElement("h3");
     trackInfoItemName.setAttribute("class", "playlist-info-track-name");
+    trackInfoItemName.setAttribute("data-index", index);
     trackInfoItemName.innerHTML = song;
     document.querySelector("#pit-" + index).appendChild(trackInfoItemName);
 
     var playBtnItem = document.createElement("div");
     playBtnItem.setAttribute("class", "playlist-btn-play");
     playBtnItem.setAttribute("id", "pbp-" + index);
+    playBtnItem.setAttribute("data-index", index);
     document.querySelector("#ptc-" + index).appendChild(playBtnItem);
 
     // Button Favoris
     var trackBtnAddFavoris = document.createElement("i");
-    trackBtnAddFavoris.setAttribute("id", "btn_add_favoris");
+    trackBtnAddFavoris.setAttribute("id", "btn-fav" + " " + "btn_add_favoris-" + index);
     trackBtnAddFavoris.setAttribute("class", "fa-solid fa-heart");
-    trackBtnAddFavoris.setAttribute("style", "display:block");
+    trackBtnAddFavoris.setAttribute("style", "display:block; color:white");
+    trackBtnAddFavoris.setAttribute("data-index", index);
     trackBtnAddFavoris.addEventListener("click", function () {
         add_favoris(index);
     });
@@ -79,17 +56,18 @@ function createTrackItem(index, title, song, image, urlvinyl) {
 
     // Link vinyls
     var trackBtnLink = document.createElement("a");
-    trackBtnLink.setAttribute("id", "btv" + index);
+    trackBtnLink.setAttribute("id", "btv-" + index);
     trackBtnLink.setAttribute("class", "btn_link_vinyl");
-    trackBtnLink.setAttribute("style", "display:block");
+    trackBtnLink.setAttribute("style", "display:block; color:white");
     trackBtnLink.setAttribute("href", urlvinyl);
     trackBtnLink.setAttribute("target", "_blank");
     trackBtnLink.setAttribute("rel", "noopener noreferrer");
+    trackBtnLink.setAttribute("data-index", index);
     document.querySelector("#ptc-" + index).appendChild(trackBtnLink);
 
     var trackImgLink = document.createElement("i");
     trackBtnLink.setAttribute("class", "fa-solid fa-arrow-up-right-from-square");
-    document.querySelector("#btv" + index).appendChild(trackImgLink);
+    document.querySelector("#btv-" + index).appendChild(trackImgLink);
 }
 
 var listAudio = [];
@@ -139,26 +117,19 @@ for (let i = 0; i < playListItems.length; i++) {
 }
 
 function getClickedElement(event) {
-    displayPlayerAudio();
+    console.log("event.target.classList.value", event.target.classList.value.includes("heart"));
+    // if not click on btn-fav or btn-link load track
+    if (!event.target.classList.value.includes("heart") && !event.target.classList.value.includes("square") && !event.target.classList.value.includes("xmark")) {
+        console.log("display");
+        displayPlayerAudio();
 
-    let eventTarget = "";
-
-    // if tagName of element = H3, H5, Img => collect the third element in list event.path for collect div .playlist-track-ctn
-    if (event.target.tagName == "H3" || event.target.tagName == "H5" || event.target.tagName == "IMG") {
-        eventTarget = event.path[2];
-    } else {
-        eventTarget = event.path[0];
-    }
-
-    for (let i = 0; i < playListItems.length; i++) {
-        if (playListItems[i] == eventTarget) {
-            var clickedIndex = eventTarget.getAttribute("data-index");
-            if (clickedIndex == this.indexAudio) {
-                // alert('Same audio');
-                this.toggleAudio();
-            } else {
-                loadNewTrack(clickedIndex);
-            }
+        // collet index of element and load new track
+        var clickedIndex = event.target.getAttribute("data-index");
+        if (clickedIndex == this.indexAudio) {
+            // alert('Same audio');
+            this.toggleAudio();
+        } else {
+            loadNewTrack(clickedIndex);
         }
     }
 }
@@ -307,7 +278,6 @@ function pauseToPlay(index) {
 }
 
 function toggleMute() {
-    var btnMute = document.querySelector("#toggleMute");
     var volUp = document.querySelector("#icon-vol-up");
     var volMute = document.querySelector("#icon-vol-mute");
     if (this.currentAudio.muted == false) {
@@ -320,20 +290,3 @@ function toggleMute() {
         volUp.style.display = "block";
     }
 }
-
-var urlcourante = document.location.href;
-console.log(urlcourante.search("favoris"));
-if (urlcourante.search("favoris") != -1) {
-    const btn_supp = document.querySelectorAll(".fa-btn-fav");
-    for (let i = 0; i < btn_supp.length; i++) {
-        btn_supp[i].classList.remove("fa-btn-fav");
-        btn_supp[i].classList.add("fa-btn-fav-supp");
-    }
-}
-
-// if (document.querySelector("#connexion").innerText == "Connexion") {
-//     const box = document.querySelectorAll("#btn_add_favoris");
-//     for (let i = 0; i < box.length; i++) {
-//         box[i].style.display = "none";
-//     }
-// }

@@ -7,19 +7,23 @@
 
     <div class="navbar-content">
         <div class="content-items">
-            <i class="fa-solid fa-house"></i>
+            <a id="logo-fa-home" href="{{ url_for('index') }}">
+                <i class="fa-solid fa-house"></i>
+            </a>
             <i class="fa-solid fa-magnifying-glass" onclick="displaySearchBar()"></i>
             <i class="fa-solid fa-music" onclick="displayPlayerAudio()"></i>
             <i class="fa-solid fa-folder" onclick="displayShops()"></i>
 
             {% if session %}
-            <i class="fa-solid fa-heart"></i>
+            <a id="logo-fa-fav" href="{{ url_for('favoris') }}">
+                <i class="fa-solid fa-heart"></i>
+            </a>
             {% endif %}
         </div>
 
         <div class="user-items">
             {% if session.username %}
-            <p>{{ session.username }}</p>
+            <p id="name-user-connect">{{ session.username }}</p>
             <a href="{{ url_for('logout') }}" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i></a>
             {% else %}
             <a href="{{ url_for('login') }}" class="btn-login"><i class="fa-solid fa-right-to-bracket"></i></a>
