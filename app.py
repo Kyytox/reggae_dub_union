@@ -222,9 +222,14 @@ def PagePlayerVinyl(shop_name, format_vinyl):
 def search_post():
     print("request.form: ", request.form["req"])
 
+    df = pd.read_csv('scripts_scrap/out.csv',header=None, names=lst_columns)
+
+    # collect shops name 
+    list_shops = getListShops(df)
+
     list_vinyls = search(request.form["req"])
 
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops="", top_all_vinyls="True", nb_vinyls="")
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls="True", nb_vinyls="")
 
 
 

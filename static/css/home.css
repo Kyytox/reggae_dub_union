@@ -166,79 +166,58 @@ a {
 
 
 
-
-
-
-
-/*****************************/
-/*****************************/
-/*********** FOOTER **********/
-/*****************************/
-/*****************************/
-.footer {
-    background: rgb(10, 8, 8);
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    padding-top: 20px;
-    color: white;
-}
-
-.footer-sponso {
-    font-family: 'Gamlangdee', sans-serif;
-    font-size: 23px;
-    width: 100%;
-    padding-left: 1%;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-
-.footer-sponso h2 {
-    font-size: 40px;
-    margin-top: 0;
-    margin-bottom: 20px;
-    letter-spacing: 1.6px;
-}
-
-.footer-social-network {
-    width: 100%;
+.div-loader {
     text-align: center;
+    margin-bottom: 60vh;
+    margin-top: 25vh;
 }
 
-.footer-social-network h2 {
-    font-size: 30px;
-    letter-spacing: 2px;
-    margin-top: 10px;
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 3px dotted #FFF;
+    border-style: solid solid dotted dotted;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 2s linear infinite;
 }
 
-.footer-social-network .fa-instagram,
-.footer-social-network .fa-facebook,
-.footer-social-network .fa-youtube {
-    color: white;
-    margin-right: 10px;
+.loader::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px dotted #FF3D00;
+    border-style: solid solid dotted;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    animation: rotationBack 1s linear infinite;
+    transform-origin: center center;
 }
 
-.footer-categories {
-    display: none;
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotationBack {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
 }

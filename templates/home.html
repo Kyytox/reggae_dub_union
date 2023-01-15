@@ -9,7 +9,7 @@
         <div id="div-player-shops" class="div-player-shops inactive">
             <div id="div-player" class="div-player inactive">{% include "playerAudio.html" %}</div>
 
-            <div id="div-shop-lst" class="div-shop-lst inactive">{% include "lstShops.html" %}</div>
+            <!-- <div id="div-shop-lst" class="div-shop-lst inactive">{% include "lstShops.html" %}</div> -->
 
             <div id="div-search-bar" class="div-search-bar inactive">{% include "searchBar.html" %}</div>
         </div>
@@ -19,6 +19,8 @@
                 <h1>Home</h1>
                 <h2>Ecouter les extraits des nouveaux vinyls des Shops :</h2>
 
+                <div id="div-shop-lst" class="div-shop-lst active">{% include "lstShops.html" %}</div>
+
                 <!-- Top for display all vinyls in home page -->
                 <p id="top-all-vinyls" style="display: none;">{{ top_all_vinyls }}</p>
                 <div class="btn-see-all">
@@ -26,6 +28,9 @@
                 </div>
             </div>
 
+            <div class="div-loader" style="display: none;">
+                <span class="loader"></span>
+            </div>
             <div class="app">{% include "lstTracks.html" %}</div>
         </div>
     </div>

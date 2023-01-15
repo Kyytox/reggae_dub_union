@@ -1,5 +1,5 @@
 <div class="div-search-form">
-    <form id="form" name="form1" role="search" method="POST" action="/search_post" accept-charset="utf-8">
+    <form id="form" name="form1" role="search" method="POST" action="/search_post" accept-charset="utf-8" onsubmit="loading();">
         <input id="search" name="req" type="text" placeholder="Enter Title, Artiste, labels" value="the"></input>
 
         <div class="shops-checkbox">
@@ -11,7 +11,17 @@
             {% endfor %}
         </div>
 
-        <button type="submit" class="btn-98" onClick="loading();">Search</button>
+        <button type="submit" class="btn-98">Search</button>
     </form>
     <p id="time-wait">10</p>
 </div>
+
+<script>
+
+    function loading() {
+        document.querySelector(".app").style.display = "none"
+        document.querySelector(".entete-app").style.display = "none"
+        document.querySelector(".div-loader").style.display = "block"
+    }
+
+</script>
