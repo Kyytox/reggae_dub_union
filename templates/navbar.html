@@ -10,9 +10,9 @@
             <a id="logo-fa-home" href="{{ url_for('index') }}">
                 <i class="fa-solid fa-house"></i>
             </a>
-            <i class="fa-solid fa-magnifying-glass" onclick="displaySearchBar()"></i>
-            <i class="fa-solid fa-music" onclick="displayPlayerAudio()"></i>
-            <i class="fa-solid fa-folder" onclick="displayShops()"></i>
+            <i class="fa-solid fa-magnifying-glass" style="display: block" onclick="displaySearchBar()"></i>
+            <i class="fa-solid fa-music" style="display: block" onclick="displayPlayerAudio()"></i>
+            <i class="fa-solid fa-folder" style="display: block" onclick="displayShops()"></i>
 
             {% if session %}
             <a id="logo-fa-fav" href="{{ url_for('favoris') }}">

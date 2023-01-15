@@ -11,6 +11,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(12)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 
+
+lst_columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
+
+
+
 def get_db_connection():
     conn = sqlite3.connect('vinyls_dub_scrap.db')
     conn.row_factory = sqlite3.Row
@@ -103,26 +108,30 @@ def logout():
 @app.route('/favoris')
 def favoris():
 
-    columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
-    df = pd.read_csv('scripts_scrap/out.csv',
-        header=None,
-        names=columns)
-    
+    df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
+
     # collect shops name 
     list_shops = getListShops(df)
 
-    list_vinyls = []
     user = session['username']
     top_all_vinyls = "False"
-    
+
     # collect all favoris of user 
     conn = get_db_connection()
     list_favoris = conn.execute(
         "SELECT * FROM favoris WHERE name_user = ? ", (user,)).fetchall()
 
-    for fav in list_favoris:
-        list_vinyls.append({"name_shop": fav[2], "format_vinyl": fav[3], "vinyl_title": fav[4], "vinyl_image": fav[5], "vinyl_link": fav[6], "mp3_title": fav[7], "mp3_link": fav[8]})
-
+    list_vinyls = [{
+            "name_shop": fav[2],
+            "format_vinyl": fav[3],
+            "vinyl_title": fav[4],
+            "vinyl_image": fav[5],
+            "vinyl_link": fav[6],
+            "mp3_title": fav[7],
+            "mp3_link": fav[8],
+        }
+        for fav in list_favoris
+    ]
     conn.close()
     return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="")
 
@@ -163,10 +172,7 @@ def favoris_post():
 @app.route('/')
 def index():
 
-    columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
-    df = pd.read_csv('scripts_scrap/out.csv',
-        header=None,
-        names=columns)
+    df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
 
     # collect shops name 
     list_shops = getListShops(df)
@@ -180,23 +186,10 @@ def index():
     return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls=nb_vinyls)
 
 
-def getListShops(df):
-    lst_shops = df["name_shop"].unique()
-    lst_shop_format = []
-    for shop in lst_shops:
-        lst = df[df["name_shop"] == shop]
-        lst_shop_format.append({"shop": shop, "formats": lst["format_vinyl"].unique()})
-    
-    return lst_shop_format
-
-
 @app.route('/AllVinyls')
 def getAllVinyls():
 
-    columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
-    df = pd.read_csv('scripts_scrap/out.csv',
-        header=None,
-        names=columns)
+    df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
 
     list_shops = getListShops(df)
     top_all_vinyls = "True"
@@ -209,11 +202,8 @@ def getAllVinyls():
 #
 @app.route('/<shop_name>, <format_vinyl>', methods=['GET', 'POST'])
 def PagePlayerVinyl(shop_name, format_vinyl):
-    print('variables: ', shop_name)
-    print('variables: ', format_vinyl)
 
-    columns=["name_shop", "format_vinyl", "vinyl_title", "vinyl_image", "vinyl_link", "mp3_title", "mp3_link"]
-    df = pd.read_csv('scripts_scrap/out.csv',header=None, names=columns)
+    df = pd.read_csv('scripts_scrap/out.csv',header=None, names=lst_columns)
 
     # collect shops name 
     list_shops = getListShops(df)
@@ -242,14 +232,15 @@ def search_post():
 
 
 
-
-
-
-
-
-
-
-
+# Collect all Shops dataFrame 
+def getListShops(df):
+    lst_shops = df["name_shop"].unique()
+    lst_shop_format = []
+    for shop in lst_shops:
+        lst = df[df["name_shop"] == shop]
+        lst_shop_format.append({"shop": shop, "formats": lst["format_vinyl"].unique()})
+    
+    return lst_shop_format
 
 
 

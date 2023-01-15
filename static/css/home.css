@@ -31,8 +31,8 @@
 }
 
 ::-webkit-scrollbar-track {
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     background: linear-gradient(143deg, #007060 0%, #4a7e65 16%, #728c69 33%, #96996e 50%, #b9a772 66%, #dcb476 83%, #ffc17a 100%);
     border-radius: 3px;
     -webkit-border-radius: 3px;
