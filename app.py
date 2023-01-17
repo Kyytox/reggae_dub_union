@@ -181,7 +181,8 @@ def index():
     # count nb line in df
     nb_vinyls = df.shape[0]
     
-    # collect only xxxx vinyls for home page 
+    # collect only xxxx vinyls for home page
+    df = df.sample(frac = 1) 
     list_vinyls = df[:150].to_dict(orient='records')
     return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls=nb_vinyls)
 
