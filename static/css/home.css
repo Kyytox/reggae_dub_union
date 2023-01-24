@@ -1,12 +1,14 @@
 :root {
     --borderRadius: 10px;
-    /* --background-content: rgba(255, 255, 255, 0.3); */
-    --background-content: linear-gradient(to left, #093028, #237a57);
-    /* --background-main: white; */
-    /* --background-main: linear-gradient(90deg, #1CB5E0 0%, #000851 100%); */
-    --background-main: linear-gradient(to left, #093028, #237a57);
+    /* --background-content: linear-gradient(to left, #093028, #237a57); */
+    --background-content: rgba(255, 255, 255, 0.2);
+    --background-content: linear-gradient(to left top, #000000, #262626, #2a2a2a, #222222, #363636);
+    /* --background-main: linear-gradient(to left, #093028, #237a57); */
+    /* --background-main: linear-gradient(to right, #536976, #292e49); */
+    --background-main: linear-gradient(to left, #283048, #859398);
+    ;
     --background-player-audio: rgba(255, 255, 255, 0.2);
-
+    /* --background-player-audio: linear-gradient(to left top, #000000, #0c0c0c, #141414, #1b1b1b, #212121); */
 }
 
 
@@ -33,7 +35,7 @@
 ::-webkit-scrollbar-track {
     margin-top: 20px;
     margin-bottom: 20px;
-    background: linear-gradient(143deg, #007060 0%, #4a7e65 16%, #728c69 33%, #96996e 50%, #b9a772 66%, #dcb476 83%, #ffc17a 100%);
+    background: linear-gradient(to bottom, #283048, #859398);
     border-radius: 3px;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
@@ -112,10 +114,12 @@ a {
 
 .main-home-content {
     background: var(--background-content);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
     margin-top: 5px;
     margin-right: 7px;
     margin-left: 6%;
-    padding-right: 5px;
+    /* padding-right: 5px; */
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

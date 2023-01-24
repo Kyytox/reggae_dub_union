@@ -86,6 +86,9 @@
     margin: 0;
     margin-bottom: 10px;
     font-size: 14px;
+    color: white;
+    font-weight: 100;
+    letter-spacing: 0.7px;
 }
 
 .infos-ctn .image {
@@ -123,7 +126,7 @@
     margin-top: 30px;
     width: 100%;
     font-size: 18px;
-    color: black;
+    color: white;
 }
 
 .btn-ctn {
@@ -158,7 +161,7 @@
 #myBar {
     width: 0;
     height: 5px;
-    background-color: #c70505;
+    background-color: white;
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;

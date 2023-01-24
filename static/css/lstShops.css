@@ -12,27 +12,21 @@
 }
 
 .div-shop-lst.active {
-    border: 1px solid red;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
-    /* justify-content: space-around; */
+    justify-content: flex-start;
     margin-top: 10px;
     margin-bottom: 10px;
     opacity: 1;
 }
 
 
-/* .div-shop-lst.active>* {
-    flex: 0 0 15%;
-} */
-
 .div-shop-lst.active details {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 10%;
     transition: opacity 1s ease;
     -webkit-transition: opacity 1s ease;
     -moz-transition: opacity 1s ease;
@@ -46,30 +40,30 @@
 summary {
     font-weight: 400;
     color: rgb(255, 255, 255);
-    background: var(--background-player-audio);
-    padding: 0.9rem;
     margin-bottom: 0.6rem;
-    border-radius: 0.5rem;
     cursor: pointer;
+    list-style: none;
+    text-align: left;
+    margin-right: 30px;
 }
 
 
 .list-shops {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 .list-shops a {
-    width: 40%;
+    width: 100%;
     color: white;
-    text-align: center;
+    text-align: left;
     margin-bottom: 7px;
-    padding: 10px;
+    padding: 6px;
+    padding-left: 2px;
+    padding-right: 0;
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
