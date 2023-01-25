@@ -1,10 +1,11 @@
-{% for x in list_shops %}
-<details>
-    <summary>{{x.shop}}</summary>
-    <div class="list-shops">
-        {% for format in x.formats %}
-        <a href="{{ url_for('PagePlayerVinyl', shop_name = x.shop, format_vinyl = format) }}">Vinyls {{format}}"</a>
-        {% endfor %}
-    </div>
-</details>
-{% endfor %}
+<ul id="menu-demo2">
+    {% for x in list_shops %}
+    <li><a href="#">{{x.shop}}</a>
+        <ul>
+            {% for format in x.formats %}
+            <li><a href="{{ url_for('PagePlayerVinyl', shop_name = x.shop, format_vinyl = format) }}">Vinyls {{format}}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>

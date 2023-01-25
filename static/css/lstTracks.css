@@ -67,7 +67,7 @@
 .playlist-info-track h5 {
     color: black;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .playlist-info-track h3 {
@@ -104,4 +104,5 @@
 
 .active-track .playlist-info-track-title {
     color: #bae400 !important;
+    letter-spacing: 0.5px;
 }

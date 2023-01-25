@@ -280,29 +280,30 @@ async def scrap_deeprootsreggae(client, url):
             description = html_page_vinyl.css_first('div.description')
 
             # verif if mp3 exists on this page 
-            if description.css_matches('a'):
-                vinyl_title = html_page_vinyl.css_first('h1').text()
-                div_img = html_page_vinyl.css_first('div.ProductImage')
-                vinyl_image = "http://www.deeprootsreggaeshop.com" + div_img.css_first('img').attributes.get('src')
+            if description:
+                if description.css_matches('a'):
+                    vinyl_title = html_page_vinyl.css_first('h1').text()
+                    div_img = html_page_vinyl.css_first('div.ProductImage')
+                    vinyl_image = "http://www.deeprootsreggaeshop.com" + div_img.css_first('img').attributes.get('src')
 
-                p_format = description.css('p')
+                    p_format = description.css('p')
 
-                if '7"' in p_format[-1].text():
-                    format_vinyl = "7"
-                elif '10"' in p_format[-1].text():
-                    format_vinyl = "10"
-                elif '12"' in p_format[-1].text():
-                    format_vinyl = "12"
-                else :
-                    format_vinyl = "lp"
+                    if '7"' in p_format[-1].text():
+                        format_vinyl = "7"
+                    elif '10"' in p_format[-1].text():
+                        format_vinyl = "10"
+                    elif '12"' in p_format[-1].text():
+                        format_vinyl = "12"
+                    else :
+                        format_vinyl = "lp"
 
-                lst_mp3 = description.css('a')
+                    lst_mp3 = description.css('a')
 
-                for mp3 in lst_mp3:
-                    mp3_title = vinyl_title
-                    mp3_link = mp3.attributes.get('href')
+                    for mp3 in lst_mp3:
+                        mp3_title = vinyl_title
+                        mp3_link = mp3.attributes.get('href')
 
-                    add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
+                        add_to_class(results, name_shop, format_vinyl, vinyl_title, vinyl_image, vinyl_link, mp3_title, mp3_link)
 
     return results
 

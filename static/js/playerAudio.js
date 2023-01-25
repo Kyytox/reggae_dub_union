@@ -101,7 +101,7 @@ function loadNewTrack(index) {
     document.querySelector(".url-vinyl").href = listAudio[index].url;
     document.querySelector(".title").innerHTML = listAudio[index].title;
     document.querySelector(".song").innerHTML = listAudio[index].song;
-    document.querySelector("#shop-name-h3").innerText = listAudio[indexAudio].shop;
+    document.querySelector("#shop-name-h3").innerText = listAudio[index].shop;
 
     this.currentAudio = document.getElementById("myAudio");
     this.currentAudio.load();
