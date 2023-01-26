@@ -4,6 +4,7 @@
 
 <div class="main">
     {% include "navbar.html" %}
+    <h1 style="display: none;">Vinyls Dub Scrap - nouveaux extraits vinyls reggae dub shops</h1>
 
     <div class="main-home-content">
         <div id="div-player-shops" class="div-player-shops inactive">
@@ -16,8 +17,8 @@
 
         <div id="main-app" class="main-app">
             <div class="entete-app">
-                <h1>Home</h1>
-                <h2>Ecouter les extraits des nouveaux vinyls des Shops :</h2>
+                <h1>{{ msg_head[0] }}</h1>
+                <h2>{{ msg_head[1] }}</h2>
 
                 <div id="div-shop-lst" class="div-shop-lst active">{% include "lstShops.html" %}</div>
 
@@ -30,6 +31,7 @@
 
             <div class="div-loader" style="display: none;">
                 <span class="loader"></span>
+                <p>Les vinyls arrivent dans un instant</p>
             </div>
             <div class="app">{% include "lstTracks.html" %}</div>
         </div>

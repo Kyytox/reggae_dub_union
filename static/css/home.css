@@ -135,10 +135,11 @@ a {
 .main-app {
     background: var(--background-main);
     padding: 20px;
-    max-height: 94.8vh;
+    max-height: 96vh;
     width: 100%;
     right: 0;
     overflow-y: scroll;
+    overflow-x: hidden;
     border-radius: var(--borderRadius);
     -webkit-border-radius: var(--borderRadius);
     -moz-border-radius: var(--borderRadius);
@@ -225,4 +226,15 @@ a {
     100% {
         transform: rotate(-360deg);
     }
+}
+
+
+.entete-app h1 {
+    margin-bottom: 10px;
+    padding-left: 9px;
+}
+
+.entete-app h2 {
+    margin-top: 10px;
+    padding-left: 9px;
 }

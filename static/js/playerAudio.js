@@ -16,6 +16,11 @@ function createTrackItem(index, title, song, image, urlvinyl) {
     img.setAttribute("id", "s-img-" + index);
     img.setAttribute("data-index", index);
     img.setAttribute("src", image);
+    img.setAttribute("alt", title + "-" + song);
+    // display img err if url image is not valid
+    img.onerror = function () {
+        img.setAttribute("src", "static/img/image-err.jpg");
+    };
     document.querySelector("#img-" + index).appendChild(img);
 
     var trackInfoItem = document.createElement("div");
@@ -98,6 +103,10 @@ function loadNewTrack(index) {
     var player = document.querySelector("#source-audio");
     player.src = listAudio[index].file;
     document.querySelector(".img").src = listAudio[index].image;
+    document.querySelector(".img").alt = listAudio[index].title + "-" + listAudio[index].song;
+    document.querySelector(".img").onerror = function () {
+        document.querySelector(".img").src = "static/img/image-err.jpg";
+    };
     document.querySelector(".url-vinyl").href = listAudio[index].url;
     document.querySelector(".title").innerHTML = listAudio[index].title;
     document.querySelector(".song").innerHTML = listAudio[index].song;
@@ -137,6 +146,10 @@ function getClickedElement(event) {
 // Load first track in Player Audio
 document.querySelector("#source-audio").src = listAudio[indexAudio].file;
 document.querySelector(".img").src = listAudio[indexAudio].image;
+document.querySelector(".img").alt = listAudio[indexAudio].title + "-" + listAudio[indexAudio].song;
+document.querySelector(".img").onerror = function () {
+    document.querySelector(".img").src = "static/img/image-err.jpg";
+};
 document.querySelector(".url-vinyl").href = listAudio[indexAudio].url;
 document.querySelector(".title").innerHTML = listAudio[indexAudio].title;
 document.querySelector(".song").innerHTML = listAudio[indexAudio].song;

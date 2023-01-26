@@ -1,6 +1,6 @@
 from customSearch import search, customSearch
 
-from flask import Flask, flash, redirect, render_template, session, request, url_for
+from flask import Flask, flash, redirect, render_template, send_file, session, request, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import pandas as pd
@@ -22,6 +22,13 @@ def get_db_connection():
     return conn
 
 
+
+# Sitemap
+@app.route('/robots.txt')
+def static_from_root():
+    return send_file("D:/DEV/VinylsDubScrap_NewVersion/robots.txt")
+
+
 # SingUp
 @app.route('/signup')
 def signup():
@@ -29,7 +36,6 @@ def signup():
 
 @app.route('/signup', methods=['POST'])
 def signup_post():
-    print('signup_post')
 
     # connect BD
     conn = get_db_connection()
@@ -64,7 +70,6 @@ def login():
 
 @app.route('/login', methods=['POST'])
 def login_post():
-    print('login_post')
 
     # connect BD
     conn = get_db_connection()
@@ -108,6 +113,7 @@ def logout():
 @app.route('/favoris')
 def favoris():
 
+    msg_head = ["Favoris", "Ecouter les extraits vinyls sauvegardés :"]
     df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
 
     # collect shops name 
@@ -133,15 +139,13 @@ def favoris():
         for fav in list_favoris
     ]
     conn.close()
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="")
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="", msg_head=msg_head)
 
 
 
 
 @app.route('/favoris_post', methods=['POST'])
 def favoris_post():
-    print("favoris_post")
-
     # connect BD
     conn = get_db_connection()
 
@@ -172,6 +176,8 @@ def favoris_post():
 @app.route('/')
 def index():
 
+
+    msg_head = ["Home", "Ecouter les extraits des nouveaux vinyls des Shops :"]
     df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
 
     # collect shops name 
@@ -184,19 +190,20 @@ def index():
     # collect only xxxx vinyls for home page
     df = df.sample(frac = 1) 
     list_vinyls = df[:150].to_dict(orient='records')
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls=nb_vinyls)
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls=nb_vinyls, msg_head=msg_head)
 
 
 @app.route('/AllVinyls')
 def getAllVinyls():
 
+    msg_head = ["Home", "Ecouter les extraits des nouveaux vinyls des Shops :"]
     df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
 
     list_shops = getListShops(df)
     top_all_vinyls = "True"
     
     list_vinyls = df.to_dict(orient='records')
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="")
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="", msg_head=msg_head)
 
 #
 #
@@ -204,6 +211,7 @@ def getAllVinyls():
 @app.route('/<shop_name>, <format_vinyl>', methods=['GET', 'POST'])
 def PagePlayerVinyl(shop_name, format_vinyl):
 
+    msg_head = [shop_name, "vinyls " + format_vinyl + '"']
     df = pd.read_csv('scripts_scrap/out.csv',header=None, names=lst_columns)
 
     # collect shops name 
@@ -213,7 +221,7 @@ def PagePlayerVinyl(shop_name, format_vinyl):
     # collect vinyls of one shops with format 
     list_vinyls = df.loc[(df['name_shop'] == shop_name) & (df['format_vinyl'] == format_vinyl)].to_dict(orient='records')
     
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="")
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="", msg_head=msg_head)
 
 # 
 # 
@@ -223,6 +231,7 @@ def PagePlayerVinyl(shop_name, format_vinyl):
 def search_post():
     print("request.form: ", request.form["req"])
 
+    msg_head = ["Recherche", request.form["req"]]
     df = pd.read_csv('scripts_scrap/out.csv',header=None, names=lst_columns)
 
     # collect shops name 
@@ -230,7 +239,7 @@ def search_post():
 
     list_vinyls = search(request.form["req"])
 
-    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls="True", nb_vinyls="")
+    return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls="True", nb_vinyls="", msg_head=msg_head)
 
 
 
