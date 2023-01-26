@@ -77,6 +77,7 @@ function createTrackItem(index, title, song, image, urlvinyl) {
 
 var listAudio = [];
 let shop = document.querySelectorAll("#shop-name"); //collect all shop name of page
+let format = document.querySelectorAll("#format-vinyl"); //collect all format vinyl
 let titlevinyl = document.querySelectorAll("#titre-vinyl"); //collect all title vinyls of page
 let imgvinyl = document.querySelectorAll("#img-vinyl"); //collect img duration mp3 of page
 let urlvinyl = document.querySelectorAll("#url-vinyl"); //collect all url vinyls of page
@@ -86,6 +87,7 @@ let urlmp3 = document.querySelectorAll("#mp3-url-song"); //collect all url mp3 o
 for (let i = 0; i < titlemp3.length; i++) {
     listAudio.push({
         shop: shop[i].innerText,
+        format: format[i].innerText,
         title: titlevinyl[i].innerText,
         image: imgvinyl[i].innerText,
         url: urlvinyl[i].innerText,
@@ -188,7 +190,7 @@ function toggleAudio() {
         document.querySelector("#icon-pause").style.display = "block";
         document.querySelector("#ptc-" + this.indexAudio).classList.add("active-track");
         document.querySelector(".img").classList.add("active");
-        this.currentAudio.volume = 0.4;
+        this.currentAudio.volume = 0.6;
         this.currentAudio.play();
     } else {
         document.querySelector("#icon-play").style.display = "block";
@@ -287,7 +289,7 @@ function updateStylePlaylist(oldIndex, newIndex) {
 }
 
 function pauseToPlay(index) {
-    currentAudio.volume = 0.4;
+    currentAudio.volume = 0.6;
 }
 
 function toggleMute() {

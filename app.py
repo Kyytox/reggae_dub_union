@@ -127,17 +127,23 @@ def favoris():
     list_favoris = conn.execute(
         "SELECT * FROM favoris WHERE name_user = ? ", (user,)).fetchall()
 
+    for fav in list_favoris:
+        print("fav", fav[0])
+        print("fav", fav[1])
+    
     list_vinyls = [{
-            "name_shop": fav[2],
-            "format_vinyl": fav[3],
-            "vinyl_title": fav[4],
-            "vinyl_image": fav[5],
-            "vinyl_link": fav[6],
-            "mp3_title": fav[7],
-            "mp3_link": fav[8],
+            "name_shop": fav[3],
+            "format_vinyl": fav[4],
+            "vinyl_title": fav[5],
+            "vinyl_image": fav[6],
+            "vinyl_link": fav[7],
+            "mp3_title": fav[8],
+            "mp3_link": fav[9],
         }
         for fav in list_favoris
     ]
+
+    print("list_vinyls", list_vinyls)
     conn.close()
     return render_template('home.html', list_vinyls=list_vinyls, list_shops=list_shops, top_all_vinyls=top_all_vinyls, nb_vinyls="", msg_head=msg_head)
 
@@ -149,11 +155,14 @@ def favoris_post():
     # connect BD
     conn = get_db_connection()
 
+    print("request.form", request.form)
+
     if request.form['action'] == 'add':
         if not conn.execute("SELECT * FROM favoris WHERE name_user = ? and title_mp3 = ? and file_mp3 = ?", (session['username'], request.form['song'], request.form['file'])).fetchone():
 
-            conn.execute("INSERT INTO favoris (name_user, name_shop, title_vinyl, image_vinyl, url_vinyl, title_mp3, file_mp3) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                            (session['username'], request.form['shop'], request.form['title'],request.form['image'],request.form['url'], request.form['song'],request.form['file']))
+            print("session['username']", session['username'])
+            conn.execute("INSERT INTO favoris (name_user, name_shop, format_vinyl, title_vinyl, image_vinyl, url_vinyl, title_mp3, file_mp3) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                            (session['username'], request.form['shop'],request.form['format'], request.form['title'],request.form['image'],request.form['url'], request.form['song'],request.form['file']))
 
             print('Favoris added')
         else:
@@ -170,12 +179,9 @@ def favoris_post():
 
 
 
-
-
 # Home
 @app.route('/')
 def index():
-
 
     msg_head = ["Home", "Ecouter les extraits des nouveaux vinyls des Shops :"]
     df = pd.read_csv('scripts_scrap/out.csv',header=None,names=lst_columns)
