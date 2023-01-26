@@ -45,17 +45,17 @@ def signup_post():
     password = request.form.get('password')
 
     if not name:
-        flash('Name is required !')
+        flash('Le nom doit être renseigné !')
     elif not password:
-        flash('Password is required !')
+        flash('Le mot de passe doit être renseigné !')
     elif account := conn.execute("SELECT * FROM users WHERE name = ?", (name,)).fetchone():
-        flash('Username already exists !')
+        flash("L'utilisateur existe déjà !")
     else:
         conn.execute("INSERT INTO users (name, password) VALUES (?, ?)", (name, generate_password_hash(password, method='sha256')))
         conn.commit()
         session['logged_in'] = True
         session['username'] = name
-        flash('Successful account create !', "succes")
+        flash('Compte créé !', "succes")
         return render_template('succesAuth.html')
 
     conn.close()
@@ -79,20 +79,20 @@ def login_post():
     password = request.form.get('password')
 
     if not name:
-        flash('Name is required !')
+        flash('Le nom doit être renseigné !')
     elif not password:
-        flash('Password is required !')
+        flash('Le mot de passe doit être renseigné !')
     elif account := conn.execute("SELECT * FROM users WHERE name = ?", (name,)).fetchone():
         if check_password_hash(account["password"], password):
             session['logged_in'] = True
             session['id'] = account['id']
             session['username'] = account['name']
-            flash('Successful connection !')
+            flash('Connexion réussie !')
             return render_template('succesAuth.html')
         else:
-            flash('Password not correct !')
+            flash('Mot de passe non correct !')
     else:
-        flash('Username not exists !')
+        flash("L'utilisateur n'existe pas !")
 
     conn.close()
 
