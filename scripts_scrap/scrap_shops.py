@@ -321,6 +321,7 @@ def scrap_rastavibes(url):
     options.headless = True
 
     service = Service(executable_path="D:/DEV/VinylsDubScrap_NewVersion/chromedriver.exe")
+    # service = Service(executable_path="/home/kytox/Vinyls_Dub_Scrap/selenium/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
     driver.set_window_size(1700, 1080)
     

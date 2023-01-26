@@ -253,5 +253,6 @@ def getListShops(df):
 
 if __name__ == "__main__":
     print('------- Start App  -------')
+    # app.config['SERVER_NAME'] = "www.vinylsdubscrap.xyz"
     app.debug = True
     app.run
