@@ -57,43 +57,6 @@ form input {
     width: 80%;
 }
 
-
-.shops-checkbox {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 15px;
-    margin-bottom: 25px;
-}
-
-
-.shops-checkbox div {
-    display: flex;
-    flex-direction: row-reverse;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: flex-start;
-    width: 48%;
-    margin-top: 10px;
-}
-
-.shops-checkbox :nth-child(2n) {
-    flex-direction: row;
-}
-
-.shops-checkbox label {
-    margin-left: 0;
-    margin-right: 7px;
-}
-
-.shops-checkbox :nth-child(2n) label {
-    flex-direction: row;
-    margin-left: 7px;
-    margin-right: 0;
-}
-
-
 input[type="checkbox"] {
     -webkit-appearance: none;
     height: 1.5em;
@@ -231,5 +194,72 @@ input[type="checkbox"]:checked {
 
     to {
         transform: translateX(0);
+    }
+}
+
+
+@media screen and (max-width: 1000px) {
+
+    .div-search-bar.inactive {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
+
+    .div-search-bar.active {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-around;
+        margin-top: 40px;
+    }
+
+    .div-search-bar.inactive .div-search-form {
+        opacity: 0;
+        width: 0;
+    }
+
+    .div-search-bar.active .div-search-form {
+        transition: opacity 1s ease-in;
+        -webkit-transition: opacity 1s ease-in;
+        -moz-transition: opacity 1s ease-in;
+        -ms-transition: opacity 1s ease-in;
+        -o-transition: opacity 1s ease-in;
+        transition-delay: 0.4s;
+        opacity: 1;
+        margin-top: 200px;
+        width: 75%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .div-search-bar.active {
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .div-search-bar.active .div-search-form {
+        margin-top: 0;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    form input {
+        height: 45px;
+        font-size: 1.7em;
+    }
+
+
+    .btn-98 {
+        margin-top: 20px;
     }
 }

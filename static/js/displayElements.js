@@ -13,6 +13,7 @@ function displayPlayerAudio() {
     var divSearch = document.getElementById("div-search-bar");
 
     if (divPlayerShop.className.includes("inactive")) {
+        console.log("test");
         // display div Player Shop
         divPlayerShop.classList.remove("inactive");
         divPlayerShop.classList.add("active");
@@ -27,7 +28,12 @@ function displayPlayerAudio() {
         // display div Player
         divPlayer.classList.remove("inactive");
         divPlayer.classList.add("active");
+
+        // hide search bar
+        divSearch.classList.remove("active");
+        divSearch.classList.add("inactive");
     } else {
+        console.log("test");
         // display player audio
         divPlayer.classList.add("active");
         divPlayer.classList.remove("inactive");
@@ -36,32 +42,8 @@ function displayPlayerAudio() {
         reduceMain.classList.add("reduce");
 
         // hide search bar
-        divSearch.classList.add("inactive");
         divSearch.classList.remove("active");
-    }
-}
-
-function displayShops() {
-    var divPlayerShop = document.getElementById("div-player-shops");
-    var reduceMain = document.getElementById("main-app");
-    var divPlayer = document.getElementById("div-player");
-    var divSearch = document.getElementById("div-search-bar");
-
-    if (divPlayerShop.className.includes("inactive")) {
-        divPlayerShop.classList.remove("inactive");
-        divPlayerShop.classList.add("active");
-
-        reduceMain.classList.add("reduce");
-    } else if (!divPlayer.className.includes("inactive")) {
-        // hide player audio
-        divPlayer.classList.remove("active");
-        divPlayer.classList.add("inactive");
-    } else {
-        reduceMain.classList.add("reduce");
-
-        // hide search bar
         divSearch.classList.add("inactive");
-        divSearch.classList.remove("active");
     }
 }
 

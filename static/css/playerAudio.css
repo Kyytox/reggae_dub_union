@@ -217,3 +217,124 @@ a.url-vinyl i::before,
 #icon-pause::before {
     color: black;
 }
+
+
+
+@media screen and (max-width: 1000px) {
+    .playlist-track-ctn {
+        width: 95%;
+    }
+
+    .playlist-song-img img {
+        width: 115px;
+        height: 115px;
+    }
+
+    .playlist-info-track h5 {
+        font-size: 1.1em;
+    }
+
+    .playlist-info-track h3 {
+        font-size: 1em;
+    }
+
+    .div-player.active {
+        margin-top: 20px;
+    }
+
+    .div-player-shops.active {
+        width: 100%;
+    }
+
+    .div-player-shops.active .player-ctn {
+        width: 94%;
+        max-height: 315px;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+
+    .infos-song {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        align-items: flex-end;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        height: 100%;
+    }
+
+    .infos-ctn {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: 200px;
+    }
+
+    .infos-ctn .image {
+        margin-bottom: 0;
+    }
+
+    .infos-ctn img {
+        height: 150px;
+        width: 150px;
+    }
+
+    .infos-ctn h3#shop-name-h3 {
+        font-size: 1.2em;
+    }
+
+    .infos-song :nth-child(2) {
+        right: 0;
+    }
+
+    .title-song {
+        width: 81%;
+    }
+
+    .btn-ctn {
+        margin-top: 10px;
+        width: 80%;
+    }
+
+    .title {
+        font-size: 2em;
+    }
+
+    .song {
+        margin-top: 15px;
+        font-size: 1.8em;
+    }
+
+    .time-progress {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+}
+
+
+@media screen and (max-width: 500px) {
+    .playlist-info-track h5 {
+        font-size: 1.4em;
+    }
+
+    .playlist-info-track h3 {
+        font-size: 1.3em;
+    }
+
+    .infos-ctn h3#shop-name-h3 {
+        font-size: 1.5em;
+    }
+
+    .title {
+        font-size: 2.4em;
+    }
+
+    .song {
+        margin-top: 15px;
+        font-size: 2.3em;
+    }
+}
