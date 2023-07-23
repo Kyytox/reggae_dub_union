@@ -1,2 +1,7 @@
 ressources/img_schema/
 old_version/init_bd.py
+venv/
+pyproject.toml
+.env
+__pycache__/
+temp/
