@@ -3,7 +3,7 @@ Pgm to Store SQL Queries
 """
 
 # insert in vinyls from extract_vinyls_temp
-insert_in_vinyls = """
+insert_vinyls = """
 INSERT INTO vinyls (site, format, title, image, url)
 SELECT DISTINCT site, format, title, image, url
 FROM extract_vinyls_temp
@@ -15,7 +15,7 @@ WHERE NOT EXISTS (
 """
 
 # insert in songs from extract_vinyls_temp
-insert_in_songs = """
+insert_songs = """
 INSERT INTO songs (id_vinyl, title, mp3)
 SELECT DISTINCT vinyls.id, title_mp3, mp3
 FROM extract_vinyls_temp

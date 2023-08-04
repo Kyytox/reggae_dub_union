@@ -28,7 +28,6 @@ async def scrap_shop(name_function: str, name_shop: str, links: list, conn: str)
         df = await asyncio.gather(*tasks)
 
     df = pd.concat(df, ignore_index=True)
-    print(df)
 
     if not df.empty:
         insert_in_db(df, conn)
@@ -75,8 +74,8 @@ def extract_data():
         links = row["links"]
 
         print(name_shop)
-        print(name_function)
-        print(links)
+        # print(name_function)
+        # print(links)
 
         # scrap shop
         asyncio.run(scrap_shop(name_function, name_shop, links, conn))
