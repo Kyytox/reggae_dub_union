@@ -9,46 +9,27 @@ Create Table:
     - favoris
 """
 
-
-import os
 from dotenv import load_dotenv
-import psycopg2
 
-import sql_query as sql
+# Fonctions utils
+import utils as db_utils
 
 load_dotenv()
 
 
-def init_conn():
-    """Create a connection to the database"""
-    try:
-        return psycopg2.connect(
-            host="localhost",
-            port=5432,
-            database=os.getenv("DATABASE"),
-            user=os.getenv("DATABASE_USER"),
-            password=os.getenv("DATABASE_PWD"),
-        )
-
-    except psycopg2.Error as e:
-        print(e)
-        return None
-
-
 def create_tables(conn):
     """Create tables in the database"""
+    # execute sql query in sql_init.sql (file)
     with conn.cursor() as cur:
-        cur.execute(sql.create_shops)
-        cur.execute(sql.create_vinyls)
-        cur.execute(sql.create_songs)
-        cur.execute(sql.create_users)
-        cur.execute(sql.create_favoris)
+        with open("database/sql_init.sql", "r") as f:
+            cur.execute(f.read())
 
     conn.commit()
 
 
-def main():
-    conn = init_conn()
+def init_db():
+    """Init database, create tables, insert data"""
+    conn = db_utils.connect_db_psycopg2()
 
     if conn is None:
         print("Error: Could not make connection to the Postgres database")
@@ -56,9 +37,8 @@ def main():
 
     create_tables(conn)
 
-    # Close the connection
     conn.close()
 
 
 if __name__ == "__main__":
-    main()
+    init_db()
