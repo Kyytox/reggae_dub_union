@@ -20,7 +20,7 @@ def get_shop_links(conn: str) -> pd.DataFrame:
 
 
 async def scrap_shop(name_function: str, name_shop: str, links: list, conn: str) -> None:
-    """Scrap shop"""
+    """Scrap shop with asyncio for execute in parallel"""
     tasks = []
     async with httpx.AsyncClient(timeout=None) as client:
         func = getattr(sc, name_function)
@@ -74,13 +74,9 @@ def extract_data():
         links = row["links"]
 
         print(name_shop)
-        # print(name_function)
-        # print(links)
 
         # scrap shop
         asyncio.run(scrap_shop(name_function, name_shop, links, conn))
-
-        print("---------------------")
 
     conn.dispose()
 

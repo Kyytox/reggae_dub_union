@@ -31,10 +31,6 @@ def init_db():
     """Init database, create tables, insert data"""
     conn = db_utils.connect_db_psycopg2()
 
-    if conn is None:
-        print("Error: Could not make connection to the Postgres database")
-        return None
-
     create_tables(conn)
 
     conn.close()
