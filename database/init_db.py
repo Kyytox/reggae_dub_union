@@ -12,7 +12,7 @@ Create Table:
 from dotenv import load_dotenv
 
 # Fonctions utils
-import utils as db_utils
+import database.connect as db_utils
 
 load_dotenv()
 

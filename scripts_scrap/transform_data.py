@@ -8,18 +8,25 @@ from dotenv import load_dotenv
 from pathlib import Path
 import sqlalchemy
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 # Fonctions utils
-from database import utils as db_utils
+from database import connect as db_utils
 from database import sql_queries as sql
 
 load_dotenv()
 
 
 def transform_tables():
-    """Transform data from extract_vinyls_temp to vinyls, songs"""
+    """
+    Transform data from extract_vinyls_temp to vinyls, songs
 
+    - connect to database
+    - insert data of extract_vinyls_temp in vinyls
+    - insert data of extract_vinyls_temp in songs
+    - truncate extract_vinyls_temp
+
+    """
     # connect to database
     conn = db_utils.connect_db_sqlalchemy()
 
@@ -31,7 +38,3 @@ def transform_tables():
         cur.commit()
 
     conn.dispose()
-
-
-if __name__ == "__main__":
-    transform_tables()

@@ -5,22 +5,40 @@ import asyncio
 import nest_asyncio
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+# sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 # Fonctions utils
-from database import utils as db_utils
+from database import connect as db_utils
 import scripts_scrap as sc
 
 nest_asyncio.apply()
 
 
 def get_shop_links(conn: str) -> pd.DataFrame:
-    """Get shop list from DB"""
+    """
+    Get all shops in DB
+
+    Args:
+        conn (str): connection to db
+
+    Returns:
+        pd.DataFrame: dataframe with elements of Table shops (name, name_function, links)
+    """
+
     return pd.read_sql("SELECT * FROM shops", conn)
 
 
 async def scrap_shop(name_function: str, name_shop: str, links: list, conn: str) -> None:
-    """Scrap shop with asyncio for execute in parallel"""
+    """
+    Scrap shops links in parallel using asyncio.
+
+    Args:
+        name_function (str): name of function to scrap shop
+        name_shop (str): name of shop
+        links (list): list of links to scrap
+        conn (str): connection to db
+    """
+
     tasks = []
     async with httpx.AsyncClient(timeout=None) as client:
         func = getattr(sc, name_function)
@@ -34,7 +52,13 @@ async def scrap_shop(name_function: str, name_shop: str, links: list, conn: str)
 
 
 def insert_in_db(df: pd.DataFrame, conn: str) -> None:
-    """Insert data in DB in extract_vinyls_temp"""
+    """
+    Insert data in DB in extract_vinyls_temp
+
+    Args:
+        df (pd.DataFrame): dataframe with data to insert
+        conn (str): connection to db
+    """
 
     # kepp vinyl_link, start with "http"
     df = df[df["vinyl_link"].str.startswith("http")]
@@ -56,7 +80,8 @@ def insert_in_db(df: pd.DataFrame, conn: str) -> None:
 
 
 def extract_data():
-    """Collect shops to scrap
+    """
+    Collect shops to scrap
     Browse shops
     Scrap shop
     Insert data in DB

@@ -6,12 +6,34 @@ from selectolax.parser import HTMLParser
 
 
 async def get_url(client: httpx.AsyncClient, url: str) -> HTMLParser:
-    """Get HTML from url"""
+    """
+    Get HTML of url
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        url (str): url to scrap
+
+    Returns:
+        HTMLParser: HTML of url
+    """
+
     res = await client.get(url)
     return HTMLParser(res.text)
 
 
 async def scrap_jahwaggysrecords(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap jahwaggysrecords
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
 
     # get format vinyl
@@ -56,6 +78,18 @@ async def scrap_jahwaggysrecords(client: httpx.AsyncClient, name_shop: str, url:
 
 
 async def scrap_onlyrootsreggae(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap onlyrootsreggae
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
     # parse HTML
     html = await get_url(client, url)
@@ -98,6 +132,18 @@ async def scrap_onlyrootsreggae(client: httpx.AsyncClient, name_shop: str, url: 
 
 
 async def scrap_controltower(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap controltower
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
     # get acces to url
     res = httpx.get(url)
@@ -146,6 +192,18 @@ async def scrap_controltower(client: httpx.AsyncClient, name_shop: str, url: str
 
 
 async def scrap_reggaefever(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap reggaefever
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
 
     date_ann = [str(i) for i in range(2017, 2036)]
@@ -197,6 +255,18 @@ async def scrap_reggaefever(client: httpx.AsyncClient, name_shop: str, url: str)
 
 
 async def scrap_pataterecords(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap pataterecords
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
 
     # parse HTML
@@ -255,6 +325,18 @@ async def scrap_pataterecords(client: httpx.AsyncClient, name_shop: str, url: st
 
 
 async def scrap_toolboxrecords(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap toolboxrecords
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
 
     # parse HTML
@@ -316,6 +398,18 @@ async def scrap_toolboxrecords(client: httpx.AsyncClient, name_shop: str, url: s
 
 
 async def scrap_lionvibes(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap Lionvibes
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
 
     # parse HTML
@@ -360,6 +454,18 @@ async def scrap_lionvibes(client: httpx.AsyncClient, name_shop: str, url: str) -
 
 
 async def scrap_reggaemuseum(client: httpx.AsyncClient, name_shop: str, url: str) -> pd.DataFrame:
+    """
+    Scrap onlyrootsreggae
+
+    Args:
+        client (httpx.AsyncClient): client httpx
+        name_shop (str): name of shop
+        url (str): url to scrap
+
+    Returns:
+        pd.DataFrame: dataframe with data scrapped
+    """
+
     results = pd.DataFrame()
     random_page = 1
 
