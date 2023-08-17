@@ -41,9 +41,14 @@ with DAG(
         sql="sql_init.sql",
     )
 
-    start = BashOperator(
-        task_id="start",
-        bash_command="echo Start",
+    extract_from_web = PythonOperator(
+        task_id="extract__vinyls_from_web",
+        python_callable=extract_data,
     )
 
-    create_tables >> start
+    transform_tables = PythonOperator(
+        task_id="transform_tables",
+        python_callable=transform_tables,
+    )
+
+    create_tables >> extract_from_web >> transform_tables

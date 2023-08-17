@@ -10,7 +10,6 @@ Extract data from shops
 
 """
 
-
 import pandas as pd
 import httpx
 import asyncio
@@ -18,7 +17,7 @@ import nest_asyncio
 
 # Fonctions utils
 from helpers import connect as db_utils
-import scripts_scrap as sc
+from operators import scripts_scrap as sc
 
 nest_asyncio.apply()
 
@@ -46,7 +45,6 @@ async def scrap_shop(name_function: str, name_shop: str, links: list, conn: str)
         links (list): list of links to scrap
         conn (str): connection to db
     """
-
     tasks = []
     async with httpx.AsyncClient(timeout=None) as client:
         func = getattr(sc, name_function)

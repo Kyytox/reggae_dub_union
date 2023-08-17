@@ -38,6 +38,5 @@ def transform_tables():
         cur.execute(sqlalchemy.text(sql.insert_vinyls))
         cur.execute(sqlalchemy.text(sql.insert_songs))
         cur.execute(sqlalchemy.text(sql.truncate_extract_vinyls_temp))
-        cur.commit()
 
     conn.dispose()
