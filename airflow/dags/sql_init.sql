@@ -3,17 +3,14 @@
 -- And to insert the data in the table shops
 
 
-DROP TABLE IF EXISTS shops CASCADE;
-CREATE TABLE shops (
-    id SERIAL,
+CREATE TABLE IF NOT EXISTS shops (
     name VARCHAR(255),
     name_function VARCHAR(255),
     links VARCHAR[],
-    PRIMARY KEY (id)
+    PRIMARY KEY (name)
 );
 
-DROP TABLE IF EXISTS vinyls CASCADE;
-CREATE TABLE vinyls (
+CREATE TABLE IF NOT EXISTS vinyls (
     id SERIAL,
     site VARCHAR(255),
     format VARCHAR(255),
@@ -23,8 +20,7 @@ CREATE TABLE vinyls (
     PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS songs CASCADE;
-CREATE TABLE songs (
+CREATE TABLE IF NOT EXISTS songs (
     id SERIAL,
     id_vinyl INT NOT NULL,
     title VARCHAR(255),
@@ -33,8 +29,7 @@ CREATE TABLE songs (
     FOREIGN KEY (id_vinyl) REFERENCES vinyls (id)
 );
 
-DROP TABLE IF EXISTS extract_vinyls_temp CASCADE;
-CREATE TABLE extract_vinyls_temp (
+CREATE TABLE IF NOT EXISTS extract_vinyls_temp (
     id SERIAL,
     site VARCHAR(255),
     format VARCHAR(255),
@@ -47,8 +42,7 @@ CREATE TABLE extract_vinyls_temp (
 );
 
 
-DROP TABLE IF EXISTS users CASCADE;
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL,
     name VARCHAR(255),
     password VARCHAR(255),
@@ -56,8 +50,7 @@ CREATE TABLE users (
 );
 
 
-DROP TABLE IF EXISTS favoris CASCADE;
-CREATE TABLE favoris (
+CREATE TABLE IF NOT EXISTS favoris (
     id SERIAL,
     id_vinyl INT NOT NULL,
     id_user INT NOT NULL,

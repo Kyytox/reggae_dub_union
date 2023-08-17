@@ -1,18 +1,21 @@
 """
+file: transform_data.py
+
 Programme for transform data 
+
 Transfer data from extract_vinyls_temp to vinyls, songs
+
 """
 
-import sys
 from dotenv import load_dotenv
-from pathlib import Path
 import sqlalchemy
 
-# sys.path.append(str(Path(__file__).resolve().parent.parent))
-
 # Fonctions utils
-from database import connect as db_utils
-from database import sql_queries as sql
+from helpers import connect as db_utils
+
+# sql queries
+from helpers import sql_queries as sql
+
 
 load_dotenv()
 

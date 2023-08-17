@@ -8,10 +8,10 @@ import requests
 import numpy as np
 
 # # Fonctions scrapping
-from scripts_scrap.extract_data import get_shop_links
+from operators.extract_data import get_shop_links
 
 # Fonctions db
-from database.connect import connect_db_sqlalchemy
+from helpers.connect import connect_db_sqlalchemy
 
 
 @pytest.fixture

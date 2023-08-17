@@ -1,5 +1,8 @@
 """
-Pgm to Store SQL Queries
+file: sql_queries.py
+
+SQL queries for transform_data.py
+
 """
 
 # insert in vinyls from extract_vinyls_temp

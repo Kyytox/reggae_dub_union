@@ -5,7 +5,7 @@ Test if connection to database is working
 
 from dotenv import load_dotenv
 
-from database.connect import connect_db_psycopg2, connect_db_sqlalchemy
+from helpers.connect import connect_db_psycopg2, connect_db_sqlalchemy
 
 load_dotenv()
 

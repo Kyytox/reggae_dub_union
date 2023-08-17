@@ -1,14 +1,23 @@
+"""
+file: extract_data.py
+
+Extract data from shops
+
+- Collect shops to scrap
+- Browse shops
+- Scrap shop
+- Insert data in DB
+
+"""
+
+
 import pandas as pd
-import sys
 import httpx
 import asyncio
 import nest_asyncio
-from pathlib import Path
-
-# sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 # Fonctions utils
-from database import connect as db_utils
+from helpers import connect as db_utils
 import scripts_scrap as sc
 
 nest_asyncio.apply()
@@ -24,7 +33,6 @@ def get_shop_links(conn: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: dataframe with elements of Table shops (name, name_function, links)
     """
-
     return pd.read_sql("SELECT * FROM shops", conn)
 
 

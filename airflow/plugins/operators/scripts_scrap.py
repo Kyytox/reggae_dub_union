@@ -1,3 +1,11 @@
+"""
+file: scripts_scrap.py
+
+regroup all functions to scrap vinyls 
+Each function scrap one shop
+
+"""
+
 import re
 import pandas as pd
 import random
