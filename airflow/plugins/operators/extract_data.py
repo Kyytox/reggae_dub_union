@@ -65,7 +65,6 @@ def insert_in_db(df: pd.DataFrame, conn: str) -> None:
         df (pd.DataFrame): dataframe with data to insert
         conn (str): connection to db
     """
-
     # kepp vinyl_link, start with "http"
     df = df[df["vinyl_link"].str.startswith("http")]
 
@@ -92,7 +91,6 @@ def extract_data():
     Scrap shop
     Insert data in DB
     """
-
     # connect to db with sqlalchemy for use pandas to_sql
     conn = db_utils.connect_db_sqlalchemy()
 
@@ -110,7 +108,3 @@ def extract_data():
         asyncio.run(scrap_shop(name_function, name_shop, links, conn))
 
     conn.dispose()
-
-
-if __name__ == "__main__":
-    extract_data()
