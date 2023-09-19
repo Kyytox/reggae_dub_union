@@ -1,0 +1,38 @@
+/* ---------------- */
+/* Navbar */
+/* ---------------- */
+.navbar_items{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.navbar_items a {
+    margin-left: 3rem;
+}
+
+
+.navbar_items .searchBar {
+    margin-left: 3rem;
+}
+
+.searchBar .MuiFormLabel-root {
+    top: -4px;
+}
+
+.searchBar input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-radius: 5px;
+    height: 0.9rem;
+    background-color: grey;
+}
+
+
+.navbar_items .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+    border-color: transparent
+}

@@ -15,6 +15,9 @@ def index():
 
 # Applications Routes
 from . import auth
+from . import get_vinyls
+from . import favoris
+from . import search
 
 
 if __name__ == "__main__":

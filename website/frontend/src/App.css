@@ -1,42 +1,81 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  width: -webkit-fill-available;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+.App{
+  margin-bottom: 5em;
+  width: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
+.home{
+  width: 100%;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+
+/* ---------------- */
+/* Card Vinyl */
+/* ---------------- */
+.container-lstVinyls .MuiGrid-root .MuiGrid-root{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-lstVinyls .MuiGrid-root .MuiGrid-root img{
+  clip-path: inset(1% 1% 1% 1%);
+}
+
+.container-lstVinyls .MuiCardActions-root {
+  display: flex;
+  direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-lstVinyls .MuiCardActions-root button,
+.container-lstVinyls .MuiCardActions-root a{
+  min-width: 0;
+}
+
+
+/* ---------------- */
+/* List Formats */
+/* ---------------- */
+.container-lstFormats button, .container-lstShops button {
+  font-size: 0.71em;
+}
+
+
+/* ---------------- */
+/* Player Audio */
+/* ---------------- */
+.container-audioPlayer-controls svg {
+  width: 1.4em;
+  height: 1.4em;
+  margin-left: 0.5em;
+  border-radius: 25%;
+}
+
+.container-audioPlayer-controls svg:hover {
+  background-color: #888;
+  background-color: #18181b;
+  cursor: pointer;
+}
+
+
+/* ---------------- */
+/* Login - Signup */
+/* ---------------- */
+
+#box-Login .MuiFormLabel-root,
+#box-Signup .MuiFormLabel-root {
+  color: grey
 }

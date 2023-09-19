@@ -68,6 +68,9 @@ def insert_in_db(df: pd.DataFrame, conn: str) -> None:
     # kepp vinyl_link, start with "http"
     df = df[df["vinyl_link"].str.startswith("http")]
 
+    # downcase values columns format_vinyl
+    df["format_vinyl"] = df["format_vinyl"].str.lower()
+
     df = df.rename(
         columns={
             "name_shop": "site",

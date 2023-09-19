@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -6,29 +7,33 @@ import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import IconButton from "@mui/material/IconButton";
-import "./auth.css";
-import postAxios from "./utils";
+import WarningIcon from "@mui/icons-material/Warning";
+import { AuthContext } from "./AuthContext";
+import { postAxios } from "./UtilsAxios";
 
-function Register() {
+function Login() {
+    const { login } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const sxTextField = {
         width: "100%",
         marginTop: "2rem",
     };
 
+    // Var for form
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
 
+    // Var for form errors
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+    // Var for form Response
+    const [ResponseSuccess, setResponseSuccess] = useState("");
+    const [ResponseError, setResponseError] = useState("");
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-    const handleClickShowConfirmPassword = () =>
-        setShowConfirmPassword((show) => !show);
 
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
@@ -41,7 +46,7 @@ function Register() {
         // reset errors
         setUsernameError("");
         setPasswordError("");
-        setConfirmPasswordError("");
+        setResponseError("");
         var topValid = true;
 
         // control username
@@ -56,30 +61,29 @@ function Register() {
             topValid = false;
         }
 
-        // control confirm password
-        if (!confirmPassword) {
-            setConfirmPasswordError("Confirm password is required");
-            topValid = false;
-        }
-
-        // control password and confirm password
-        if (password !== confirmPassword) {
-            setConfirmPasswordError("Passwords do not match");
-            topValid = false;
-        }
-
         if (topValid) {
             console.log("Form submitted");
 
-            // call backend flask api /register
+            // call backend flask api /Signup
             const data = {
                 username: username,
                 password: password,
             };
 
             try {
-                const response = await postAxios("/register", data);
+                const response = await postAxios("/login", data);
                 console.log(response);
+
+                if (response.isAuth === true) {
+                    login(response.id, response.token);
+                    setResponseSuccess("Login successful");
+
+                    setTimeout(() => {
+                        navigate("/");
+                    }, 1500);
+                } else {
+                    setResponseError(response);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -94,18 +98,20 @@ function Register() {
                 flexDirection: "column",
                 width: "25rem",
                 padding: "4rem",
-                paddingTop: "3rem",
+                paddingTop: "2rem",
+                marginTop: "5rem",
                 border: "1px solid black",
                 borderRadius: "1rem",
-                backgroundColor: "gray",
+                backgroundColor: "#18181b",
             }}
-            id="box-register"
+            id="box-Login"
         >
-            <h2 className="text-xl font-bold" id="h2-register">
-                Register
+            <h2 className="text-xl font-bold" id="h2-Signup">
+                Signup
             </h2>
             <TextField
                 required
+                autoFocus
                 id="username"
                 label="Username"
                 variant="standard"
@@ -143,44 +149,24 @@ function Register() {
                     ),
                 }}
             />
-            <TextField
-                required
-                id="confirm-password"
-                label="Confirm Password"
-                variant="standard"
-                sx={sxTextField}
-                type={showConfirmPassword ? "text" : "password"}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                error={!!confirmPasswordError}
-                helperText={confirmPasswordError}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowConfirmPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                            >
-                                {showConfirmPassword ? (
-                                    <VisibilityOff />
-                                ) : (
-                                    <Visibility />
-                                )}
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            <Button
-                variant="contained"
-                onClick={handleSubmit}
-                sx={{ mt: 5, ml: 1 }}
-            >
-                Register
+            <Button variant="contained" onClick={handleSubmit} sx={{ mt: 5 }}>
+                Sign Up
             </Button>
+
+            {ResponseError && (
+                <div className="text-black flex justify-center text-m mt-4 p-2 bg-red-400 rounded">
+                    <WarningIcon />
+                    {ResponseError}
+                </div>
+            )}
+
+            {ResponseSuccess && (
+                <div className="text-black flex justify-center text-m mt-4 p-2 bg-green-400 rounded">
+                    {ResponseSuccess}
+                </div>
+            )}
         </Box>
     );
 }
 
-export default Register;
+export default Login;

@@ -1,7 +1,7 @@
 """
 This file contains the code for the authentication of the user.
 
-Registering a new user
+Signup a new user
 Logging in an existing user
 Logging out a user
 Deleting a user
@@ -12,41 +12,64 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from .app import app
 from . import db
-
-# from . import app
 from .models import User
 
-
-@app.route("/r")
-def register1():
-    return "yes"
+# Utils
+from .auth_utils import encode_auth_token, decode_auth_token
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
+@app.route("/signup", methods=["POST"])
+def Signup():
     """
-    Register a new user.
+    Signup a new user.
     """
-    print("register")
-    print(request.method)
-    print(request.form)
-    return "test"
-    if request.method == "POST":
-        # Get form information.
-        name = request.form.get("username")
-        password = request.form.get("password")
+    print("-------------------------------------------")
+    body = request.get_json()["body"]
 
-        # Check if user already exists.
-        if User.query.filter_by(name=name).first():
-            return render_template("error.html", message="User already exists.")
+    # Get form information.
+    name = body["username"]
+    password = body["password"]
 
-        # Create new user.
-        new_user = User(name=name, password=generate_password_hash(password, method="sha256"))
+    name_not_auth = ["null", "undefined", "None", "nan", "NaN", ""]
 
-        # Add user to database.
-        db.session.add(new_user)
-        db.session.commit()
+    # Check if user already exists.
+    if User.query.filter_by(name=name).first() or name in name_not_auth:
+        return "User already exists"
 
-        return render_template("succesAuth.html")
+    # Create new user.
+    new_user = User(name=name, password=generate_password_hash(password, method="sha256"))
 
-    return render_template("register.html")
+    # Add user to database.
+    new_user.save()
+
+    # generate token
+    token = encode_auth_token(name)
+
+    return {"id": new_user.id, "user": name, "isAuth": True, "token": token}
+
+
+@app.route("/login", methods=["POST"])
+def Login():
+    """
+    Logging in an existing user.
+    """
+    body = request.get_json()["body"]
+
+    # Get form information.
+    name = body["username"]
+    password = body["password"]
+
+    # Check if user exists.
+    user = User.query.filter_by(name=name).first()
+    print(user.id)
+
+    # Check if password is correct.
+    if not user:
+        return "User does not exist"
+    if not check_password_hash(user.password, password):
+        return "Password is incorrect"
+
+    # generate token
+    token = encode_auth_token(name)
+
+    return {"id": user.id, "user": name, "isAuth": True, "token": token}

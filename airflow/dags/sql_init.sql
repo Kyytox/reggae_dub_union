@@ -53,10 +53,12 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS favoris (
     id SERIAL,
     id_vinyl INT NOT NULL,
+    id_song INT NOT NULL,
     id_user INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (id_vinyl) REFERENCES vinyls (id),
     FOREIGN KEY (id_user) REFERENCES users (id)
+    FOREIGN KEY (id_song) REFERENCES songs (id)
 );
 
 
