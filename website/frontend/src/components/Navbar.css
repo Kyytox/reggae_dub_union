@@ -1,20 +1,15 @@
 /* ---------------- */
 /* Navbar */
 /* ---------------- */
-.navbar_items{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-
 .navbar_items a {
-    margin-left: 3rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
 }
 
 
 .navbar_items .searchBar {
-    margin-left: 3rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
 }
 
 .searchBar .MuiFormLabel-root {
