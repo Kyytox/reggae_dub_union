@@ -13,3 +13,4 @@ a ajouter en install
 
 export AIRFLOW_CONN_POSTGRES_DEFAULT=
 export AIRFLOW_HOME
+test
