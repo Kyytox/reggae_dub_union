@@ -1,0 +1,15 @@
+ressources/img_schema/
+old_version/init_bd.py
+venv/
+pyproject.toml
+.env
+__pycache__/
+temp/
+.vscode/
+airflow/airflow.db
+airflow/standalone_admin_password.txt
+airflow/webserver_config.py
+airflow/airflow.cfg
+airflow/airflow-webserver.pid
+docs/
+airflow/logs/
