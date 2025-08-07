@@ -1,7 +1,7 @@
-
 -- Drop all tables
 
 DROP TABLE IF EXISTS public.shops CASCADE;
+DROP TABLE IF EXISTS public.shops_links CASCADE;
 DROP TABLE IF EXISTS public.vinyls CASCADE;
 DROP TABLE IF EXISTS public.songs CASCADE;
 DROP TABLE IF EXISTS public.users CASCADE;
