@@ -20,23 +20,8 @@ from utils.db_connect import (
     get_shops_links,
 )
 
+from utils.libs import save_file
 from utils.utils_gcp_storage import upload_blob
-
-
-def save_file(
-    df: pd.DataFrame, name_shop: str, bucket_name: str, time_file_name: str
-) -> None:
-    """
-    Save DataFrame to GCP Storage
-
-    Args:
-        df (pd.DataFrame): DataFrame to save
-        name_shop (str): name of shop
-        bucket_name (str): name of the GCP Storage bucket
-        time_file_name (str): timestamp for file naming
-    """
-    path_file = f"extract_{time_file_name}/{name_shop}.csv"
-    upload_blob(bucket_name=bucket_name, df=df, destination_blob_name=path_file)
 
 
 def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
@@ -188,15 +173,15 @@ def scrap_jahwaggysrecords(
                     ].attributes.get("src")
 
                     row = {
-                        "name_shop": name_shop,
+                        "shop_name": name_shop,
                         "vinyl_format": vinyl_format,
                         "vinyl_title": vinyl_title,
                         "vinyl_image": vinyl_image,
                         "vinyl_link": vinyl_link,
                         "vinyl_price": vinyl_price,
-                        "vinyl_ref": vinyl_ref,
-                        "mp3_title": mp3_title,
-                        "mp3_link": mp3_link,
+                        "vinyl_reference": vinyl_ref,
+                        "song_title": mp3_title,
+                        "song_mp3": mp3_link,
                         "date_extract": pd.Timestamp.now(),
                     }
 
@@ -222,7 +207,7 @@ def scrap_jahwaggysrecords(
 
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -330,15 +315,15 @@ def scrap_onlyrootsreggae(
                         )
 
                         row = {
-                            "name_shop": name_shop,
+                            "shop_name": name_shop,
                             "vinyl_format": vinyl_format,
                             "vinyl_title": vinyl_title,
                             "vinyl_image": vinyl_image,
                             "vinyl_link": vinyl_link,
                             "vinyl_price": vinyl_price,
-                            "vinyl_ref": vinyl_ref,
-                            "mp3_title": mp3_title,
-                            "mp3_link": mp3_link,
+                            "vinyl_reference": vinyl_ref,
+                            "song_title": mp3_title,
+                            "song_mp3": mp3_link,
                             "date_extract": pd.Timestamp.now(),
                         }
 
@@ -369,7 +354,7 @@ def scrap_onlyrootsreggae(
     # Upload results to GCP Storage
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -461,15 +446,15 @@ def scrap_controltower(
                 mp3_link = mp3.attributes.get("src")
 
                 row = {
-                    "name_shop": name_shop,
+                    "shop_name": name_shop,
                     "vinyl_format": vinyl_format,
                     "vinyl_title": vinyl_title,
                     "vinyl_image": vinyl_image,
                     "vinyl_link": vinyl_link,
                     "vinyl_price": vinyl_price,
-                    "vinyl_ref": vinyl_ref,
-                    "mp3_title": mp3_title,
-                    "mp3_link": mp3_link,
+                    "vinyl_reference": vinyl_ref,
+                    "song_title": mp3_title,
+                    "song_mp3": mp3_link,
                     "date_extract": pd.Timestamp.now(),
                 }
 
@@ -488,7 +473,7 @@ def scrap_controltower(
     # Upload df_results to GCP Storage
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -626,15 +611,15 @@ def scrap_reggaefever(
                         )
 
                         row = {
-                            "name_shop": name_shop,
+                            "shop_name": name_shop,
                             "vinyl_format": vinyl_format,
                             "vinyl_title": vinyl_title,
                             "vinyl_image": vinyl_image,
                             "vinyl_link": vinyl_link,
                             "vinyl_price": vinyl_price,
-                            "vinyl_ref": vinyl_ref,
-                            "mp3_title": mp3_title,
-                            "mp3_link": mp3_link,
+                            "vinyl_reference": vinyl_ref,
+                            "song_title": mp3_title,
+                            "song_mp3": mp3_link,
                             "date_extract": pd.Timestamp.now(),
                         }
 
@@ -662,7 +647,7 @@ def scrap_reggaefever(
     # Upload df_results to GCP Storage
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -786,15 +771,15 @@ def scrap_pataterecords(
                             mp3_link = mp3.css_first("source").attributes.get("src")
 
                         row = {
-                            "name_shop": name_shop,
+                            "shop_name": name_shop,
                             "vinyl_format": vinyl_format,
                             "vinyl_title": vinyl_title,
                             "vinyl_image": vinyl_image,
                             "vinyl_link": vinyl_link,
                             "vinyl_price": vinyl_price,
-                            "vinyl_ref": vinyl_ref,
-                            "mp3_title": mp3_title,
-                            "mp3_link": mp3_link,
+                            "vinyl_reference": vinyl_ref,
+                            "song_title": mp3_title,
+                            "song_mp3": mp3_link,
                             "date_extract": pd.Timestamp.now(),
                         }
 
@@ -826,7 +811,7 @@ def scrap_pataterecords(
     # Upload df_results to GCP Storage
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -952,15 +937,15 @@ def scrap_lionvibes(
                     ).attributes.get("src")
 
                     row = {
-                        "name_shop": name_shop,
+                        "shop_name": name_shop,
                         "vinyl_format": vinyl_format,
                         "vinyl_title": vinyl_title,
                         "vinyl_image": vinyl_image,
                         "vinyl_link": vinyl_link,
                         "vinyl_price": vinyl_price,
-                        "vinyl_ref": vinyl_ref,
-                        "mp3_title": mp3_title,
-                        "mp3_link": mp3_link,
+                        "vinyl_reference": vinyl_ref,
+                        "song_title": mp3_title,
+                        "song_mp3": mp3_link,
                         "date_extract": pd.Timestamp.now(),
                     }
 
@@ -989,7 +974,7 @@ def scrap_lionvibes(
     # Upload df_results to GCP Storage
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -1115,15 +1100,15 @@ def scrap_toolboxrecords(
                         )
 
                         row = {
-                            "name_shop": name_shop,
+                            "shop_name": name_shop,
                             "vinyl_format": vinyl_format,
                             "vinyl_title": vinyl_title,
                             "vinyl_image": vinyl_image,
                             "vinyl_link": vinyl_link,
                             "vinyl_price": vinyl_price,
-                            "vinyl_ref": vinyl_ref,
-                            "mp3_title": mp3_title,
-                            "mp3_link": mp3_link,
+                            "vinyl_reference": vinyl_ref,
+                            "song_title": mp3_title,
+                            "song_mp3": mp3_link,
                             "date_extract": pd.Timestamp.now(),
                         }
 
@@ -1149,7 +1134,7 @@ def scrap_toolboxrecords(
     # Upload df_results to GCP Storage
     save_file(
         df=df_results,
-        name_shop=name_shop,
+        file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
@@ -1296,15 +1281,15 @@ def scrap_toolboxrecords(
 #                     mp3_link = lst_mp3[i].css_first("source").attributes.get("src")
 
 #                     row = {
-#                         "name_shop": name_shop,
+#                         "shop_name": name_shop,
 #                         "vinyl_format": vinyl_format,
 #                         "vinyl_title": vinyl_title,
 #                         "vinyl_image": vinyl_image,
 #                         "vinyl_link": vinyl_link,
 #                         "vinyl_price": vinyl_price,
-#                         "vinyl_ref": vinyl_ref,
-#                         "mp3_title": mp3_title,
-#                         "mp3_link": mp3_link,
+#                         "vinyl_reference": vinyl_ref,
+#                         "song_title": mp3_title,
+#                         "song_mp3": mp3_link,
 #                         "date_extract": pd.Timestamp.now(),
 #                     }
 
@@ -1325,7 +1310,7 @@ def scrap_toolboxrecords(
 #     # Upload df_results to GCP Storage
 #     save_file(
 #         df=df_results,
-#         name_shop=name_shop,
+#         file_name=name_shop,
 #         bucket_name=bucket_name,
 #         time_file_name=time_file_name,
 #     )

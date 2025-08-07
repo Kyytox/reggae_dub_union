@@ -6,6 +6,9 @@ from utils.utils_gcp_storage import (
     download_blob_into_memory,
     list_blobs_with_prefix,
 )
+
+
+from utils.libs import save_file
 from utils.variables import lst_formats_accepted
 
 lst_formats_accepted = ["7", "10", "12", "LP", "TEST PRESS"]
@@ -108,7 +111,7 @@ def transform_data(bucket_name: str, time_file_name: str):
 
     # # Get the list of files with prefix
     # prefix = f"extract_{time_file_name}/"
-    # blobs = list_blobs_with_prefix(bucket_name, prefix)
+    # blobs = list_blobs_with_prefix(bucket_name, prefix, "ext")
     # print(f"Found {len(blobs)} blobs with prefix '{prefix}' in bucket '{bucket_name}'.")
     #
     # # Concat all data
@@ -143,7 +146,7 @@ def transform_data(bucket_name: str, time_file_name: str):
 
     #
     # remove Unnamed: 0
-    df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
+    df = df.loc[:, ~df.columns.str.contains("Unnamed")]
 
     # update vinyl_format
     df = update_format(df)
@@ -153,7 +156,7 @@ def transform_data(bucket_name: str, time_file_name: str):
 
     #
     # if vinyl_ref is null, set the title
-    df["vinyl_ref"] = df["vinyl_ref"].fillna(df["vinyl_title"])
+    df["vinyl_reference"] = df["vinyl_reference"].fillna(df["vinyl_title"])
 
     #
     # convart date to datetime
@@ -164,3 +167,10 @@ def transform_data(bucket_name: str, time_file_name: str):
     #
     print(df.info())
     print(df.head())
+
+    save_file(
+        df=df,
+        file_name="trf_all_shops",
+        bucket_name=bucket_name,
+        time_file_name=time_file_name,
+    )
