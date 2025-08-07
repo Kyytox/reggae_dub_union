@@ -21,19 +21,23 @@ def db_connect_postgres(con_id: str):
     return conn
 
 
-def get_shops_from_db(conn) -> pd.DataFrame:
+def get_shops_from_db(conn_id) -> pd.DataFrame:
     """
     Get all shops from the database.
 
     Args:
-        conn: Connection object to the PostgreSQL database.
+        conn_id: id of the Airflow connection to the PostgreSQL database.
 
     Returns:
         pd.DataFrame: DataFrame containing all shops with columns (name_shop, name_function, links).
     """
 
+    conn = db_connect_postgres(conn_id)
+
     query = "SELECT * FROM shops"
     df = pd.read_sql(query, conn)
+
+    conn.close()
 
     return df
 
@@ -77,6 +81,7 @@ def get_shop_infos(conn_id: str, name_shop: str) -> pd.DataFrame:
     query = """
         SELECT s.*, v.*
         FROM shops s
+        LEFT JOIN shops_links sl ON s.shop_id = sl.shop_id
         LEFT JOIN vinyls v ON s.shop_id = v.shop_id
         WHERE s.shop_name = %s
     """
