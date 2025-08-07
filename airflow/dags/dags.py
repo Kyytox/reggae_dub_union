@@ -4,7 +4,7 @@ from airflow.sdk import DAG
 from airflow.utils.task_group import TaskGroup
 
 # Operators
-from airflow.providers.standard.operators.bash import BashOperator
+# from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 
@@ -18,12 +18,13 @@ from etl.extract_data import (
     scrap_controltower,
     scrap_reggaefever,
     scrap_pataterecords,
-    scrap_toolboxrecords,
     scrap_lionvibes,
+    # scrap_toolboxrecords,
     # scrap_reggaemuseum,
 )
 
 from etl.transform_data import transform_data
+from etl.load_data import load_data_to_db
 
 
 default_args = {
@@ -142,7 +143,7 @@ with DAG(
     }
 
     # Task Collect Shops to Scrap
-    # with TaskGroup("scrap_shops") as scrap_shops:
+    # with TaskGroup("tsk_scrap_shops") as scrap_shops:
     #     for name_shop, scrap_function in dict_tasks.items():
     #         PythonOperator(
     #             task_id=f"tsk_scrap_{name_shop}",
@@ -155,19 +156,30 @@ with DAG(
     #             },
     #         )
     #
-    # print(bucket_name)
 
     # Task Transform Data
-    transf_data = PythonOperator(
-        task_id="tsk_transform_data",
-        python_callable=transform_data,
+    # tsk_transf_data = PythonOperator(
+    #     task_id="tsk_transform_data",
+    #     python_callable=transform_data,
+    #     op_kwargs={
+    #         "bucket_name": bucket_name,
+    #         "time_file_name": time_file_name,
+    #     },
+    # )
+
+    # Task Load Data to DB
+    tsk_load_data = PythonOperator(
+        task_id="tsk_load_data_to_db",
+        python_callable=load_data_to_db,
         op_kwargs={
             "bucket_name": bucket_name,
             "time_file_name": time_file_name,
+            "conn_id": conn_id,
         },
     )
 
     # Run all scrap tasks
-    # scrap_shops
-    # scrap_shops >> transform_data
-    transf_data
+    # tsk_scrap_shops >> tsk_transform_data >> tsk_load_data_to_db
+    # tsk_scrap_shops
+    # tsk_transf_data
+    tsk_load_data
