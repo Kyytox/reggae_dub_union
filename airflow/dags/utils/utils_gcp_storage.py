@@ -53,9 +53,15 @@ def download_blob_into_memory(bucket_name, blob_name):
     return contents
 
 
-def list_blobs_with_prefix(bucket_name, prefix, delimiter=None):
+def list_blobs_with_prefix(bucket_name, prefix, start_string, delimiter=None):
     """
     Lists all the blobs in the bucket that begin with the prefix.
+
+    Args:
+        bucket_name (str): The name of the bucket to list blobs from.
+        prefix (str): The prefix to filter blobs by.
+        start_string (str): A string to start the listing from.
+        delimiter (str, optional): A delimiter to restrict the results to only
 
     This can be used to list all blobs in a "folder", e.g. "public/".
 
@@ -88,4 +94,9 @@ def list_blobs_with_prefix(bucket_name, prefix, delimiter=None):
     blobs = storage_client.list_blobs(bucket_name, prefix=prefix, delimiter=delimiter)
 
     # Stock the blobs and prefixes
-    return [blob.name for blob in blobs if blob.name.endswith(".csv")]
+    # return [blob.name for blob in blobs if blob.name.endswith(".csv")]
+    return [
+        blob.name
+        for blob in blobs
+        if (blob.name.endswith(".csv") and blob.name.startswith(start_string))
+    ]
