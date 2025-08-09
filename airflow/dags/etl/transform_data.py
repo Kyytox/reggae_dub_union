@@ -44,7 +44,7 @@ def update_format(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df["vinyl_format"] != "CD"]
 
     # Upper vinyl_format
-    df["vinyl_format"] = df["vinyl_format"].str.upper()
+    df["vinyl_format"] = df["vinyl_format"].str.upper().str.strip()
 
     # replace formats
     df["vinyl_format"] = df["vinyl_format"].replace(dict_replace)
@@ -109,40 +109,47 @@ def transform_data(bucket_name: str, time_file_name: str):
 
     df = pd.DataFrame()
 
-    # # Get the list of files with prefix
-    # prefix = f"extract_{time_file_name}/"
-    # blobs = list_blobs_with_prefix(bucket_name, prefix, "ext")
-    # print(f"Found {len(blobs)} blobs with prefix '{prefix}' in bucket '{bucket_name}'.")
-    #
-    # # Concat all data
-    # for blob_name in blobs:
-    #     # Download the blob into memory
-    #     csv_bytes = download_blob_into_memory(bucket_name, blob_name)
-    #
-    #     # Read the CSV bytes into a DataFrame
-    #     s = io.BytesIO(csv_bytes)
-    #     tmp_df = pd.read_csv(s, encoding="utf-8", sep=",")
-    #     print(f"Read data shape: {tmp_df.shape} from {blob_name}")
-    #
-    #     # Concatenate the DataFrame
-    #     df = pd.concat([df, tmp_df], ignore_index=True)
-    #
-    # print(f"Transformed data shape: {df.shape}")
-    # print(df.head())
-    # print(df.info())
-    # print(df.dtypes)
-    #
-    # # format to str
-    # df["vinyl_format"] = df["vinyl_format"].astype(str)
-    # df["vinyl_price"] = df["vinyl_price"].astype(str)
-    #
+    # Get the list of files with prefix
+    prefix = f"extract_{time_file_name}/"
+    blobs = list_blobs_with_prefix(bucket_name, prefix, "ext")
+    print(f"Found {len(blobs)} blobs with prefix '{prefix}' in bucket '{bucket_name}'.")
+
+    # Concat all data
+    for blob_name in blobs:
+        # Download the blob into memory
+        csv_bytes = download_blob_into_memory(bucket_name, blob_name)
+
+        # Read the CSV bytes into a DataFrame
+        s = io.BytesIO(csv_bytes)
+        tmp_df = pd.read_csv(s, encoding="utf-8", sep=",")
+        print(f"Read data shape: {tmp_df.shape} from {blob_name}")
+
+        # Concatenate the DataFrame
+        df = pd.concat([df, tmp_df], ignore_index=True)
+
+    print(f"Transformed data shape: {df.shape}")
+    print(df.head())
+    print(df.info())
+    print(df.dtypes)
+
+    # format to str
+    df["vinyl_format"] = df["vinyl_format"].astype(str)
+    df["vinyl_price"] = df["vinyl_price"].astype(str)
+
     # # save parquet file
     # df.to_parquet("new_data_test.parquet", index=False)
     # return
 
     # read the parquet file
-    df = pd.read_parquet("new_data_test.parquet")
+    # df = pd.read_parquet("new_data_test.parquet")
     print(f"Transformed data shape: {df.shape}")
+
+    # FIX remove this when name will be fixed
+    df.rename(columns={"name_shop": "shop_name"}, inplace=True)
+    df.rename(columns={"vinyl_ref": "vinyl_reference"}, inplace=True)
+    df.rename(columns={"mp3_title": "song_title"}, inplace=True)
+    df.rename(columns={"mp3_link": "song_mp3"}, inplace=True)
+    # FIX
 
     #
     # remove Unnamed: 0
@@ -157,7 +164,12 @@ def transform_data(bucket_name: str, time_file_name: str):
     #
     # if vinyl_ref is null, set the title
     df["vinyl_reference"] = df["vinyl_reference"].fillna(df["vinyl_title"])
+    df["vinyl_reference"] = df["vinyl_reference"].str.strip()
 
+    #
+    # for vinyl_title, song_title
+    df["vinyl_title"] = df["vinyl_title"].str.strip()
+    df["song_title"] = df["song_title"].str.strip()
     #
     # convart date to datetime
     if "date_extract" in df.columns:
