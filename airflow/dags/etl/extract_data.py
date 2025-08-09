@@ -14,13 +14,9 @@ from selectolax.parser import HTMLParser
 
 from airflow.models import Variable
 
-from utils.db_connect import (
-    db_connect_postgres,
-    get_shop_infos,
-    get_shops_links,
-)
-
-from utils.libs import save_file
+from utils.db_connect import db_connect_postgres
+from utils.db_process import get_shop_infos
+from utils.libs import get_shops_links, format_path_file
 from utils.utils_gcp_storage import upload_blob
 
 
@@ -34,7 +30,7 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: DataFrame without duplicates
     """
-    return df.drop_duplicates(subset=["vinyl_title", "vinyl_ref", "mp3_title"])
+    return df.drop_duplicates(subset=["vinyl_title", "vinyl_reference", "song_title"])
 
 
 def read_html_page(url: str) -> HTMLParser:
@@ -80,23 +76,37 @@ def scrap_jahwaggysrecords(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    max_pages = 400  # Maximum number of pages to scrap
+    max_pages = 2  # Maximum number of pages to scrap
 
     # Get shop infos from DB
-    df_infos = get_shop_infos(conn_id, name_shop)
+    conn = db_connect_postgres(conn_id)
+    df_infos = get_shop_infos(conn, name_shop)
+    conn.close()
+    print(df_infos)
+    print(type(df_infos))
+    print(df_infos.columns)
 
     # Get shops links
     lst_urls = get_shops_links(df_infos)
 
-    # get first vinyl_reference
-    vinyl_reference = df_infos["vinyl_reference"].iloc[0]
-
-    # define max_pages to scrap
-    if vinyl_reference is not None:
-        max_pages = 2
-
     for base_url in lst_urls:
         print(f"Scrapping {name_shop} from URL: {base_url}")
+
+        # get link_id with wheere base_url (shop link)
+        shop_link_id = df_infos[df_infos["shop_link"] == base_url]["shop_link_id"].iloc[
+            0
+        ]
+        print(f"Link ID: {shop_link_id}")
+
+        # get first vinyl_reference
+        vinyl_reference = df_infos[df_infos["shop_link_id"] == shop_link_id][
+            "vinyl_reference"
+        ].iloc[0]
+        print(f"Vinyl reference: {vinyl_reference}")
+
+        # define max_pages to scrap
+        if vinyl_reference is not None:
+            max_pages = 2
 
         # initialize variables
         top_break = False
@@ -123,7 +133,7 @@ def scrap_jahwaggysrecords(
             # retrieve all tags article with class=product-miniature
             lst_articles = html.css("article.product-miniature")
 
-            for vinyl in lst_articles:
+            for vinyl in lst_articles[:2]:
                 vinyl_link = vinyl.css_first("a").attributes.get("href")
 
                 # parse HTML
@@ -182,6 +192,7 @@ def scrap_jahwaggysrecords(
                         "vinyl_reference": vinyl_ref,
                         "song_title": mp3_title,
                         "song_mp3": mp3_link,
+                        "shop_link_id": shop_link_id,
                         "date_extract": pd.Timestamp.now(),
                     }
 
@@ -189,7 +200,7 @@ def scrap_jahwaggysrecords(
                         [df_results, pd.DataFrame(row, index=[0])], ignore_index=True
                     )
 
-            print(f"Scrapped {len(df_results)} items from page {pg}")
+                print(f"Scrapped {len(df_results)} items from page {pg}")
 
             if top_break:
                 print("Top break reached. Stop scrapping.")
@@ -197,20 +208,25 @@ def scrap_jahwaggysrecords(
 
             pg += 1
 
+    print(df_results.head())
     print(f"Scrapped {len(df_results)} items")
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
+    return
 
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
-    print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}.csv", index=False)
+    # order by desc to get the most recent items first
+    df_results = df_results.sort_values(by="date_extract", ascending=False)
 
-    save_file(
-        df=df_results,
-        file_name=name_shop,
-        bucket_name=bucket_name,
-        time_file_name=time_file_name,
-    )
+    print(f"Removed duplicates. {len(df_results)} items left.")
+    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
 
 
 def scrap_onlyrootsreggae(
@@ -352,12 +368,8 @@ def scrap_onlyrootsreggae(
     df_results.to_csv(f"./{name_shop}.csv", index=False)
 
     # Upload results to GCP Storage
-    save_file(
-        df=df_results,
-        file_name=name_shop,
-        bucket_name=bucket_name,
-        time_file_name=time_file_name,
-    )
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
 
 
 def scrap_controltower(
@@ -471,12 +483,8 @@ def scrap_controltower(
     df_results.to_csv(f"./{name_shop}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    save_file(
-        df=df_results,
-        file_name=name_shop,
-        bucket_name=bucket_name,
-        time_file_name=time_file_name,
-    )
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
 
 
 def scrap_reggaefever(
@@ -645,12 +653,8 @@ def scrap_reggaefever(
     df_results.to_csv(f"./{name_shop}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    save_file(
-        df=df_results,
-        file_name=name_shop,
-        bucket_name=bucket_name,
-        time_file_name=time_file_name,
-    )
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
 
 
 def scrap_pataterecords(
@@ -809,12 +813,8 @@ def scrap_pataterecords(
     df_results.to_csv(f"./{name_shop}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    save_file(
-        df=df_results,
-        file_name=name_shop,
-        bucket_name=bucket_name,
-        time_file_name=time_file_name,
-    )
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
 
 
 def scrap_lionvibes(
@@ -972,12 +972,8 @@ def scrap_lionvibes(
     df_results.to_csv(f"./{name_shop}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    save_file(
-        df=df_results,
-        file_name=name_shop,
-        bucket_name=bucket_name,
-        time_file_name=time_file_name,
-    )
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
 
 
 def scrap_toolboxrecords(
@@ -1132,185 +1128,181 @@ def scrap_toolboxrecords(
     df_results.to_csv(f"./{name_shop}.csv", index=False)
 
     # Upload df_results to GCP Storage
+    path_file = format_path_file(time_file_name, name_shop)
+    upload_blob(bucket_name, df_results, path_file)
+
+
+def scrap_reggaemuseum(
+    name_shop: str, conn_id: str, bucket_name: str, time_file_name: str
+) -> None:
+    """
+    Scrap reggaemuseum
+
+    Args:
+        name_shop (str): name of shop
+        conn_id (str): connection ID for the database
+        bucket_name (str): name of the GCP Storage bucket
+        time_file_name (str): timestamp for file naming
+
+    """
+    print(f"Scrapping {name_shop}...")
+
+    df_results = pd.DataFrame()
+    max_pages = 150  # Maximum number of pages to scrap
+
+    # Get shop infos from DB
+    df_infos = get_shop_infos(conn_id, name_shop)
+
+    # Get shops links
+    lst_urls = get_shops_links(df_infos)
+    print(f"Scrapping {name_shop} from URLs: {lst_urls}")
+
+    # get first vinyl_reference
+    vinyl_reference = df_infos["vinyl_reference"].iloc[0]
+
+    # define max_pages to scrap
+    vinyl_reference = "10rp001"  #! Test
+    if vinyl_reference is not None:
+        max_pages = 2
+
+    # random_page = 1
+
+    # dict_pages = {
+    #     "https://www.reggae-museum.com/shop/14": 22,
+    #     "https://www.reggae-museum.com/shop/15": 42,
+    #     "https://www.reggae-museum.com/shop/16": 13,
+    #     "https://www.reggae-museum.com/shop/18": 2,
+    # }
+
+    # # get random page
+    # base_url = url.split("-", 2)[0] + "-" + url.split("-", 2)[1]
+    # end_url = url.split("-", 2)[2]
+    # random_page = random.randint(1, dict_pages[base_url])
+    # url = base_url + "-" + end_url + str(random_page)
+
+    for base_url in lst_urls:
+
+        # initialize variables
+        top_break = False
+        i = 32
+
+        while i < 35:
+
+            # add number page to url
+            url = base_url.replace("-X", f"-{i}")
+            print(f"Scrapping {url}")
+
+            # parse HTML
+            html = read_html_page(url)
+
+            # retrieve all tags article with class=album-block
+            lst_articles = html.css("div.product-container")
+            print(f"Found {len(lst_articles)} items to scrap.")
+
+            for vinyl in lst_articles[:4]:
+
+                vinyl_image = vinyl.css_first("img.img-responsive").attributes.get(
+                    "src"
+                )
+                vinyl_link = vinyl.css_first("a.product_img_link").attributes.get(
+                    "href"
+                )
+
+                vinyl_title = re.sub(
+                    " +",
+                    " ",
+                    vinyl.css_first("a.product-name")
+                    .text()
+                    .replace("\n", " ")
+                    .replace("\t", " "),
+                )
+                print(f"Scrapping {vinyl_title}")
+
+                #  open url link_vinyl for retrieve mp3 link
+                html_page_vinyl = read_html_page(vinyl_link)
+
+                # ref
+                vinyl_ref = (
+                    html_page_vinyl.css_first("p#product_reference")
+                    .css_first("span")
+                    .attributes.get("content")
+                )
+
+                # control if vinyl_ref already exists in table vinyls
+                if vinyl_ref == vinyl_reference:
+                    top_break = True
+                    print(f"Data already exists for {vinyl_ref}. Stop scrapping.")
+                    break
+
+                # Extract format from title
+                if re.search(r"\b(7|10|12|lp|LP)\b", vinyl_title):
+                    vinyl_format = re.search(r"\b(7|10|12|lp|LP)\b", vinyl_title).group(
+                        1
+                    )
+                else:
+                    vinyl_format = "12"
+
+                div_content = html_page_vinyl.css_first("section.page-product-box")
+
+                lst_infos = re.sub(
+                    " +", " ", div_content.text().replace("\n", " ").replace("\t", " ")
+                ).split("] ")
+
+                # get artitst if br.text contains "Artist")
+                lst_articles = [
+                    item.split(": ")[1].split("[")[0].strip()
+                    for item in lst_infos
+                    if "Artist" in item
+                ]
+
+                # get Title if br.text contains "Title"
+                lst_titles = [
+                    item.split(": ")[1].split("[")[0].strip()
+                    for item in lst_infos
+                    if "Title" in item
+                ]
+
+                # price
+                vinyl_price = html_page_vinyl.css_first("span#our_price_display").text()
+
+                # get audio
+                lst_mp3 = div_content.css("audio")
+
+                for i in range(len(lst_mp3)):
+                    mp3_title = lst_titles[i]
+                    mp3_link = lst_mp3[i].css_first("source").attributes.get("src")
+
+                    row = {
+                        "shop_name": name_shop,
+                        "vinyl_format": vinyl_format,
+                        "vinyl_title": vinyl_title,
+                        "vinyl_image": vinyl_image,
+                        "vinyl_link": vinyl_link,
+                        "vinyl_price": vinyl_price,
+                        "vinyl_reference": vinyl_ref,
+                        "song_title": mp3_title,
+                        "song_mp3": mp3_link,
+                        "date_extract": pd.Timestamp.now(),
+                    }
+
+                    df_results = pd.concat(
+                        [df_results, pd.DataFrame(row, index=[0])], ignore_index=True
+                    )
+
+            if top_break:
+                print("Top break reached. Stop scrapping.")
+                break
+            i += 1
+
+        return  #! Test
+
+    print(f"Scrapped {len(df_results)} items")
+    return
+
+    # Upload df_results to GCP Storage
     save_file(
         df=df_results,
         file_name=name_shop,
         bucket_name=bucket_name,
         time_file_name=time_file_name,
     )
-
-
-# def scrap_reggaemuseum(
-#     name_shop: str, conn_id: str, bucket_name: str, time_file_name: str
-# ) -> None:
-#     """
-#     Scrap reggaemuseum
-
-#     Args:
-#         name_shop (str): name of shop
-#         conn_id (str): connection ID for the database
-#         bucket_name (str): name of the GCP Storage bucket
-#         time_file_name (str): timestamp for file naming
-
-#     """
-#     print(f"Scrapping {name_shop}...")
-
-#     df_results = pd.DataFrame()
-#     max_pages = 150  # Maximum number of pages to scrap
-
-#     # Get shop infos from DB
-#     df_infos = get_shop_infos(conn_id, name_shop)
-
-#     # Get shops links
-#     lst_urls = get_shops_links(df_infos)
-#     print(f"Scrapping {name_shop} from URLs: {lst_urls}")
-
-#     # get first vinyl_reference
-#     vinyl_reference = df_infos["vinyl_reference"].iloc[0]
-
-#     # define max_pages to scrap
-#     vinyl_reference = "10rp001"  #! Test
-#     if vinyl_reference is not None:
-#         max_pages = 2
-
-#     # random_page = 1
-
-#     # dict_pages = {
-#     #     "https://www.reggae-museum.com/shop/14": 22,
-#     #     "https://www.reggae-museum.com/shop/15": 42,
-#     #     "https://www.reggae-museum.com/shop/16": 13,
-#     #     "https://www.reggae-museum.com/shop/18": 2,
-#     # }
-
-#     # # get random page
-#     # base_url = url.split("-", 2)[0] + "-" + url.split("-", 2)[1]
-#     # end_url = url.split("-", 2)[2]
-#     # random_page = random.randint(1, dict_pages[base_url])
-#     # url = base_url + "-" + end_url + str(random_page)
-
-#     for base_url in lst_urls:
-
-#         # initialize variables
-#         top_break = False
-#         i = 32
-
-#         while i < 35:
-
-#             # add number page to url
-#             url = base_url.replace("-X", f"-{i}")
-#             print(f"Scrapping {url}")
-
-#             # parse HTML
-#             html = read_html_page(url)
-
-#             # retrieve all tags article with class=album-block
-#             lst_articles = html.css("div.product-container")
-#             print(f"Found {len(lst_articles)} items to scrap.")
-
-#             for vinyl in lst_articles[:4]:
-
-#                 vinyl_image = vinyl.css_first("img.img-responsive").attributes.get(
-#                     "src"
-#                 )
-#                 vinyl_link = vinyl.css_first("a.product_img_link").attributes.get(
-#                     "href"
-#                 )
-
-#                 vinyl_title = re.sub(
-#                     " +",
-#                     " ",
-#                     vinyl.css_first("a.product-name")
-#                     .text()
-#                     .replace("\n", " ")
-#                     .replace("\t", " "),
-#                 )
-#                 print(f"Scrapping {vinyl_title}")
-
-#                 #  open url link_vinyl for retrieve mp3 link
-#                 html_page_vinyl = read_html_page(vinyl_link)
-
-#                 # ref
-#                 vinyl_ref = (
-#                     html_page_vinyl.css_first("p#product_reference")
-#                     .css_first("span")
-#                     .attributes.get("content")
-#                 )
-
-#                 # control if vinyl_ref already exists in table vinyls
-#                 if vinyl_ref == vinyl_reference:
-#                     top_break = True
-#                     print(f"Data already exists for {vinyl_ref}. Stop scrapping.")
-#                     break
-
-#                 # Extract format from title
-#                 if re.search(r"\b(7|10|12|lp|LP)\b", vinyl_title):
-#                     vinyl_format = re.search(r"\b(7|10|12|lp|LP)\b", vinyl_title).group(
-#                         1
-#                     )
-#                 else:
-#                     vinyl_format = "12"
-
-#                 div_content = html_page_vinyl.css_first("section.page-product-box")
-
-#                 lst_infos = re.sub(
-#                     " +", " ", div_content.text().replace("\n", " ").replace("\t", " ")
-#                 ).split("] ")
-
-#                 # get artitst if br.text contains "Artist")
-#                 lst_articles = [
-#                     item.split(": ")[1].split("[")[0].strip()
-#                     for item in lst_infos
-#                     if "Artist" in item
-#                 ]
-
-#                 # get Title if br.text contains "Title"
-#                 lst_titles = [
-#                     item.split(": ")[1].split("[")[0].strip()
-#                     for item in lst_infos
-#                     if "Title" in item
-#                 ]
-
-#                 # price
-#                 vinyl_price = html_page_vinyl.css_first("span#our_price_display").text()
-
-#                 # get audio
-#                 lst_mp3 = div_content.css("audio")
-
-#                 for i in range(len(lst_mp3)):
-#                     mp3_title = lst_titles[i]
-#                     mp3_link = lst_mp3[i].css_first("source").attributes.get("src")
-
-#                     row = {
-#                         "shop_name": name_shop,
-#                         "vinyl_format": vinyl_format,
-#                         "vinyl_title": vinyl_title,
-#                         "vinyl_image": vinyl_image,
-#                         "vinyl_link": vinyl_link,
-#                         "vinyl_price": vinyl_price,
-#                         "vinyl_reference": vinyl_ref,
-#                         "song_title": mp3_title,
-#                         "song_mp3": mp3_link,
-#                         "date_extract": pd.Timestamp.now(),
-#                     }
-
-#                     df_results = pd.concat(
-#                         [df_results, pd.DataFrame(row, index=[0])], ignore_index=True
-#                     )
-
-#             if top_break:
-#                 print("Top break reached. Stop scrapping.")
-#                 break
-#             i += 1
-
-#         return  #! Test
-
-#     print(f"Scrapped {len(df_results)} items")
-#     return
-
-#     # Upload df_results to GCP Storage
-#     save_file(
-#         df=df_results,
-#         file_name=name_shop,
-#         bucket_name=bucket_name,
-#         time_file_name=time_file_name,
-#     )
