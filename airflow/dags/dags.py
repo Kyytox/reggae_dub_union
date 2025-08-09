@@ -1,6 +1,7 @@
+import pandas as pd
 from datetime import datetime, timedelta
 
-from airflow.sdk import DAG
+from airflow.sdk import DAG, task, task_group
 from airflow.utils.task_group import TaskGroup
 
 # Operators
@@ -12,6 +13,11 @@ from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.models import Variable
 
 
+from utils.variables import (
+    BUCKET_NAME,
+    CONNECTION_DB,
+)
+
 from etl.extract_data import (
     scrap_jahwaggysrecords,
     scrap_onlyrootsreggae,
@@ -19,9 +25,12 @@ from etl.extract_data import (
     scrap_reggaefever,
     scrap_pataterecords,
     scrap_lionvibes,
-    # scrap_toolboxrecords,
-    # scrap_reggaemuseum,
+    scrap_toolboxrecords,
+    scrap_reggaemuseum,
 )
+
+from utils.db_connect import db_connect_postgres
+from utils.db_process import get_shops_from_db
 
 from etl.transform_data import transform_data
 from etl.load_data import load_data_to_db
@@ -98,7 +107,7 @@ with DAG(
     dag_id="etl_vinyls_from_shops",
     default_args=default_args,
     description="DAG for Extracting, Transforming and Loading vinyls from shops",
-    # schedule_interval=None,
+    schedule=None,
     tags=["etl"],
     catchup=False,
 ) as dag:
@@ -122,43 +131,55 @@ with DAG(
 
     """
 
+    # @task
+    def get_shop_list(conn_id: str):
+        """
+        Get the list of shops from the database.
+
+        Args:
+            conn_id (str): Airflow connection ID for the PostgreSQL database.
+
+        Returns:
+            df (pd.DataFrame): DataFrame containing the shop list with columns (shop_name, scrap_function).
+
+        """
+        conn = db_connect_postgres(conn_id)
+        df = get_shops_from_db(conn)
+        conn.close()
+        return df
+
     # Define var timestamp for file naming
     time_file_name = datetime.now().strftime("%Y%m%d_%H")
-    # time_file_name = "20250727_06"
-    time_file_name = "20250730_02"
     Variable.set(key="time_file_name", value=time_file_name)
 
-    conn_id = Variable.get("conn_id", default_var="con_reggae_dub_union_db")
-    bucket_name = Variable.get("bucket_name", default_var="reggae_dub_union_bucket")
+    conn_id = Variable.get("conn_id", default_var=CONNECTION_DB)
+    bucket_name = Variable.get("bucket_name", default_var=BUCKET_NAME)
 
-    dict_tasks = {
-        # "jahwaggysrecords": scrap_jahwaggysrecords,
-        "onlyrootsreggae": scrap_onlyrootsreggae,
-        # "controltower": scrap_controltower,
-        # "reggaefever": scrap_reggaefever,
-        "pataterecords": scrap_pataterecords,
-        # "lionvibes": scrap_lionvibes,
-        # "toolboxrecords": scrap_toolboxrecords,  # TO Update with BeautifulSoup
-        # "reggaemuseum": scrap_reggaemuseum, # TO Update with BeautifulSoup
-    }
+    with TaskGroup("tg_scrap_shops") as tg_scrap_shops:
+        """
+        Task Group to scrap shops.
+        This task group iterates over the list of shops
+        and creates a PythonOperator for each shop to perform the scraping.
+        """
+        df_shops = get_shop_list(conn_id=conn_id)
 
-    # Task Collect Shops to Scrap
-    # with TaskGroup("tsk_scrap_shops") as scrap_shops:
-    #     for name_shop, scrap_function in dict_tasks.items():
-    #         PythonOperator(
-    #             task_id=f"tsk_scrap_{name_shop}",
-    #             python_callable=scrap_function,
-    #             op_kwargs={
-    #                 "name_shop": name_shop,
-    #                 "conn_id": conn_id,
-    #                 "bucket_name": bucket_name,
-    #                 "time_file_name": time_file_name,
-    #             },
-    #         )
-    #
+        for index, row in df_shops.iterrows():
+            name_shop = row["shop_name"]
+            scrap_function = row["shop_function"]
 
-    # Task Transform Data
-    # tsk_transf_data = PythonOperator(
+            PythonOperator(
+                task_id=f"tsk_scrap_{name_shop}",
+                python_callable=eval(scrap_function),
+                op_kwargs={
+                    "name_shop": name_shop,
+                    "conn_id": conn_id,
+                    "bucket_name": bucket_name,
+                    "time_file_name": time_file_name,
+                },
+            )
+
+    # # Task Transform Data
+    # tsk_transform_data = PythonOperator(
     #     task_id="tsk_transform_data",
     #     python_callable=transform_data,
     #     op_kwargs={
@@ -166,20 +187,20 @@ with DAG(
     #         "time_file_name": time_file_name,
     #     },
     # )
-
-    # Task Load Data to DB
-    tsk_load_data = PythonOperator(
-        task_id="tsk_load_data_to_db",
-        python_callable=load_data_to_db,
-        op_kwargs={
-            "bucket_name": bucket_name,
-            "time_file_name": time_file_name,
-            "conn_id": conn_id,
-        },
-    )
-
-    # Run all scrap tasks
-    # tsk_scrap_shops >> tsk_transform_data >> tsk_load_data_to_db
-    # tsk_scrap_shops
-    # tsk_transf_data
-    tsk_load_data
+    #
+    # # Task Load Data to DB
+    # tsk_load_data = PythonOperator(
+    #     task_id="tsk_load_data",
+    #     python_callable=load_data_to_db,
+    #     op_kwargs={
+    #         "bucket_name": bucket_name,
+    #         "time_file_name": time_file_name,
+    #         "conn_id": conn_id,
+    #     },
+    # )
+    #
+    # # Run all scrap tasks
+    # tg_scrap_shops >> tsk_transform_data >> tsk_load_data
+    tg_scrap_shops
+    # tsk_transform_data
+    # tsk_load_data
