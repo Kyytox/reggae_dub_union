@@ -1,7 +1,8 @@
 import io
+from os import path
 import pandas as pd
 
-from airflow.models import Variable
+from airflow.exceptions import AirflowSkipException
 
 from utils.utils_gcp_storage import (
     download_blob_into_memory,
@@ -30,28 +31,32 @@ def load_data_to_db(bucket_name: str, time_file_name: str, conn_id: str) -> None
     """
 
     # Download the blob into memory
-    file_name = "trf_all_shops"
-    path_file = format_path_file(time_file_name, file_name)
+    prefix = f"extract_{time_file_name}/"
+    file_name = "all_shops"
+    path_file = format_path_file(time_file_name, "trf", file_name)
+
+    # List blob for check if the file exists
+    blob = list_blobs_with_prefix(bucket_name, prefix, "trf")
+    print(blob)
+
+    if not blob:
+        # Skip Task
+        raise AirflowSkipException(f"No blobs found starting with 'trf' in '{prefix}'")
 
     # List all blobs with the prefix
     data = download_blob_into_memory(bucket_name, path_file)
     df = pd.read_csv(io.BytesIO(data))
 
     print("Data loaded from GCP Storage:")
-    print(df.head())
 
     # connection to db
     conn = db_connect_postgres(conn_id)
 
     # get shops
     df_shops = get_shops_from_db(conn)
-    print("all shop")
-    print(df_shops)
 
     # join data with shops
     df = df.merge(df_shops, on="shop_name", how="left").drop("shop_function", axis=1)
-    print("Data after merging with shops:")
-    print(df.head())
 
     # prepare df_vinyls
     df_vinyls = (
@@ -144,6 +149,6 @@ def load_data_to_db(bucket_name: str, time_file_name: str, conn_id: str) -> None
         print("Number of records inserted:", len(df))
 
     # Delete the file from GCP Storage
-    delete_blob(bucket_name, path_file)
+    # delete_blob(bucket_name, path_file)
 
     return

@@ -2,6 +2,8 @@ import io
 import re
 import pandas as pd
 
+from airflow.exceptions import AirflowSkipException
+
 from utils.utils_gcp_storage import (
     download_blob_into_memory,
     list_blobs_with_prefix,
@@ -114,6 +116,10 @@ def transform_data(bucket_name: str, time_file_name: str):
     blobs = list_blobs_with_prefix(bucket_name, prefix, "ext")
     print(f"Found {len(blobs)} blobs with prefix '{prefix}' in bucket '{bucket_name}'.")
 
+    if not blobs:
+        # Skip Task
+        raise AirflowSkipException(f"No blobs found starting with 'trf' in '{prefix}'")
+
     # Concat all data
     for blob_name in blobs:
         # Download the blob into memory
@@ -128,9 +134,6 @@ def transform_data(bucket_name: str, time_file_name: str):
         df = pd.concat([df, tmp_df], ignore_index=True)
 
     print(f"Transformed data shape: {df.shape}")
-    print(df.head())
-    print(df.info())
-    print(df.dtypes)
 
     # format to str
     df["vinyl_format"] = df["vinyl_format"].astype(str)
@@ -145,10 +148,10 @@ def transform_data(bucket_name: str, time_file_name: str):
     print(f"Transformed data shape: {df.shape}")
 
     # FIX remove this when name will be fixed
-    df.rename(columns={"name_shop": "shop_name"}, inplace=True)
-    df.rename(columns={"vinyl_ref": "vinyl_reference"}, inplace=True)
-    df.rename(columns={"mp3_title": "song_title"}, inplace=True)
-    df.rename(columns={"mp3_link": "song_mp3"}, inplace=True)
+    # df.rename(columns={"name_shop": "shop_name"}, inplace=True)
+    # df.rename(columns={"vinyl_ref": "vinyl_reference"}, inplace=True)
+    # df.rename(columns={"mp3_title": "song_title"}, inplace=True)
+    # df.rename(columns={"mp3_link": "song_mp3"}, inplace=True)
     # FIX
 
     #
@@ -175,10 +178,6 @@ def transform_data(bucket_name: str, time_file_name: str):
     if "date_extract" in df.columns:
         df["date_extract"] = pd.to_datetime(df["date_extract"], errors="coerce")
         df["date_extract"] = df["date_extract"].dt.strftime("%Y-%m-%d %H:%M:%S")
-
-    #
-    print(df.info())
-    print(df.head())
 
     save_file(
         df=df,
