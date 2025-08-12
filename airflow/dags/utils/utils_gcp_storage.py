@@ -72,7 +72,9 @@ def delete_blob(bucket_name, blob_name):
     print(f"Blob {blob_name} deleted.")
 
 
-def list_blobs_with_prefix(bucket_name, prefix, start_string, delimiter=None):
+def list_blobs_with_prefix(
+    bucket_name: str, prefix: str, start_string: str, delimiter=None
+):
     """
     Lists all the blobs in the bucket that begin with the prefix.
 
@@ -82,40 +84,22 @@ def list_blobs_with_prefix(bucket_name, prefix, start_string, delimiter=None):
         start_string (str): A string to start the listing from.
         delimiter (str, optional): A delimiter to restrict the results to only
 
-    This can be used to list all blobs in a "folder", e.g. "public/".
 
-    The delimiter argument can be used to restrict the results to only the
-    "files" in the given "folder". Without the delimiter, the entire tree under
-    the prefix is returned. For example, given these blobs:
-
-        a/1.txt
-        a/b/2.txt
-
-    If you specify prefix ='a/', without a delimiter, you'll get back:
-
-        a/1.txt
-        a/b/2.txt
-
-    However, if you specify prefix='a/' and delimiter='/', you'll get back
-    only the file directly under 'a/':
-
-        a/1.txt
-
-    As part of the response, you'll also get back a blobs.prefixes entity
-    that lists the "subfolders" under `a/`:
-
-        a/b/
+    doc: https://cloud.google.com/storage/docs/listing-objects?hl=fr&authuser=1#storage-list-objects-python
     """
 
     storage_client = storage.Client()
 
     # List blobs with the specified prefix and delimiter
+    print(f"List blobs in {bucket_name} with '{prefix}' and delimiter '{delimiter}'.")
     blobs = storage_client.list_blobs(bucket_name, prefix=prefix, delimiter=delimiter)
 
     # Stock the blobs and prefixes
-    # return [blob.name for blob in blobs if blob.name.endswith(".csv")]
     return [
         blob.name
         for blob in blobs
-        if (blob.name.endswith(".csv") and blob.name.startswith(start_string))
+        if (
+            blob.name.split("/")[-1].startswith(start_string)
+            and blob.name.endswith(".csv")
+        )
     ]
