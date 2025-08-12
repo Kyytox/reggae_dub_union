@@ -18,6 +18,7 @@ from utils.db_connect import db_connect_postgres
 from utils.db_process import get_shop_infos
 from utils.libs import get_shops_links, format_path_file
 from utils.utils_gcp_storage import upload_blob
+from utils.variables import prefix_file
 
 
 def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
@@ -47,8 +48,7 @@ def get_link_and_reference(df: pd.DataFrame, base_url: str) -> tuple[str, str]:
     shop_link_id = df[df["shop_link"] == base_url]["shop_link_id"].iloc[0]
     vinyl_reference = df[df["shop_link_id"] == shop_link_id]["vinyl_reference"].iloc[0]
 
-    print(f"Link ID: {shop_link_id}")
-    print(f"Vinyl reference: {vinyl_reference}")
+    print(f"Link ID: {shop_link_id} - Vinyl Reference: {vinyl_reference}")
     return shop_link_id, vinyl_reference
 
 
@@ -94,13 +94,12 @@ def scrap_jahwaggysrecords(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    max_pages = 2  # Maximum number of pages to scrap
+    max_pages = 400  # Maximum number of pages to scrap
 
     # Get shop infos from DB
     conn = db_connect_postgres(conn_id)
     df_infos = get_shop_infos(conn, name_shop)
     conn.close()
-    print(f"Shop infos: {df_infos}")
 
     # Get shops links
     lst_urls = get_shops_links(df_infos)
@@ -143,7 +142,7 @@ def scrap_jahwaggysrecords(
             # retrieve all tags article with class=product-miniature
             lst_articles = html.css("article.product-miniature")
 
-            for vinyl in lst_articles[:2]:
+            for vinyl in lst_articles:
                 vinyl_link = vinyl.css_first("a").attributes.get("href")
 
                 # parse HTML
@@ -210,7 +209,7 @@ def scrap_jahwaggysrecords(
                         [df_results, pd.DataFrame(row, index=[0])], ignore_index=True
                     )
 
-                print(f"Scrapped {len(df_results)} items from page {pg}")
+            print(f"Scrapped {len(df_results)} items from page {pg}")
 
             if top_break:
                 print("Top break reached. Stop scrapping.")
@@ -220,6 +219,7 @@ def scrap_jahwaggysrecords(
 
     print(df_results.head())
     print(f"Scrapped {len(df_results)} items")
+
     if df_results.empty:
         print("No items found. Exiting.")
         return
@@ -231,9 +231,9 @@ def scrap_jahwaggysrecords(
     df_results = df_results.sort_values(by="date_extract", ascending=False)
 
     print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+    df_results.to_csv(f"./data_tmp/{name_shop}_{time_file_name}.csv", index=False)
 
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
@@ -254,8 +254,8 @@ def scrap_onlyrootsreggae(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    max_pages = 2  # Maximum number of pages to scrap
-    # max_pages = 100  # Maximum number of pages to scrap
+    # max_pages = 2  # Maximum number of pages to scrap
+    max_pages = 100  # Maximum number of pages to scrap
 
     # Get shop infos from DB
     conn = db_connect_postgres(conn_id)
@@ -299,7 +299,7 @@ def scrap_onlyrootsreggae(
             # retrieve all tags article with class=product-miniature
             lst_articles = html.css("article.product-miniature")
 
-            for vinyl in lst_articles[:2]:
+            for vinyl in lst_articles:
                 vinyl_link = vinyl.css_first("link").attributes.get("href")
 
                 # parse HTML
@@ -339,10 +339,7 @@ def scrap_onlyrootsreggae(
 
                     for mp3 in lst_mp3:
                         mp3_title = mp3.attributes.get("title")
-                        mp3_link = (
-                            "https://www.onlyroots-reggae.com"
-                            + mp3.attributes.get("src")
-                        )
+                        mp3_link = f"https://www.onlyroots-reggae.com{mp3.attributes.get('src')}"
 
                         row = {
                             "shop_name": name_shop,
@@ -376,6 +373,10 @@ def scrap_onlyrootsreggae(
 
     print(f"Scrapped {len(df_results)} items")
 
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
@@ -383,10 +384,10 @@ def scrap_onlyrootsreggae(
     df_results = df_results.sort_values(by="date_extract", ascending=False)
 
     print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+    df_results.to_csv(f"./data_tmp/{name_shop}_{time_file_name}.csv", index=False)
 
     # Upload results to GCP Storage
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
@@ -404,8 +405,8 @@ def scrap_controltower(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    # max_elements = 3000  # Maximum number of elements to scrap (shop has no pagination)
-    max_elements = 2  # Maximum number of elements to scrap (shop has no pagination)
+    max_elements = 3000  # Maximum number of elements to scrap (shop has no pagination)
+    # max_elements = 2  # Maximum number of elements to scrap (shop has no pagination)
 
     # Get shop infos from DB
     conn = db_connect_postgres(conn_id)
@@ -501,6 +502,10 @@ def scrap_controltower(
 
     print(f"Scrapped {len(df_results)} items")
 
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
@@ -510,7 +515,7 @@ def scrap_controltower(
     print(f"Removed duplicates. {len(df_results)} items left.")
 
     # Upload df_results to GCP Storage
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
@@ -530,8 +535,8 @@ def scrap_reggaefever(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    max_pages = 2  # Maximum number of pages to scrap
-    # max_pages = 600  # Maximum number of pages to scrap
+    # max_pages = 2  # Maximum number of pages to scrap
+    max_pages = 600  # Maximum number of pages to scrap
 
     # Get shop infos from DB
     conn = db_connect_postgres(conn_id)
@@ -577,7 +582,7 @@ def scrap_reggaefever(
             # retrieve all tags tr
             lst_articles = html.css("tr")
 
-            for item in lst_articles[1:3]:
+            for item in lst_articles[1:]:
                 if item.text().lstrip()[:4] not in date_ann:
                     if item.css_matches("td.articleFormat"):
                         vinyl_format = item.css_first("td.articleFormat").text()
@@ -599,9 +604,7 @@ def scrap_reggaefever(
                     # link
                     if item.css_matches("a"):
                         if "articleId" in item.css_first("a").attributes.get("href"):
-                            vinyl_link = "https://www.reggaefever.ch/" + item.css_first(
-                                "a"
-                            ).attributes.get("href")
+                            vinyl_link = f"https://www.reggaefever.ch/{item.css_first('a').attributes.get('href')}"
                             save_link = vinyl_link
                         else:
                             vinyl_link = save_link
@@ -679,6 +682,10 @@ def scrap_reggaefever(
 
     print(f"Scrapped {len(df_results)} items")
 
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
@@ -686,10 +693,10 @@ def scrap_reggaefever(
     df_results = df_results.sort_values(by="date_extract", ascending=False)
 
     print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+    df_results.to_csv(f"./data_tmp/{name_shop}_{time_file_name}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
@@ -709,8 +716,8 @@ def scrap_pataterecords(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    # max_pages = 400  # Maximum number of pages to scrap
-    max_pages = 2  # Maximum number of pages to scrap
+    max_pages = 400  # Maximum number of pages to scrap
+    # max_pages = 2  # Maximum number of pages to scrap
 
     # Get shop infos from DB
     conn = db_connect_postgres(conn_id)
@@ -754,7 +761,7 @@ def scrap_pataterecords(
             # retrieve all tags article with class=product-miniature
             lst_articles = html.css("div.img_shop_article")
 
-            for vinyl in lst_articles[:2]:
+            for vinyl in lst_articles:
                 vinyl_image = vinyl.css_first("img").attributes.get("src")
                 vinyl_link = vinyl.css_first("a").attributes.get("href")
 
@@ -846,6 +853,10 @@ def scrap_pataterecords(
 
     print(f"Scrapped {len(df_results)} items")
 
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
@@ -853,10 +864,10 @@ def scrap_pataterecords(
     df_results = df_results.sort_values(by="date_extract", ascending=False)
 
     print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+    df_results.to_csv(f"./data_tmp/{name_shop}_{time_file_name}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
@@ -876,8 +887,8 @@ def scrap_lionvibes(
     print(f"Scrapping {name_shop}...")
 
     df_results = pd.DataFrame()
-    max_pages = 2  # Maximum number of pages to scrap
-    # max_pages = 100  # Maximum number of pages to scrap
+    # max_pages = 2  # Maximum number of pages to scrap
+    max_pages = 100  # Maximum number of pages to scrap
 
     # Get shop infos from DB
     conn = db_connect_postgres(conn_id)
@@ -922,14 +933,14 @@ def scrap_lionvibes(
             # lst_articles = html.css("div.album-block")
             lst_articles = html.css("div.card--card")
 
-            for vinyl in lst_articles[:2]:
+            for vinyl in lst_articles:
 
                 # Image
-                vinyl_image = "https:" + vinyl.css_first("img").attributes.get("src")
+                vinyl_image = f"https:{vinyl.css_first('img').attributes.get('src')}"
 
                 # Link + Title
                 div_link = vinyl.css("a")
-                vinyl_link = "https:" + div_link[1].attributes.get("href")
+                vinyl_link = f"https:{div_link[1].attributes.get('href')}"
 
                 # Ref
                 vinyl_ref = f"R-{vinyl_link.split('?')[0].split('-')[-1]}"
@@ -1014,6 +1025,10 @@ def scrap_lionvibes(
 
     print(f"Scrapped {len(df_results)} items")
 
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
@@ -1021,10 +1036,10 @@ def scrap_lionvibes(
     df_results = df_results.sort_values(by="date_extract", ascending=False)
 
     print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+    df_results.to_csv(f"./data_tmp/{name_shop}_{time_file_name}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
@@ -1087,7 +1102,7 @@ def scrap_toolboxrecords(
                 print("No articles found. Pass to next Url.")
                 break
 
-            for vinyl in lst_articles[:2]:
+            for vinyl in lst_articles:
                 if vinyl.css_matches("ul.product-track-listing"):
                     vinyl_image = vinyl.css_first("img").attributes.get("src")
                     vinyl_link = vinyl.css_first("a").attributes.get("href")
@@ -1179,6 +1194,10 @@ def scrap_toolboxrecords(
 
     print(f"Scrapped {len(df_results)} items")
 
+    if df_results.empty:
+        print("No items found. Exiting.")
+        return
+
     # Remove duplicates
     df_results = remove_duplicates(df_results)
 
@@ -1186,10 +1205,10 @@ def scrap_toolboxrecords(
     df_results = df_results.sort_values(by="date_extract", ascending=False)
 
     print(f"Removed duplicates. {len(df_results)} items left.")
-    df_results.to_csv(f"./{name_shop}_{time_file_name}.csv", index=False)
+    df_results.to_csv(f"./data_tmp/{name_shop}_{time_file_name}.csv", index=False)
 
     # Upload df_results to GCP Storage
-    path_file = format_path_file(time_file_name, name_shop)
+    path_file = format_path_file(time_file_name, prefix_file, name_shop)
     upload_blob(bucket_name, df_results, path_file)
 
 
