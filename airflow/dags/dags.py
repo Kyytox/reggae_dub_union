@@ -151,17 +151,15 @@ with DAG(
         result = pd.read_sql(query, conn).iloc[0, 0]
 
         if not result:
-            # raise ValueError("Table 'shops' does not exist in the database.")
             return pd.DataFrame()
 
         df = get_shops_from_db(conn)
-        print(df)
         cur.close()
         conn.close()
         return df
 
     # Define var timestamp for file naming
-    time_file_name = datetime.now().strftime("%Y%m%d_%H")
+    time_file_name = datetime.now().strftime("%Y%m%d_%H%M")
     Variable.set(key="time_file_name", value=time_file_name)
 
     conn_id = Variable.get("conn_id", default_var=CONNECTION_DB)
