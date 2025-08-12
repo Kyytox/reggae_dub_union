@@ -19,18 +19,20 @@ def save_file(
     upload_blob(bucket_name=bucket_name, df=df, destination_blob_name=path_file)
 
 
-def format_path_file(time_file_name: str, file_name: str) -> str:
+def format_path_file(time_file_name: str, prefix_file: str, file_name: str) -> str:
     """
     Format the path for the file in GCP Storage.
 
     Args:
         time_file_name (str): Timestamp for file naming.
+        prefix_file (str): Prefix for the file path.
         file_name (str): Name of the file.
+
 
     Returns:
         str: Formatted path for the file.
     """
-    return f"extract_{time_file_name}/{file_name}.csv"
+    return f"extract_{time_file_name}/{prefix_file}_{file_name}.csv"
 
 
 def get_shops_links(df_shops: pd.DataFrame) -> list:
