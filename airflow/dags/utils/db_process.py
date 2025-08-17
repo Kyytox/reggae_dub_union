@@ -49,8 +49,11 @@ def get_shop_infos(conn, name_shop: str) -> pd.DataFrame:
         SELECT
             s.shop_id,
             s.shop_name,
+            s.shop_nb_min_pages,
+            s.shop_nb_max_pages,
             sl.shop_link,
             sl.shop_link_id,
+
             NULL AS vinyl_id,
             NULL AS vinyl_reference
         FROM shops s
@@ -62,6 +65,8 @@ def get_shop_infos(conn, name_shop: str) -> pd.DataFrame:
             SELECT
                 s.shop_id,
                 s.shop_name,
+                s.shop_nb_min_pages,
+                s.shop_nb_max_pages,
                 sl.shop_link,
                 sl.shop_link_id,
                 v.vinyl_id,
