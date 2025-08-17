@@ -15,7 +15,7 @@ from utils.variables import lst_formats_accepted
 
 lst_formats_accepted = ["7", "10", "12", "LP", "TEST PRESS"]
 
-from airflow.models import Variable
+from airflow.sdk import Variable
 
 
 def update_format(df: pd.DataFrame) -> pd.DataFrame:
@@ -100,16 +100,17 @@ def update_price_currency(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def transform_data(bucket_name: str, time_file_name: str):
+def transform_data(bucket_name: str):
     """
     Transform data from a all shops present in folder extract_{time_file_name} in GCP Storage.
 
     Args:
         bucket_name (str): The name of the GCP Storage bucket to upload the transformed data.
-        time_file_name (str): The timestamp used for naming the file.
     """
 
     df = pd.DataFrame()
+
+    time_file_name = Variable.get("time_file_name")
 
     # Get the list of files with prefix
     prefix = f"extract_{time_file_name}/"

@@ -3,6 +3,8 @@ from os import path
 import pandas as pd
 
 from airflow.exceptions import AirflowSkipException
+from airflow.sdk import Variable
+
 
 from utils.utils_gcp_storage import (
     download_blob_into_memory,
@@ -20,15 +22,16 @@ from utils.db_process import (
 from utils.libs import format_path_file
 
 
-def load_data_to_db(bucket_name: str, time_file_name: str, conn_id: str) -> None:
+def load_data_to_db(bucket_name: str, conn_id: str) -> None:
     """
     Load data from GCP Storage to the database.
 
     Args:
         bucket_name (str): Name of the GCP Storage bucket.
-        time_file_name (str): Timestamp for file naming.
         conn_id (str): Airflow connection ID for the PostgreSQL database.
     """
+
+    time_file_name = Variable.get("time_file_name")
 
     # Download the blob into memory
     prefix = f"extract_{time_file_name}/"
@@ -76,7 +79,7 @@ def load_data_to_db(bucket_name: str, time_file_name: str, conn_id: str) -> None
         .copy()
         .drop_duplicates()
     )
-
+    print(df_vinyls)
     # Insert in vinyls table and return vinyl_id
     try:
         lst_vinyl_ids = []
@@ -127,8 +130,12 @@ def load_data_to_db(bucket_name: str, time_file_name: str, conn_id: str) -> None
             ],
             how="left",
         )
+    except Exception as e:
+        conn.rollback()
+        raise Exception(f"Error inserting vinyls into the database: {e}") from e
 
-        # Insert songs into the Songs table
+    # Insert songs into the Songs table
+    try:
         for _, row in df.iterrows():
             query = """
                 INSERT INTO songs (vinyl_id, song_title, song_mp3)
@@ -138,15 +145,17 @@ def load_data_to_db(bucket_name: str, time_file_name: str, conn_id: str) -> None
             cursor.execute(query, params)
 
         # Commit the transaction
-        conn.commit()
     except Exception as e:
-        print(f"An error occurred: {e}")
         conn.rollback()
-    finally:
-        cursor.close()
-        conn.close()
-        print("Data loaded into the database successfully.")
-        print("Number of records inserted:", len(df))
+        raise Exception(f"Error inserting data into the database: {e}") from e
+
+    # Commit and close the connection
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    print("Data loaded into the database successfully.")
+    print("Number of records inserted:", len(df))
 
     # Delete the file from GCP Storage
     # delete_blob(bucket_name, path_file)
