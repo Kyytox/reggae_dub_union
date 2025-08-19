@@ -7,119 +7,135 @@ import LstShops from "./LstShops";
 import LstFormatVinyls from "./LstFormatVinyls";
 import "../App.css";
 
+// composant for Search not found
+function SearchNotFound() {
+  return (
+    <div className="noResult" style={{ marginTop: "5em" }}>
+      <h2>No result found</h2>
+    </div>
+  );
+}
+
 function SearchPage() {
-    const { search } = useParams();
+  const { search } = useParams();
 
-    const { isLoggedIn, idUser } = useContext(AuthContext);
-    const [lstShops, setLstShops] = useState([]);
-    const [lstShopsSelected, setLstShopsSelected] = useState([]);
-    const [lstFormatVinyls, setLstFormatVinyls] = useState([]);
-    const [lstFormatVinylsSelected, setLstFormatVinylsSelected] = useState([]);
-    const [lstSearch, setLstSearch] = useState([]);
-    const [lstSearchSelected, setLstSearchSelected] = useState([]);
-    const [lstFavoris, setLstFavoris] = useState([]);
-    const [topSearch, setTopSearch] = useState(false);
+  const { isLoggedIn, idUser } = useContext(AuthContext);
+  const nbVinyls = 100;
+  const [lstVinyls, setLstVinyls] = useState([]);
+  const [lstVinylsSelected, setLstVinylsSelected] = useState([]);
+  const [lstSongs, setLstSongs] = useState([]);
+  const [lstSongsSelected, setLstSongsSelected] = useState([]);
+  const [lstShops, setLstShops] = useState([]);
+  const [lstShopsSelected, setLstShopsSelected] = useState([]);
+  const [lstFormatVinyls, setLstFormatVinyls] = useState([]);
+  const [lstFormatVinylsSelected, setLstFormatVinylsSelected] = useState([]);
+  const [lstFavoris, setLstFavoris] = useState([]);
 
-    const FetchData = async () => {
-        try {
-            console.log("Fetching data...");
+  const FetchData = async () => {
+    try {
+      // get data
+      const search_response = await getAxios("/search/" + search);
+      console.log("search_response", search_response);
 
-            // get data
-            if (isLoggedIn) {
-                const favoris = await getAxiosAuth("/get_favoris", idUser);
-                if (favoris === "Token is not valid") {
-                    logout();
-                    navigate("/login");
-                }
-                setLstFavoris(favoris);
-            }
+      // if result contans error key
+      if (search_response.error) {
+        return <SearchNotFound />;
+      }
 
-            const search_response = await getAxios("/search/" + search);
+      // if result contans message key
+      if (search_response.error) {
+        return <SearchNotFound />;
+      }
 
-            if (search_response.length === 0) {
-                setTopSearch(true);
-            }
+      // get Vinyls, Songs, Shops
+      const vinyls = search_response["vinyls"];
+      const songs = search_response["songs"];
+      const shops = search_response["shops"];
 
-            getUniqueShops(search_response);
-            getUniqueFormatVinyls(search_response);
-            setLstSearch(search_response);
-            setLstSearchSelected(search_response);
-        } catch (error) {
-            console.error("Une erreur s'est produite :", error);
+      // if user is connect get favoris
+      if (isLoggedIn) {
+        const favoris = await getAxiosAuth("/get_list_favoris", idUser);
+        if (favoris === "Token is not valid") {
+          logout();
+          navigate("/login");
         }
-    };
+        console.log("favoris", favoris);
+        setLstFavoris(favoris);
+      }
 
-    // get Vinyls and Songs
-    useEffect(() => {
-        FetchData();
-    }, []);
+      // update States
+      setLstShops(shops);
+      getUniqueFormatVinyls(vinyls);
+      setLstVinyls(vinyls);
+      setLstSongs(songs);
+      setLstSongsSelected(songs.slice(0, nbVinyls)); // get first x songs
+      setLstVinylsSelected(vinyls.slice(0, nbVinyls)); // get first x vinyls
+    } catch (error) {
+      console.error("Une erreur s'est produite :", error);
+    }
+  };
 
-    useEffect(() => {
-        // get all vinyls from selected shops, if no shop is selected, get all vinyls
-        const newLstVinyls =
-            lstShopsSelected.length === 0
-                ? lstSearch
-                : lstSearch.filter((vinyl) =>
-                      lstShopsSelected.includes(vinyl.site)
-                  );
+  // get Vinyls and Songs
+  useEffect(() => {
+    FetchData();
+  }, []);
 
-        // filter by selected format vinyls, if any
-        const filteredLstVinyls =
-            lstFormatVinylsSelected.length === 0
-                ? newLstVinyls
-                : newLstVinyls.filter((vinyl) =>
-                      lstFormatVinylsSelected.includes(vinyl.format)
-                  );
+  useEffect(() => {
+    // get all vinyls from selected shops, if no shop is selected, get all vinyls
+    const newLstVinyls =
+      lstShopsSelected.length === 0
+        ? lstVinyls
+        : lstVinyls.filter((vinyl) => lstShopsSelected.includes(vinyl.shop_id));
 
-        setLstSearchSelected(filteredLstVinyls);
+    // filter by selected format vinyls, if any
+    const filteredLstVinyls =
+      lstFormatVinylsSelected.length === 0
+        ? newLstVinyls
+        : newLstVinyls.filter((vinyl) =>
+            lstFormatVinylsSelected.includes(vinyl.vinyl_format),
+          );
 
-        getUniqueFormatVinyls(newLstVinyls);
-    }, [lstShopsSelected, lstFormatVinylsSelected]);
+    // with vinyl_id, get songs
+    const newLstSongs = filteredLstVinyls.map((vinyl) => {
+      return lstSongs.filter((song) => song.vinyl_id === vinyl.vinyl_id);
+    });
 
-    const getUniqueFormatVinyls = (lst) => {
-        const lstFormatVinyls = lst
-            .map((vinyl) => vinyl.format)
-            .filter((value, index, self) => self.indexOf(value) === index);
-        setLstFormatVinyls(lstFormatVinyls);
-    };
-    const getUniqueShops = (lst) => {
-        const lstShops = lst
-            .map((vinyl) => vinyl.site)
-            .filter((value, index, self) => self.indexOf(value) === index)
-            .map((shop) => {
-                return { name: shop };
-            });
-        setLstShops(lstShops);
-    };
+    setLstVinylsSelected(filteredLstVinyls.slice(0, nbVinyls));
+    setLstSongsSelected(newLstSongs.slice(0, nbVinyls));
 
-    return (
-        <div className="home">
-            {topSearch ? (
-                <div className="noResult" style={{ marginTop: "5em" }}>
-                    <h2>No result found for "{search}"</h2>
-                </div>
-            ) : (
-                <>
-                    <LstShops
-                        lstShops={lstShops}
-                        lstShopsSelected={lstShopsSelected}
-                        setLstShopsSelected={setLstShopsSelected}
-                    />
-                    <LstFormatVinyls
-                        lstFormatVinyls={lstFormatVinyls}
-                        lstFormatVinylsSelected={lstFormatVinylsSelected}
-                        setLstFormatVinylsSelected={setLstFormatVinylsSelected}
-                    />
-                    <AudioPlayer
-                        lstSongs={lstSearchSelected}
-                        lstFavoris={lstFavoris}
-                        setLstFavoris={setLstFavoris}
-                        loadMoreData={null}
-                    />
-                </>
-            )}
-        </div>
-    );
+    getUniqueFormatVinyls(newLstVinyls);
+  }, [lstShopsSelected, lstFormatVinylsSelected]);
+
+  const getUniqueFormatVinyls = (lstVinyls) => {
+    const lstFormatVinyls = lstVinyls
+      .map((vinyl) => vinyl.vinyl_format)
+      .filter((value, index, self) => self.indexOf(value) === index);
+    setLstFormatVinyls(lstFormatVinyls);
+  };
+
+  return (
+    <div className="home">
+      <>
+        <LstShops
+          lstShops={lstShops}
+          lstShopsSelected={lstShopsSelected}
+          setLstShopsSelected={setLstShopsSelected}
+        />
+        <LstFormatVinyls
+          lstFormatVinyls={lstFormatVinyls}
+          lstFormatVinylsSelected={lstFormatVinylsSelected}
+          setLstFormatVinylsSelected={setLstFormatVinylsSelected}
+        />
+        <AudioPlayer
+          lstSongs={lstSongsSelected}
+          lstVinyls={lstVinylsSelected}
+          lstFavoris={lstFavoris}
+          setLstFavoris={setLstFavoris}
+          // loadMoreData={loadMoreData}
+        />
+      </>
+    </div>
+  );
 }
 
 export default SearchPage;
