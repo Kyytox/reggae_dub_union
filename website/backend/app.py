@@ -1,5 +1,3 @@
-import os
-
 from flask_sqlalchemy import SQLAlchemy
 
 # from flask_migrate import Migrate
@@ -48,6 +46,7 @@ CORS(
 from routes import get_vinyls
 from routes import auth
 from routes import favoris
+from routes import search
 
 
 #
