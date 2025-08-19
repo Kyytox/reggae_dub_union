@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Typography from "@mui/material/Typography";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
@@ -141,13 +142,11 @@ function AudioPlayer({
         <div className="container-audioPlayer-title">
           {songPlaying ? (
             <div className="container-audioPlayer-title-text ">
-              <span className="text-green-200 font-semibold">
-                {songPlaying.vinyl_title}
-              </span>
+              <Typography color="primary">{songPlaying.vinyl_title}</Typography>
               <span> - </span>
-              <span className="text-yellow-200 font-light">
+              <Typography color="secondary">
                 {songPlaying.song_title}
-              </span>
+              </Typography>
             </div>
           ) : null}
         </div>

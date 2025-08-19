@@ -2,13 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { AuthProvider } from "./components/AuthContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { green, yellow } from "@mui/material/colors";
 import App from "./App.jsx";
 import "./index.css";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#0f9e36",
+      main: green[700],
+    },
+    secondary: {
+      main: yellow[200],
     },
   },
 });

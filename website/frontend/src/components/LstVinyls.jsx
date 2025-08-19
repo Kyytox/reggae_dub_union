@@ -293,9 +293,9 @@ function LstVinyls({
                       {lstFavoris.some(
                         (favori) => favori.vinyl_id === vinyl.vinyl_id,
                       ) ? (
-                        <FavoriteIcon />
+                        <FavoriteIcon color="secondary" />
                       ) : (
-                        <FavoriteBorderIcon />
+                        <FavoriteBorderIcon color="primary" />
                       )}
                     </Button>
                   ) : null}
@@ -313,9 +313,9 @@ function LstVinyls({
                     }
                   >
                     {songPlaying && songPlaying.vinyl_id === vinyl.vinyl_id ? (
-                      <PauseIcon />
+                      <PauseIcon color="secondary" />
                     ) : (
-                      <PlayArrowIcon />
+                      <PlayArrowIcon color="primary" />
                     )}
                   </Button>
 
