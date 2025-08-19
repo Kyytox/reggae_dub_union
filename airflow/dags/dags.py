@@ -1,15 +1,13 @@
 import pandas as pd
 from datetime import datetime, timedelta
 
-from airflow.sdk import DAG, task, task_group, get_current_context
+from airflow.sdk import Variable, DAG, task, task_group, get_current_context
 from airflow.utils.task_group import TaskGroup
 
 # Operators
 # from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
-
-from airflow.models import Variable
 
 
 from utils.variables import (
@@ -77,6 +75,8 @@ with DAG(
 
     init_db >> insert_shops
 
+    # init_db
+
 
 with DAG(
     dag_id="dump_database",
@@ -132,6 +132,18 @@ with DAG(
 
     """
 
+    def init_variables():
+        """
+        Initialize and set Airflow Variables for the DAG.
+
+        This function sets the connection ID and bucket name as Airflow Variables.
+        """
+        # init time_file_name
+        time_file_name = datetime.now().strftime("%Y%m%d_%H%M")
+        # time_file_name = "data_base"
+        # time_file_name = "20250818_2252"
+        Variable.set("time_file_name", time_file_name)
+
     def get_shop_list(conn_id: str):
         """
         Get the list of shops from the database.
@@ -158,12 +170,18 @@ with DAG(
         conn.close()
         return df
 
-    # Define var timestamp for file naming
-    time_file_name = datetime.now().strftime("%Y%m%d_%H%M")
-    Variable.set(key="time_file_name", value=time_file_name)
+    conn_id = Variable.get("conn_id", default=CONNECTION_DB)
+    bucket_name = Variable.get("bucket_name", default=BUCKET_NAME)
 
-    conn_id = Variable.get("conn_id", default_var=CONNECTION_DB)
-    bucket_name = Variable.get("bucket_name", default_var=BUCKET_NAME)
+    #########
+    # TASKS
+    #########
+
+    # Task to initialize variables
+    tsk_init_variables = PythonOperator(
+        task_id="tsk_init_variables",
+        python_callable=init_variables,
+    )
 
     # Create a task for each shop using PythonOperator
     with TaskGroup("tsk_gp") as tsk_gp:
@@ -174,6 +192,7 @@ with DAG(
             name_shop = row["shop_name"]
             scrap_function = row["shop_function"]
 
+            # if name_shop == "jahwaggysrecords":
             PythonOperator(
                 task_id=f"tsk_scrap_{name_shop}",
                 python_callable=eval(scrap_function),
@@ -181,7 +200,6 @@ with DAG(
                     "name_shop": name_shop,
                     "conn_id": conn_id,
                     "bucket_name": bucket_name,
-                    "time_file_name": time_file_name,
                 },
             )
 
@@ -191,7 +209,6 @@ with DAG(
         python_callable=transform_data,
         op_kwargs={
             "bucket_name": bucket_name,
-            "time_file_name": time_file_name,
         },
     )
 
@@ -201,10 +218,11 @@ with DAG(
         python_callable=load_data_to_db,
         op_kwargs={
             "bucket_name": bucket_name,
-            "time_file_name": time_file_name,
             "conn_id": conn_id,
         },
     )
 
     # Run all scrap tasks
-    (tsk_gp >> tsk_transform_data >> tsk_load_data)
+
+    (tsk_init_variables >> tsk_gp >> tsk_transform_data >> tsk_load_data)
+    # (tsk_init_variables >> tsk_transform_data >> tsk_load_data)
