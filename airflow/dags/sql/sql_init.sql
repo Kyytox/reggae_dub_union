@@ -58,24 +58,21 @@ CREATE TABLE IF NOT EXISTS public.shops_links (
     PRIMARY KEY (shop_link_id)
 );
 
---
--- ALTER TABLE public.favoris
--- ADD CONSTRAINT fk_favoris_id_song_songs_id FOREIGN KEY(song_id) REFERENCES public.songs(song_id);
---
--- ALTER TABLE public.favoris
--- ADD CONSTRAINT fk_favoris_id_user_users_id FOREIGN KEY(user_id) REFERENCES public.users(user_id);
---
--- alter table public.favoris
--- ADD CONSTRAINT fk_favoris_id_vinyl_vinyls_id foreign key(vinyl_id) references public.vinyls(vinyl_id);
---
--- ALTER TABLE public.songs
--- ADD CONSTRAINT fk_songs_id_vinyl_vinyls_id FOREIGN KEY(vinyl_id) REFERENCES public.vinyls(vinyl_id);
---
--- ALTER TABLE public.vinyls
--- ADD CONSTRAINT fk_vinyls_id_shop_shops_id FOREIGN KEY(shop_id) REFERENCES public.shops(shop_id);
---
--- ALTER TABLE public.shops_links
--- ADD CONSTRAINT fk_shops_links_id_shop_shops_id FOREIGN KEY(shop_id) REFERENCES public.shops(shop_id);
---
--- ALTER TABLE public.vinyls
--- ADD CONSTRAINT fk_vinyls_id_link_shops_links_id FOREIGN KEY(shop_link_id) REFERENCES public.shops_links(shop_link_id);
+
+ALTER TABLE public.favoris
+ADD CONSTRAINT fk_favoris_id_user_users_id FOREIGN KEY(user_id) REFERENCES public.users(user_id);
+
+alter table public.favoris
+ADD CONSTRAINT fk_favoris_id_vinyl_vinyls_id foreign key(vinyl_id) references public.vinyls(vinyl_id);
+
+ALTER TABLE public.songs
+ADD CONSTRAINT fk_songs_id_vinyl_vinyls_id FOREIGN KEY(vinyl_id) REFERENCES public.vinyls(vinyl_id);
+
+ALTER TABLE public.vinyls
+ADD CONSTRAINT fk_vinyls_id_shop_shops_id FOREIGN KEY(shop_id) REFERENCES public.shops(shop_id);
+
+ALTER TABLE public.shops_links
+ADD CONSTRAINT fk_shops_links_id_shop_shops_id FOREIGN KEY(shop_id) REFERENCES public.shops(shop_id);
+
+ALTER TABLE public.vinyls
+ADD CONSTRAINT fk_vinyls_id_link_shops_links_id FOREIGN KEY(shop_link_id) REFERENCES public.shops_links(shop_link_id);
