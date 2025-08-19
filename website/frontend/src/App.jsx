@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Favoris from "./components/Favoris";
-// import SearchPage from "./components/SearchPage";
+import SearchPage from "./components/SearchPage";
 import "./App.css";
 
 function App() {
@@ -31,10 +31,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/favoris" element={<Favoris />} />
-            {/* <Route */}
-            {/*     path="/search/:search" */}
-            {/*     element={<SearchPage />} */}
-            {/* /> */}
+            <Route path="/search/:search" element={<SearchPage />} />
           </Routes>
         </div>
       </Router>
