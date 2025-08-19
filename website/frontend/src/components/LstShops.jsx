@@ -6,12 +6,12 @@ import "../App.css";
 function LstShops({ lstShops, lstShopsSelected, setLstShopsSelected }) {
   // change the list of selected shops
   const changeSelectedShops = (shop) => {
-    if (lstShopsSelected.includes(shop.shop_name)) {
-      const newArray = lstShopsSelected.filter((e) => e !== shop.shop_name);
+    if (lstShopsSelected.includes(shop.shop_id)) {
+      const newArray = lstShopsSelected.filter((e) => e !== shop.shop_id);
       setLstShopsSelected(newArray);
     } else {
       // add it in array
-      setLstShopsSelected([...lstShopsSelected, shop.shop_name]);
+      setLstShopsSelected([...lstShopsSelected, shop.shop_id]);
     }
   };
 
@@ -23,7 +23,7 @@ function LstShops({ lstShops, lstShopsSelected, setLstShopsSelected }) {
           variant={
             lstShopsSelected.length === 0
               ? "contained"
-              : lstShopsSelected.some((s) => s === shop.shop_name)
+              : lstShopsSelected.some((s) => s === shop.shop_id)
                 ? "contained"
                 : "outlined"
           }
