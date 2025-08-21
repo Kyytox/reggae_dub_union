@@ -1,13 +1,15 @@
 import { useState, useContext, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import { AuthContext } from "./components/AuthContext";
+
 import Signup from "./components/Signup";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Favoris from "./components/Favoris";
 import SearchPage from "./components/SearchPage";
+import PageNotFound from "./components/errors/PageNotFound";
+
 import "./App.css";
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/favoris" element={<Favoris />} />
             <Route path="/search/:search" element={<SearchPage />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
       </Router>
