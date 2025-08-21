@@ -931,7 +931,9 @@ def scrap_lionvibes(name_shop: str, conn_id: str, bucket_name: str) -> None:
 
                 # Link + Title
                 div_link = vinyl.css("a")
-                vinyl_link = f"https:{div_link[1].attributes.get('href')}"
+                vinyl_link = (
+                    f"https://www.lionvibes.com{div_link[1].attributes.get('href')}"
+                )
 
                 # Ref
                 vinyl_ref = f"R-{vinyl_link.split('?')[0].split('-')[-1]}"
@@ -982,9 +984,9 @@ def scrap_lionvibes(name_shop: str, conn_id: str, bucket_name: str) -> None:
                 # range title of track and collect filname attribute for mp3 link
                 for track in lst_audio:
                     mp3_title = track.css_first("strong").text()
-                    mp3_link = "https://shop.lionvibes.com" + track.css_first(
-                        "source"
-                    ).attributes.get("src")
+                    mp3_link = "https:" + track.css_first("source").attributes.get(
+                        "src"
+                    )
 
                     row = {
                         "shop_name": name_shop,
