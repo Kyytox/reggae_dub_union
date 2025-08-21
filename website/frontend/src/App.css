@@ -39,6 +39,11 @@
 /*   align-items: center; */
 /* } */
 /**/
+
+.container-lstVinyls {
+  margin-bottom: 4em;
+}
+
 .container-lstVinyls .MuiCardActions-root button,
 .container-lstVinyls .MuiCardActions-root a {
   min-width: 0;
