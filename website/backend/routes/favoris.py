@@ -5,6 +5,25 @@ from routes.auth_utils import decode_auth_token
 from utils.libs import format_return_data
 
 
+def parse_request(request):
+    """
+    Parse the request data.
+    Get the token from the request headers and decode it.
+
+    Args:
+        request (Request): The request object.
+
+    Returns:
+        bool: True if the token is valid, False otherwise.
+    """
+    # decode token
+    token = request.headers.get("Authorization")
+    token = token.split(" ")[1]
+    topAuth = decode_auth_token(token)
+
+    return topAuth
+
+
 @app.route("/get_list_favoris/<id_user>", methods=["GET"])
 def get_list_favoris(id_user):
     """
@@ -14,31 +33,29 @@ def get_list_favoris(id_user):
         list: list of favoris
     """
 
-    # decode token
-    token = request.headers.get("Authorization")
-    token = token.split(" ")[1]
-    topAuth = decode_auth_token(token)
+    # Parse request
+    topAuth = parse_request(request)
 
-    # if token is not valid
-    if topAuth:
-        lst_favoris = Favori.query.filter_by(user_id=id_user).all()
+    # Check if token is valid
+    if not topAuth:
+        return {"error": "Token is not valid"}
 
-        if len(lst_favoris) == 0:
-            return []
+    lst_favoris = Favori.query.filter_by(user_id=id_user).all()
 
-        data = []
-        for favori in lst_favoris:
-            data.append(
-                {
-                    "favori_id": favori.favori_id,
-                    "vinyl_id": favori.vinyl_id,
-                    "user_id": favori.user_id,
-                }
-            )
+    if len(lst_favoris) == 0:
+        return []
 
-        return data
-    else:
-        return "Token is not valid"
+    data = []
+    for favori in lst_favoris:
+        data.append(
+            {
+                "favori_id": favori.favori_id,
+                "vinyl_id": favori.vinyl_id,
+                "user_id": favori.user_id,
+            }
+        )
+
+    return data
 
 
 @app.route("/get_favoris/<id_user>", methods=["GET"])
@@ -50,21 +67,20 @@ def get_favoris(id_user):
         list: list of favoris
     """
 
-    # decode token
-    token = request.headers.get("Authorization")
-    token = token.split(" ")[1]
-    topAuth = decode_auth_token(token)
+    # Parse request
+    topAuth = parse_request(request)
 
-    # if token is not valid
-    if topAuth:
-        df = Favori.get_favoris_by_user(id_user)
-        if df.empty:
-            return "No favoris found for this user"
+    # Check if token is valid
+    if not topAuth:
+        return {"error": "Token is not valid"}
 
-        data = format_return_data(df)
-        return data
-    else:
-        return "Token is not valid"
+    df = Favori.get_favoris_by_user(id_user)
+
+    if df.empty:
+        return []
+
+    data = format_return_data(df)
+    return data
 
 
 @app.route("/toggle_favori", methods=["POST"])
@@ -76,31 +92,28 @@ def toggle_favori():
         list: list of favoris
     """
 
-    token = request.headers.get("Authorization")
-    topAuth = decode_auth_token(token)
-    token = token.split(" ")[1]
+    # Parse request
+    topAuth = parse_request(request)
 
-    if topAuth:
-        # body = request.get_json()["body"]
-        body = request.get_json()
-        id_vinyl = body["vinyl_id"]
-        id_user = body["user_id"]
+    # Check if token is valid
+    if not topAuth:
+        return {"error": "Token is not valid"}
 
-        # get favoris
-        top_favori = Favori.get_favoris_exist(id_user, id_vinyl)
+    body = request.get_json()
+    id_vinyl = body["vinyl_id"]
+    id_user = body["user_id"]
 
-        # if favori exist
-        if top_favori:
-            # delete favori
-            delete_favori = Favori.query.filter_by(
-                favori_id=top_favori.favori_id
-            ).first()
-            delete_favori.delete()
-            return {"vinyl_id": delete_favori.vinyl_id, "message": "delete"}
-        else:
-            # create favori
-            new_favori = Favori(vinyl_id=id_vinyl, user_id=id_user)
-            new_favori.save()
-            return {"vinyl_id": new_favori.vinyl_id, "message": "create"}
+    # get favoris
+    top_favori = Favori.get_favoris_exist(id_user, id_vinyl)
+
+    # if favori exist
+    if top_favori:
+        # delete favori
+        delete_favori = Favori.query.filter_by(favori_id=top_favori.favori_id).first()
+        delete_favori.delete()
+        return {"vinyl_id": delete_favori.vinyl_id, "message": "delete"}
     else:
-        return "Token is not valid"
+        # create favori
+        new_favori = Favori(vinyl_id=id_vinyl, user_id=id_user)
+        new_favori.save()
+        return {"vinyl_id": new_favori.vinyl_id, "message": "create"}
