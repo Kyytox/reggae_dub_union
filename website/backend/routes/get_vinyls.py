@@ -12,7 +12,6 @@ def get_vinyls_songs():
     Returns:
         list: list of vinyls and songs
     """
-    # return Vinyl.get_vinyls_and_songs()
 
     query = """
     select 
@@ -28,6 +27,7 @@ def get_vinyls_songs():
         v.vinyl_link,
         s.song_id,
         s.song_title,
+        s.song_mp3,
         sh.shop_name
     from public.songs s
     left join public.vinyls v on s.vinyl_id = v.vinyl_id
@@ -39,5 +39,9 @@ def get_vinyls_songs():
 
     df = pd.read_sql(query, con=app.config["SQLALCHEMY_DATABASE_URI"])
 
+    if df.empty:
+        return {"error": "No data found"}
+
     data = format_return_data(df)
+
     return data

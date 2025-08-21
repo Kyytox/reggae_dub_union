@@ -17,9 +17,9 @@ def search(search):
         list: list of vinyls and songs matching the search term
         dict: error message if search term is invalid or an error occurs
     """
-    search = search.strip()
+    # search = search.strip()
     if not search or len(search) > 100:
-        return {"error": "Search term is too short or too long"}, 400
+        return {"error": "Search term is too short or too long"}
 
     try:
         # get vinyls and songs from database with search in title, song title
@@ -37,6 +37,7 @@ def search(search):
                 Vinyl.vinyl_link,
                 Song.song_id,
                 Song.song_title,
+                Song.song_mp3,
                 Shop.shop_name,
             )
             .outerjoin(Song, Song.vinyl_id == Vinyl.vinyl_id)
@@ -63,6 +64,7 @@ def search(search):
             vinyl_link,
             song_id,
             song_title,
+            song_mp3,
             shop_name,
         ) in req:
             result.append(
@@ -79,16 +81,17 @@ def search(search):
                     "vinyl_link": vinyl_link,
                     "song_id": song_id,
                     "song_title": song_title,
+                    "song_mp3": song_mp3,
                     "shop_name": shop_name,
                 }
             )
 
         df = pd.DataFrame(result)
         if df.empty:
-            return {"message": "No results found"}, 404
+            return {"error": "No results found"}
 
         data = format_return_data(df)
         return data
     except Exception as e:
         print(f"Error during search: {e}")
-        return {"error": "An error occurred while processing your request"}, 500
+        return {"error": "An error occurred during the search. Please try again later."}
