@@ -17,6 +17,8 @@ import IconButton from "@mui/material/IconButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 import * as React from "react";
 import "../App.css";
 
@@ -48,6 +50,7 @@ function LstVinyls({
   lstFavoris,
   setLstFavoris,
   loadMoreData,
+  topLoadMore,
 }) {
   const { isLoggedIn, idUser } = useContext(AuthContext);
 
@@ -83,17 +86,25 @@ function LstVinyls({
       <InfiniteScroll
         dataLength={lstVinyls.length}
         next={loadMoreData}
-        hasMore={true}
+        hasMore={topLoadMore}
         loader={
-          <h4 style={{ marginTop: "40px" }} className="loading">
-            Loading...
-          </h4>
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "center",
+              padding: 2,
+              marginTop: 5,
+            }}
+          >
+            <CircularProgress />
+          </Box>
         }
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+        // endMessage={
+        //   <p style={{ textAlign: "center" }}>
+        //     <b>Yay! You have seen it all</b>
+        //   </p>
+        // }
       >
         <Grid
           container
@@ -276,13 +287,13 @@ function LstVinyls({
                     target="_blank"
                   >
                     <ShoppingCartCheckoutIcon />
-                    <Typography
-                      variant="caption"
-                      sx={{ ml: 0.5, display: { xs: "none", sm: "block" } }}
-                      fontSize="0.8em"
-                    >
-                      {vinyl.vinyl_price} {vinyl.vinyl_currency}
-                    </Typography>
+                    {/* <Typography */}
+                    {/*   variant="caption" */}
+                    {/*   sx={{ ml: 0.5, display: { xs: "none", sm: "block" } }} */}
+                    {/*   fontSize="0.8em" */}
+                    {/* > */}
+                    {/*   {vinyl.vinyl_price} {vinyl.vinyl_currency} */}
+                    {/* </Typography> */}
                   </Button>
                   {isLoggedIn ? (
                     <Button
