@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useRef, useCallback } from "react";
-import { AuthContext } from "./AuthContext";
+import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -10,7 +10,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Button, CardActionArea, CardActions } from "@mui/material";
-import { postAxiosAuth } from "./UtilsAxios";
 import { styled } from "@mui/material/styles";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -19,7 +18,10 @@ import PauseIcon from "@mui/icons-material/Pause";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import * as React from "react";
+
+import { postAxiosAuth } from "../requests/UtilsAxios";
+import { AuthContext } from "./AuthContext";
+
 import "../App.css";
 
 const StyledCardActionArea = styled(CardActionArea)(
@@ -42,7 +44,7 @@ const ExpandMore = styled((props) => {
   transform: expand ? "rotate(0deg)" : "rotate(180deg)",
 }));
 
-function LstVinyls({
+function SectionVinyls({
   lstSongs,
   lstVinyls,
   playSong,
@@ -53,6 +55,9 @@ function LstVinyls({
   topLoadMore,
 }) {
   const { isLoggedIn, idUser } = useContext(AuthContext);
+
+  console.log("lstVinyls", lstVinyls);
+  console.log("lstSongs", lstSongs);
 
   // State to manage expanded states of vinyls
   const [expandedStates, setExpandedStates] = React.useState({});
@@ -263,7 +268,7 @@ function LstVinyls({
                             }}
                             onClick={() => playSong(song)}
                           >
-                            {song.song_title}
+                            - {song.song_title}
                           </Typography>
                         ),
                     )}
@@ -348,4 +353,4 @@ function LstVinyls({
   );
 }
 
-export default LstVinyls;
+export default SectionVinyls;
