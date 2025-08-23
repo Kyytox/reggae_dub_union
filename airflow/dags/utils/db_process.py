@@ -74,13 +74,13 @@ def get_shop_infos(conn, name_shop: str) -> pd.DataFrame:
             FROM shops s
             LEFT JOIN shops_links sl ON s.shop_id = sl.shop_id
             LEFT JOIN vinyls v ON sl.shop_link_id = v.shop_link_id
-            WHERE
-                s.shop_name = %s
-                AND v.vinyl_id = (
-                    SELECT MAX(v2.vinyl_id)
-                    FROM vinyls v2
-                    WHERE v2.shop_link_id = v.shop_link_id
-        )    """
+            AND v.vinyl_id = (
+                SELECT MAX(v2.vinyl_id)
+                FROM vinyls v2
+                WHERE v2.shop_link_id = v.shop_link_id
+            )
+            WHERE s.shop_name = %s
+            """
 
     df = pd.read_sql(query, conn, params=(name_shop,))
 
