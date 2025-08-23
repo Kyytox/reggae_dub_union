@@ -145,7 +145,7 @@ def add_row_to_df(df: pd.DataFrame, row: dict) -> pd.DataFrame:
     # get timestamp for the row
     row["date_extract"] = pd.Timestamp.now()
 
-    return pd.concat([df, pd.DataFrame(row)], ignore_index=True)
+    return pd.concat([df, pd.DataFrame([row])], ignore_index=True)
 
 
 def scrap_jahwaggysrecords(name_shop: str, conn_id: str, bucket_name: str) -> None:
