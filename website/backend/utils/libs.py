@@ -9,6 +9,9 @@ def format_return_data(df):
             'songs', and 'shops', each containing a list of dictionaries with the relevant data.
     """
 
+    # add cols id_elem
+    df["id_elem"] = range(1, len(df) + 1)
+
     # keep cols starting with "vinyls"
     cols_vinyls = [
         df.columns[i]
@@ -21,8 +24,14 @@ def format_return_data(df):
         cols_vinyls += ["user_id", "favori_id"]
 
     # create a DataFrame with the vinyls data
-    df_vinyls = df[cols_vinyls + ["shop_id", "shop_name"]].copy().drop_duplicates()
+    df_vinyls = (
+        df[cols_vinyls + ["shop_id", "shop_name", "id_elem"]]
+        .copy()
+        .drop_duplicates(subset=["vinyl_id"])
+    )
 
+    #
+    #
     # keep cols starting with "songs"
     cols_songs = [
         df.columns[i]
@@ -31,6 +40,8 @@ def format_return_data(df):
     ]
     df_songs = df[cols_songs + ["vinyl_id", "vinyl_title"]].copy()
 
+    #
+    #
     # kepp cols for shops
     cols_shops = ["shop_id", "shop_name"]
     df_shops = df[cols_shops].copy().drop_duplicates()
