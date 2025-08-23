@@ -1,5 +1,4 @@
 import io
-import re
 import pandas as pd
 
 from airflow.exceptions import AirflowSkipException
@@ -134,8 +133,6 @@ def transform_data(bucket_name: str):
         # Concatenate the DataFrame
         df = pd.concat([df, tmp_df], ignore_index=True)
 
-    print(f"Transformed data shape: {df.shape}")
-
     # format to str
     df["vinyl_format"] = df["vinyl_format"].astype(str)
     df["vinyl_price"] = df["vinyl_price"].astype(str)
@@ -147,13 +144,6 @@ def transform_data(bucket_name: str):
     # read the parquet file
     # df = pd.read_parquet("new_data_test.parquet")
     print(f"Transformed data shape: {df.shape}")
-
-    # FIX remove this when name will be fixed
-    # df.rename(columns={"name_shop": "shop_name"}, inplace=True)
-    # df.rename(columns={"vinyl_ref": "vinyl_reference"}, inplace=True)
-    # df.rename(columns={"mp3_title": "song_title"}, inplace=True)
-    # df.rename(columns={"mp3_link": "song_mp3"}, inplace=True)
-    # FIX
 
     #
     # remove Unnamed: 0
@@ -174,11 +164,16 @@ def transform_data(bucket_name: str):
     # for vinyl_title, song_title
     df["vinyl_title"] = df["vinyl_title"].str.strip()
     df["song_title"] = df["song_title"].str.strip()
+
     #
     # convart date to datetime
-    if "date_extract" in df.columns:
-        df["date_extract"] = pd.to_datetime(df["date_extract"], errors="coerce")
-        df["date_extract"] = df["date_extract"].dt.strftime("%Y-%m-%d %H:%M:%S")
+    df = df.rename(columns={"date_extract": "vinyl_date_extract"})
+    df["vinyl_date_extract"] = pd.to_datetime(df["vinyl_date_extract"], errors="coerce")
+    df["vinyl_date_extract"] = df["vinyl_date_extract"].dt.strftime(
+        "%Y-%m-%d %H:%M:%S.%f"
+    )
+
+    print(df)
 
     save_file(
         df=df,

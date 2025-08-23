@@ -62,24 +62,31 @@ def load_data_to_db(bucket_name: str, conn_id: str) -> None:
     df = df.merge(df_shops, on="shop_name", how="left").drop("shop_function", axis=1)
 
     # prepare df_vinyls
-    df_vinyls = (
-        df[
-            [
-                "shop_id",
-                "shop_link_id",
-                "vinyl_format",
-                "vinyl_title",
-                "vinyl_image",
-                "vinyl_price",
-                "vinyl_currency",
-                "vinyl_reference",
-                "vinyl_link",
-            ]
+    df_vinyls = df[
+        [
+            "shop_id",
+            "shop_link_id",
+            "vinyl_format",
+            "vinyl_title",
+            "vinyl_image",
+            "vinyl_price",
+            "vinyl_currency",
+            "vinyl_reference",
+            "vinyl_link",
+            "vinyl_date_extract",
         ]
-        .copy()
-        .drop_duplicates()
-    )
-    print(df_vinyls)
+    ].copy()
+
+    df_vinyls = df_vinyls.drop_duplicates(
+        subset=[
+            "shop_id",
+            "shop_link_id",
+            "vinyl_reference",
+            "vinyl_link",
+        ],
+        keep="first",
+    ).reset_index(drop=True)
+
     # Insert in vinyls table and return vinyl_id
     try:
         lst_vinyl_ids = []
@@ -89,8 +96,8 @@ def load_data_to_db(bucket_name: str, conn_id: str) -> None:
         # Insert vinyls into the Vinyls table
         for _, row in df_vinyls.iterrows():
             query = """
-                INSERT INTO vinyls (shop_id, shop_link_id, vinyl_format, vinyl_title, vinyl_image, vinyl_price, vinyl_currency, vinyl_reference, vinyl_link)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO vinyls (shop_id, shop_link_id, vinyl_format, vinyl_title, vinyl_image, vinyl_price, vinyl_currency, vinyl_reference, vinyl_link, vinyl_date_extract)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING vinyl_id;
             """
             params = (
@@ -103,6 +110,7 @@ def load_data_to_db(bucket_name: str, conn_id: str) -> None:
                 row["vinyl_currency"],
                 row["vinyl_reference"],
                 row["vinyl_link"],
+                row["vinyl_date_extract"],
             )
             cursor.execute(query, params)
             vinyl_id = cursor.fetchone()[0]
@@ -158,6 +166,6 @@ def load_data_to_db(bucket_name: str, conn_id: str) -> None:
     print("Number of records inserted:", len(df))
 
     # Delete the file from GCP Storage
-    # delete_blob(bucket_name, path_file)
+    delete_blob(bucket_name, path_file)
 
     return

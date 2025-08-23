@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.vinyls (
     vinyl_currency character varying(5),
     vinyl_reference text,
     vinyl_link text,
+    vinyl_date_extract timestamp without time zone,
     PRIMARY KEY (vinyl_id)
 );
 
