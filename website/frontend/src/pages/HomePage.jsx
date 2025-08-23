@@ -1,7 +1,6 @@
-import AudioPlayer from "./AudioPlayer";
-import LstShops from "./LstShops";
-import LstFormatVinyls from "./LstFormatVinyls";
-import useVinylsData from "./UseVinylsData";
+import AudioPlayer from "../components/AudioPlayer";
+import SectionFilter from "../components/SectionFilter";
+import useVinylsData from "../requests/UseVinylsData";
 
 import "../App.css";
 
@@ -22,16 +21,18 @@ function Home() {
   } = useVinylsData("home");
 
   return (
-    <div className="home">
-      <LstShops
-        lstShops={lstShops}
-        lstShopsSelected={lstShopsSelected}
-        setLstShopsSelected={setLstShopsSelected}
+    <div className="main-content">
+      <SectionFilter
+        lstItems={lstShops}
+        lstItemsSelected={lstShopsSelected}
+        setLstItemsSelected={setLstShopsSelected}
+        sectionName={"Shops"}
       />
-      <LstFormatVinyls
-        lstFormatVinyls={lstFormatVinyls}
-        lstFormatVinylsSelected={lstFormatVinylsSelected}
-        setLstFormatVinylsSelected={setLstFormatVinylsSelected}
+      <SectionFilter
+        lstItems={lstFormatVinyls}
+        lstItemsSelected={lstFormatVinylsSelected}
+        setLstItemsSelected={setLstFormatVinylsSelected}
+        sectionName={"Formats"}
       />
       <AudioPlayer
         lstSongs={lstSongsSelected}

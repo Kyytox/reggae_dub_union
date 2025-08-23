@@ -1,10 +1,9 @@
 import { useParams } from "react-router-dom";
-import AudioPlayer from "./AudioPlayer";
-import LstShops from "./LstShops";
-import LstFormatVinyls from "./LstFormatVinyls";
-import useVinylsData from "./UseVinylsData";
+import AudioPlayer from "../components/AudioPlayer";
+import SectionFilter from "../components/SectionFilter";
+import useVinylsData from "../requests/UseVinylsData";
 
-import ResultEmpty from "./errors/ResultEmpty";
+import ResultEmpty from "../errors/ResultEmpty";
 
 import "../App.css";
 
@@ -30,16 +29,18 @@ function SearchPage() {
   }
 
   return (
-    <div className="home">
-      <LstShops
-        lstShops={lstShops}
-        lstShopsSelected={lstShopsSelected}
-        setLstShopsSelected={setLstShopsSelected}
+    <div className="main-content">
+      <SectionFilter
+        lstItems={lstShops}
+        lstItemsSelected={lstShopsSelected}
+        setLstItemsSelected={setLstShopsSelected}
+        sectionName={"Shops"}
       />
-      <LstFormatVinyls
-        lstFormatVinyls={lstFormatVinyls}
-        lstFormatVinylsSelected={lstFormatVinylsSelected}
-        setLstFormatVinylsSelected={setLstFormatVinylsSelected}
+      <SectionFilter
+        lstItems={lstFormatVinyls}
+        lstItemsSelected={lstFormatVinylsSelected}
+        setLstItemsSelected={setLstFormatVinylsSelected}
+        sectionName={"Formats"}
       />
       <AudioPlayer
         lstSongs={lstSongsSelected}

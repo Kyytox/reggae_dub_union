@@ -1,13 +1,12 @@
-import AudioPlayer from "./AudioPlayer";
-import LstShops from "./LstShops";
-import LstFormatVinyls from "./LstFormatVinyls";
-import useVinylsData from "./UseVinylsData";
+import AudioPlayer from "../components/AudioPlayer";
+import SectionFilter from "../components/SectionFilter";
+import useVinylsData from "../requests/UseVinylsData";
 
-import ResultEmpty from "./errors/ResultEmpty";
+import ResultEmpty from "../errors/ResultEmpty";
 
 import "../App.css";
 
-function Favoris() {
+function FavorisPage() {
   const {
     lstVinylsSelected,
     lstSongsSelected,
@@ -28,16 +27,18 @@ function Favoris() {
   }
 
   return (
-    <div className="favoris">
-      <LstShops
-        lstShops={lstShops}
-        lstShopsSelected={lstShopsSelected}
-        setLstShopsSelected={setLstShopsSelected}
+    <div className="main-content">
+      <SectionFilter
+        lstItems={lstShops}
+        lstItemsSelected={lstShopsSelected}
+        setLstItemsSelected={setLstShopsSelected}
+        sectionName={"Shops"}
       />
-      <LstFormatVinyls
-        lstFormatVinyls={lstFormatVinyls}
-        lstFormatVinylsSelected={lstFormatVinylsSelected}
-        setLstFormatVinylsSelected={setLstFormatVinylsSelected}
+      <SectionFilter
+        lstItems={lstFormatVinyls}
+        lstItemsSelected={lstFormatVinylsSelected}
+        setLstItemsSelected={setLstFormatVinylsSelected}
+        sectionName={"Formats"}
       />
       <AudioPlayer
         lstSongs={lstSongsSelected}
@@ -51,4 +52,4 @@ function Favoris() {
   );
 }
 
-export default Favoris;
+export default FavorisPage;

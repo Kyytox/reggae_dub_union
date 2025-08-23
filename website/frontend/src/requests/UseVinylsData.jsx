@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../components/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { getAxiosAuth, getAxios } from "./UtilsAxios";
+import { getAxiosAuth, getAxios } from "../requests/UtilsAxios";
 
-import ResultEmpty from "./errors/ResultEmpty";
-import PageNotFound from "./errors/PageNotFound";
+import ResultEmpty from "../errors/ResultEmpty";
+import PageNotFound from "../errors/PageNotFound";
 
 import "../App.css";
 
@@ -131,18 +131,29 @@ function useVinylsData(apiEndpoint) {
     );
 
     setLstVinylsSelected(filteredLstVinyls.slice(0, nbVinyls));
-    setLstSongsSelected(newLstSongs.slice(0, nbVinyls));
+    // setLstSongsSelected(newLstSongs.slice(0, nbVinyls));
+
+    // get songs for the first nbVinyls vinyls
+    const initialSongs = filteredLstVinyls
+      .slice(0, nbVinyls)
+      .flatMap((vinyl) =>
+        lstSongs.filter((song) => song.vinyl_id === vinyl.vinyl_id),
+      );
+    setLstSongsSelected(initialSongs);
+
     getUniqueFormatVinyls(newLstVinyls);
-  }, [lstShopsSelected, lstFormatVinylsSelected, lstVinyls, lstSongs]);
+  }, [lstShopsSelected, lstFormatVinylsSelected]);
+  // }, [lstShopsSelected, lstFormatVinylsSelected, lstVinyls, lstSongs]);
 
   const loadMoreData = () => {
     console.log("loadMoreData called");
     if (lstVinylsSelected.length === 0) return;
 
     // Load more vinyls based on the last selected vinyl
-    const lastId = lstVinylsSelected[lstVinylsSelected.length - 1].vinyl_id;
+    // const lastId = lstVinylsSelected[lstVinylsSelected.length - 1].vinyl_id;
+    const lastId = lstVinylsSelected[lstVinylsSelected.length - 1].id_elem;
     const newVinyls = lstVinyls
-      .filter((vinyl) => vinyl.vinyl_id < lastId)
+      .filter((vinyl) => vinyl.id_elem > lastId)
       .slice(0, nbVinyls);
     setLstVinylsSelected([...lstVinylsSelected, ...newVinyls]);
 
@@ -177,125 +188,5 @@ function useVinylsData(apiEndpoint) {
     topLoadMore,
   };
 }
-
-// function useVinylsData({ endpoint }) {
-//   const { isLoggedIn, idUser, logout } = useContext(AuthContext);
-//   const nbVinyls = 100;
-//
-//   const [lstVinyls, setLstVinyls] = useState([]);
-//   const [lstVinylsSelected, setLstVinylsSelected] = useState([]);
-//   const [lstSongs, setLstSongs] = useState([]);
-//   const [lstSongsSelected, setLstSongsSelected] = useState([]);
-//   const [lstShops, setLstShops] = useState([]);
-//   const [lstShopsSelected, setLstShopsSelected] = useState([]);
-//   const [lstFormatVinyls, setLstFormatVinyls] = useState([]);
-//   const [lstFormatVinylsSelected, setLstFormatVinylsSelected] = useState([]);
-//   const [lstFavoris, setLstFavoris] = useState([]);
-//
-//   // 🔹 Fetch Data
-//   useEffect(() => {
-//     const FetchData = async () => {
-//       try {
-//         console.log("isLoggedIn", isLoggedIn, idUser);
-//         console.log("endpoint", endpoint);
-//         const vinylsSongs = {};
-//
-//         // get data
-//         if (endpoint === "/home") {
-//           console.log("Fetching home data");
-//           const vinylsSongs = await getAxios("/get_vinyls_songs");
-//
-//           if (isLoggedIn) {
-//             const favoris = await getAxiosAuth("/get_list_favoris", idUser);
-//             if (favoris === "Token is not valid") {
-//               logout();
-//               navigate("/login");
-//             }
-//           }
-//         }
-//
-//         if (endpoint === "favoris")
-//           if (isLoggedIn) {
-//             const vinylsSongs = await getAxiosAuth("/get_favoris", idUser);
-//             if (vinylsSongs === "Token is not valid") {
-//               logout();
-//               navigate("/login");
-//             }
-//             const favoris = vinylsSongs["favoris"];
-//           }
-//
-//         const vinyls = vinylsSongs["vinyls"];
-//         const songs = vinylsSongs["songs"];
-//         const shops = vinylsSongs["shops"];
-//
-//         setLstShops(shops);
-//         setLstVinyls(vinyls);
-//         setLstSongs(songs);
-//         setLstFavoris(favoris);
-//         setLstSongsSelected(songs.slice(0, nbVinyls));
-//         setLstVinylsSelected(vinyls.slice(0, nbVinyls));
-//         getUniqueFormatVinyls(vinyls);
-//       } catch (error) {
-//         console.error("Une erreur s'est produite :", error);
-//       }
-//     };
-//     FetchData();
-//   }, [endpoint, isLoggedIn, idUser]);
-//
-//   // 🔹 Filtering
-//   useEffect(() => {
-//     const newLstVinyls =
-//       lstShopsSelected.length === 0
-//         ? lstVinyls
-//         : lstVinyls.filter((vinyl) => lstShopsSelected.includes(vinyl.shop_id));
-//
-//     const filteredLstVinyls =
-//       lstFormatVinylsSelected.length === 0
-//         ? newLstVinyls
-//         : newLstVinyls.filter((vinyl) =>
-//             lstFormatVinylsSelected.includes(vinyl.vinyl_format),
-//           );
-//
-//     const newLstSongs = filteredLstVinyls.flatMap((vinyl) =>
-//       lstSongs.filter((song) => song.vinyl_id === vinyl.vinyl_id),
-//     );
-//
-//     setLstVinylsSelected(filteredLstVinyls.slice(0, nbVinyls));
-//     setLstSongsSelected(newLstSongs.slice(0, nbVinyls));
-//
-//     getUniqueFormatVinyls(newLstVinyls);
-//   }, [lstShopsSelected, lstFormatVinylsSelected, lstVinyls, lstSongs]);
-//
-//   // 🔹 Utils
-//   const getUniqueFormatVinyls = (vinyls) => {
-//     const formats = [...new Set(vinyls.map((v) => v.vinyl_format))];
-//     setLstFormatVinyls(formats);
-//   };
-//
-//   const loadMoreData = () => {
-//     const lastId = lstVinylsSelected[lstVinylsSelected.length - 1]?.vinyl_id;
-//     if (!lastId) return;
-//
-//     const newLstVinyls = lstVinyls
-//       .filter((vinyl) => vinyl.vinyl_id < lastId)
-//       .slice(0, nbVinyls);
-//
-//     setLstVinylsSelected((prev) => [...prev, ...newLstVinyls]);
-//   };
-//
-//   return {
-//     lstVinylsSelected,
-//     lstSongsSelected,
-//     lstShops,
-//     lstShopsSelected,
-//     setLstShopsSelected,
-//     lstFormatVinyls,
-//     lstFormatVinylsSelected,
-//     setLstFormatVinylsSelected,
-//     lstFavoris,
-//     setLstFavoris,
-//     loadMoreData,
-//   };
-// }
 
 export default useVinylsData;
