@@ -8,7 +8,8 @@
   font-weight: 400;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: rgb(9 9 11);
+  --bg-color: #09090b;
+  --bg-color-secondary: #121214;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,6 +40,7 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:focus,
 button:focus-visible {
   /* outline: 4px auto -webkit-focus-ring-color; */

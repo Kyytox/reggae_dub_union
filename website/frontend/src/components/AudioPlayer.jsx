@@ -7,7 +7,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
-import LstVinyls from "./LstVinyls";
+import SectionVinyls from "../components/SectionVinyls";
 import "../App.css";
 
 import ReactPlayer from "react-player";
@@ -112,7 +112,6 @@ function AudioPlayer({
           flexWrap: "wrap",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "#18181b",
           padding: "10px",
           color: "white",
         }}
@@ -256,7 +255,7 @@ function AudioPlayer({
       </Box>
 
       <div className="container-audioPlayer-lstVinyls mt-6">
-        <LstVinyls
+        <SectionVinyls
           lstVinyls={lstVinyls}
           lstSongs={lstSongs}
           playSong={playSong}

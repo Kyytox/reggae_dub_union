@@ -5,43 +5,25 @@
 }
 
 .App {
+  background-color: var(--bg-color);
   margin-bottom: 5em;
   width: 100%;
 }
 
-.home,
-.favoris {
+.navbar {
+  background-color: var(--bg-color-secondary);
+}
+.navbar-items > a {
+  padding: 10px;
+}
+
+.main-content {
+  margin-top: 5em;
   width: 100%;
 }
 
 .read-the-docs {
-  color: #888;
-}
-
-/* ---------------- */
-/* Card Vinyl */
-/* ---------------- */
-/* .container-lstVinyls .MuiGrid-root .MuiGrid-root{ */
-/*   display: flex; */
-/*   flex-direction: column; */
-/*   justify-content: center; */
-/*   align-items: center; */
-/* } */
-/**/
-/* .container-lstVinyls .MuiGrid-root .MuiGrid-root img{ */
-/*   clip-path: inset(1% 1% 1% 1%); */
-/* } */
-/**/
-/* .container-lstVinyls .MuiCardActions-root { */
-/*   display: flex; */
-/*   direction: row; */
-/*   justify-content: space-between; */
-/*   align-items: center; */
-/* } */
-/**/
-
-.container-lstVinyls {
-  margin-bottom: 4em;
+  color: #88;
 }
 
 .container-lstVinyls .MuiCardActions-root button,
@@ -52,14 +34,17 @@
 /* ---------------- */
 /* List Formats */
 /* ---------------- */
-.container-lstFormats button,
-.container-lstShops button {
+.container-lstSection button {
   font-size: 0.71em;
 }
 
 /* ---------------- */
 /* Player Audio */
 /* ---------------- */
+.container-audioPlayer-ReactPlayer {
+  background-color: var(--bg-color-secondary);
+}
+
 .container-audioPlayer-controls svg {
   width: 1.4em;
   height: 1.4em;
@@ -68,7 +53,7 @@
 }
 
 .container-audioPlayer-controls svg:hover {
-  background-color: #18181b;
+  background-color: var(--bg-color-secondary);
   cursor: pointer;
 }
 
