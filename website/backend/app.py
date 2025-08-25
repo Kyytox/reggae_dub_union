@@ -47,6 +47,7 @@ from routes import get_vinyls
 from routes import auth
 from routes import favoris
 from routes import search
+from routes import get_sohps
 
 
 #
