@@ -19,7 +19,7 @@ export async function postAxios(route, data) {
   }
 }
 
-export async function getAxios(route) {
+export async function getAxios(route, data = {}) {
   try {
     const response = await axios.get(`${baseURL}${route}`, {
       headers: {
@@ -27,11 +27,11 @@ export async function getAxios(route) {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Credentials": true,
       },
+      params: data,
     });
 
     return response.data;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 }
