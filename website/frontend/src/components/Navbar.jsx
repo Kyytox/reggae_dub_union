@@ -9,7 +9,7 @@ function Navbar() {
 
   return (
     <div className="navbar z-50 fixed p-1 pr-5 pl-5 mb-3 w-full flex flex-wrap items-center justify-center md:justify-between">
-      <div className="navbar_logo flex justify-center w-full md:w-auto">
+      <div className="navbar_logo flex justify-center items-center w-full md:w-auto">
         <Link to="/">
           <img
             className="navbar_logo mr-3 ml-2 md:ml-0"
@@ -30,10 +30,9 @@ function Navbar() {
         >
           Created by <br /> Tunguska Sound System
         </a>*/}
+        <Link to="/">Home</Link>
       </div>
       <div className="navbar-items flex flex-wrap items-center justify-center">
-        <Link to="/">Home</Link>
-
         <SearchBar />
 
         {isLoggedIn ? (
