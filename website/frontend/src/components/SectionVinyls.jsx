@@ -200,7 +200,7 @@ function SectionVinyls({
                         flexGrow: 1,
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent: "space-evenly",
+                        justifyContent: "start",
                       }}
                     >
                       {/* Shop name */}
@@ -210,6 +210,15 @@ function SectionVinyls({
                         sx={isLoggedIn ? {} : { ml: "1em" }}
                       >
                         {vinyl.shop_name}
+                      </Typography>
+
+                      {/* Format */}
+                      <Typography
+                        variant="caption"
+                        color="#989898"
+                        sx={isLoggedIn ? {} : { ml: "1em" }}
+                      >
+                        {vinyl.vinyl_format}
                       </Typography>
 
                       {/* Vinyl title */}
