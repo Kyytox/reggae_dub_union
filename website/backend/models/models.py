@@ -39,6 +39,18 @@ class Shop(db.Model):
     def __repr__(self):
         return f"<Shop {self.shop_id} - {self.shop_name}>"
 
+    @classmethod
+    def get_all_shops(cls):
+        """
+        Get all shops from database.
+
+        Returns:
+            list: list of shops
+        """
+        req = cls.query.all()
+        data = [{"shop_id": shop.shop_id, "shop_name": shop.shop_name} for shop in req]
+        return data
+
 
 # class ShopLink(db.Model):
 #     __tablename__ = "shops_links"
@@ -91,6 +103,29 @@ class Vinyl(db.Model):
 
     def __repr__(self):
         return f"<Vinyl {self.vinyl_id}>"
+
+    @classmethod
+    def get_all_formats(cls):
+        """
+        Get all vinyl formats from database.
+
+        Returns:
+            list: list of formats
+        """
+        req = db.session.query(cls.vinyl_format).distinct().all()
+        data = [format[0] for format in req]
+        return data
+
+    @classmethod
+    def get_nb_vinyls(cls):
+        """
+        Get number of vinyls in database.
+
+        Returns:
+            int: number of vinyls
+        """
+        req = db.session.query(cls).count()
+        return req
 
 
 class Song(db.Model):
