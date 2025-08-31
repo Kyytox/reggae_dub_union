@@ -10,7 +10,11 @@ import "../App.css";
 
 const nbVinyls = 100;
 
-function useVinylsData(apiEndpoint) {
+function useVinylsData(
+  apiEndpoint,
+  lstShopsSelected = [],
+  lstFormatsSelected = [],
+) {
   const navigate = useNavigate();
   const { isLoggedIn, idUser, logout } = useContext(AuthContext);
   const [topLoadMore, setTopLoadMore] = useState(true);
@@ -24,54 +28,35 @@ function useVinylsData(apiEndpoint) {
   const [lstSongs, setLstSongs] = useState([]);
   const [lstSongsSelected, setLstSongsSelected] = useState([]);
 
-  const [lstShops, setLstShops] = useState([]);
-  const [lstShopsSelected, setLstShopsSelected] = useState([]);
-
-  const [lstFormatVinyls, setLstFormatVinyls] = useState([]);
-  const [lstFormatVinylsSelected, setLstFormatVinylsSelected] = useState([]);
-
   const [lstFavoris, setLstFavoris] = useState([]);
 
-  const getPresentFormatVinyls = (vinyls) => {
-    // get formats in vinyls and update lstFormatVinylsSelected
-    const formats = [...new Set(vinyls.map((vinyl) => vinyl.vinyl_format))];
-    setLstFormatVinylsSelected(formats);
+  // Prepare data filters
+  const prepareDataFilters = (shops = null, formats = null, random = false) => {
+    return {
+      shops: shops || lstShopsSelected,
+      formats: formats || lstFormatsSelected,
+      num_page: numPage,
+      top_random: random,
+    };
   };
 
-  const fetchInitialData = async () => {
-    try {
-      // get all shops
-      const allShops = await getAxios("/get_all_shops");
-      setLstShops(allShops);
-
-      // get all formats
-      const allFormats = await getAxios("/get_all_formats");
-      setLstFormatVinyls(allFormats);
-
-      // get nb vinyls
-      const data_nb_vinyls = await getAxios("/get_nb_vinyls");
-      const nbVinylsTotal = data_nb_vinyls.nb_vinyls || 0;
-
-      setNbPages(Math.ceil(nbVinylsTotal / (nbVinyls * 3)));
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
+  const initNumPages = async () => {
+    setNumPage(1);
   };
 
   const fetchData = async () => {
     try {
+      // get nb vinyls
+      const data_filters = prepareDataFilters();
+      const data_nb_vinyls = await getAxios("/get_nb_vinyls", data_filters);
+      const nbVinylsTotal = data_nb_vinyls.nb_vinyls;
+      setTotalVinyls(nbVinylsTotal);
+
       let vinylsSongs;
-      console.log("shop selected", lstShopsSelected);
-      console.log("format selected", lstFormatVinylsSelected);
 
       if (apiEndpoint === "home") {
         // prepare data
-        console.log("fetch page numPage", numPage);
-        const data_filters = {
-          shops: lstShopsSelected,
-          formats: lstFormatVinylsSelected,
-          num_page: numPage,
-        };
+        const data_filters = prepareDataFilters();
         vinylsSongs = await getAxios("/get_vinyls_songs", data_filters);
       } else if (apiEndpoint.includes("search")) {
         // get search
@@ -79,7 +64,6 @@ function useVinylsData(apiEndpoint) {
 
         // get search results
         vinylsSongs = await getAxios("/search/" + search);
-        console.log("vinylsSongs", vinylsSongs);
 
         if (vinylsSongs.error) {
           console.error("No results found for search:", search);
@@ -99,6 +83,24 @@ function useVinylsData(apiEndpoint) {
           logout();
           navigate("/login");
         }
+      } else if (apiEndpoint.includes("uniqueShop")) {
+        //
+        // get shop_id
+        const shopId = apiEndpoint.split("/").pop();
+        // prepare data
+        const data_filters = prepareDataFilters([shopId], null);
+        vinylsSongs = await getAxios("/get_vinyls_songs", data_filters);
+      } else if (apiEndpoint.includes("uniqueFormat")) {
+        //
+        // get format
+        const formatId = apiEndpoint.split("/").pop();
+        // prepare data
+        const data_filters = prepareDataFilters(null, [formatId]);
+        vinylsSongs = await getAxios("/get_vinyls_songs", data_filters);
+      } else if (apiEndpoint === "random") {
+        // prepare data
+        const data_filters = prepareDataFilters(null, null, true);
+        vinylsSongs = await getAxios("/get_vinyls_songs", data_filters);
       } else {
         console.error("Page not found");
         return <PageNotFound />;
@@ -115,25 +117,25 @@ function useVinylsData(apiEndpoint) {
         setLstFavoris(favoris);
       }
 
+      console.log("vinylsSongs", vinylsSongs);
       const vinyls = vinylsSongs.vinyls || [];
       const songs = vinylsSongs.songs || [];
-      const shops = vinylsSongs.shops || [];
 
-      // setLstShops(shops);
-      getPresentFormatVinyls(vinyls);
       setLstVinyls(vinyls);
       setLstSongs(songs);
 
       // Initialize Vinyls
       const firstVinyls = vinyls.slice(0, nbVinyls);
       setLstVinylsSelected(firstVinyls);
-      setTotalVinyls(vinyls.length);
 
       // Initialize lstSongsSelected based on the first nbVinyls vinyls
       const initialSongs = firstVinyls.flatMap((vinyl) =>
         songs.filter((song) => song.vinyl_id === vinyl.vinyl_id),
       );
       setLstSongsSelected(initialSongs);
+
+      // Calculate number of pages
+      setNbPages(Math.ceil(nbVinylsTotal / vinyls.length));
 
       // Check if all vinyls are selected
       if (parseInt(vinyls.length, 10) <= nbVinyls) {
@@ -145,40 +147,24 @@ function useVinylsData(apiEndpoint) {
   };
 
   useEffect(() => {
-    fetchInitialData();
+    initNumPages();
+  }, [apiEndpoint]);
+
+  useEffect(() => {
     fetchData();
-  }, [apiEndpoint, isLoggedIn]); // Re-fetch data when endpoint or login status changes
+    window.scrollTo(0, 0); // put user in top of the page
+  }, [apiEndpoint, isLoggedIn, numPage]); // Re-fetch data when endpoint or login status changes
 
   const clickChangePage = (num) => {
-    console.log("clickFetchData called");
+    console.log("clickChangePage");
     setNumPage(num);
-    fetchData();
   };
 
-  // Filtering logic
-  // useEffect(() => {
-  //   let newLstVinyls =
-  //     lstShopsSelected.length === 0
-  //       ? lstVinyls
-  //       : lstVinyls.filter((vinyl) => lstShopsSelected.includes(vinyl.shop_id));
-  //
-  //   const filteredLstVinyls =
-  //     lstFormatVinylsSelected.length === 0
-  //       ? newLstVinyls
-  //       : newLstVinyls.filter((vinyl) =>
-  //           lstFormatVinylsSelected.includes(vinyl.vinyl_format),
-  //         );
-  //
-  //   setLstVinylsSelected(filteredLstVinyls.slice(0, nbVinyls));
-  //
-  //   // get songs for the first nbVinyls vinyls
-  //   const initialSongs = filteredLstVinyls
-  //     .slice(0, nbVinyls)
-  //     .flatMap((vinyl) =>
-  //       lstSongs.filter((song) => song.vinyl_id === vinyl.vinyl_id),
-  //     );
-  //   setLstSongsSelected(initialSongs);
-  // }, [lstShopsSelected, lstFormatVinylsSelected]);
+  const clickApplyFilters = () => {
+    console.log("clickApplyFilters");
+    initNumPages();
+    fetchData();
+  };
 
   const loadMoreData = () => {
     console.log("loadMoreData called");
@@ -209,20 +195,14 @@ function useVinylsData(apiEndpoint) {
   };
 
   return {
-    fetchData,
     lstVinylsSelected,
     lstSongsSelected,
-    lstShops,
-    lstShopsSelected,
-    setLstShopsSelected,
-    lstFormatVinyls,
-    lstFormatVinylsSelected,
-    setLstFormatVinylsSelected,
     lstFavoris,
     setLstFavoris,
     loadMoreData,
     topLoadMore,
     clickChangePage: clickChangePage,
+    clickApplyFilters: clickApplyFilters,
     nbPages,
   };
 }
