@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+
 import { Search } from "@mui/icons-material";
 
 function SearchBar() {
@@ -26,7 +27,8 @@ function SearchBar() {
   return (
     <Box
       sx={{
-        margin: "0 50px 0 20px",
+        margin: { xs: "0 10px 0 0", sm: "0 20px 0 0", md: "0 25px 0 1px" },
+        width: { xs: "170px", sm: "300px", md: "300px" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

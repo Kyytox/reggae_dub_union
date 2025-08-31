@@ -30,7 +30,6 @@ function AudioPlayer({
 
   // create a function to play the song
   const playSong = (song) => {
-    console.log("playSong", song);
     // if the song is already playing, pause it
     if (songPlaying === song) {
       setIsPlaying(false);
@@ -254,7 +253,7 @@ function AudioPlayer({
         </Box>
       </Box>
 
-      <div className="container-audioPlayer-lstVinyls mt-6">
+      <div className="container-audioPlayer-lstVinyls">
         <SectionVinyls
           lstVinyls={lstVinyls}
           lstSongs={lstSongs}

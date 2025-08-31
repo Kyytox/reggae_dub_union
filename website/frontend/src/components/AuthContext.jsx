@@ -10,7 +10,6 @@ function AuthProvider(props) {
   const idUser = sessionStorage.getItem("idUser");
 
   const login = (idUser, jwtToken) => {
-    console.log("login----");
     setIsLoggedIn(true);
     sessionStorage.setItem("idUser", idUser);
     sessionStorage.setItem("token", jwtToken);
@@ -27,10 +26,8 @@ function AuthProvider(props) {
 
   const checkToken = async () => {
     if (token) {
-      console.log("checkToken----");
       login(idUser, token);
     } else {
-      console.log("checkToken out----");
       logout();
     }
   };
