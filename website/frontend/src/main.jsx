@@ -51,6 +51,15 @@ const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          minWidth: "45px",
+          borderRadius: "4px",
+          cursor: "pointer",
+        },
+      },
+    },
   },
 });
 
