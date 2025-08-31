@@ -51,6 +51,42 @@ class Shop(db.Model):
         data = [{"shop_id": shop.shop_id, "shop_name": shop.shop_name} for shop in req]
         return data
 
+    @classmethod
+    def get_shop_by_id(cls, shop_id):
+        """
+        Get a shop from database by id.
+
+        Args:
+            shop_id (int): id of the shop
+
+        Returns:
+            Shop: Shop object
+        """
+        req = cls.query.filter_by(shop_id=shop_id).first()
+        data = {"shop_id": req.shop_id, "shop_name": req.shop_name} if req else None
+        return data
+
+    @classmethod
+    def get_shops_by_format(cls, format):
+        """
+        Get all shops that have a specific vinyl format.
+
+        Args:
+            format (str): vinyl format
+
+        Returns:
+            list: list of shops
+        """
+        req = (
+            db.session.query(cls)
+            .join(Vinyl, cls.shop_id == Vinyl.shop_id)
+            .filter(Vinyl.vinyl_format == format)
+            .distinct()
+            .all()
+        )
+        data = [{"shop_id": shop.shop_id, "shop_name": shop.shop_name} for shop in req]
+        return data
+
 
 # class ShopLink(db.Model):
 #     __tablename__ = "shops_links"
@@ -117,15 +153,40 @@ class Vinyl(db.Model):
         return data
 
     @classmethod
-    def get_nb_vinyls(cls):
+    def get_formats_by_shop(cls, shop_id):
+        """
+        Get all vinyl formats from database for a shop.
+
+        Args:
+            shop_id (int): id of the shop
+
+        Returns:
+            list: list of formats
+        """
+        req = (
+            db.session.query(cls.vinyl_format)
+            .distinct()
+            .filter(cls.shop_id == shop_id)
+            .all()
+        )
+        data = [format[0] for format in req]
+        return data
+
+    @classmethod
+    def get_nb_vinyls(cls, shops=None, formats=None):
         """
         Get number of vinyls in database.
 
         Returns:
             int: number of vinyls
         """
-        req = db.session.query(cls).count()
-        return req
+        req = db.session.query(cls)
+        if shops:
+            req = req.filter(cls.shop_id.in_(shops))
+        if formats:
+            req = req.filter(cls.vinyl_format.in_(formats))
+
+        return req.count()
 
 
 class Song(db.Model):
