@@ -56,9 +56,6 @@ function SectionVinyls({
 }) {
   const { isLoggedIn, idUser } = useContext(AuthContext);
 
-  console.log("lstVinyls", lstVinyls);
-  console.log("lstSongs", lstSongs);
-
   // State to manage expanded states of vinyls
   const [expandedStates, setExpandedStates] = React.useState({});
   const handleExpandClick = (vinylId) => {
@@ -87,7 +84,7 @@ function SectionVinyls({
   };
 
   return (
-    <div className="container-lstVinyls">
+    <Box sx={{ flexGrow: 1, marginLeft: { xs: 0, sm: 2, md: "13%" } }}>
       <InfiniteScroll
         dataLength={lstVinyls.length}
         next={loadMoreData}
@@ -113,43 +110,24 @@ function SectionVinyls({
       >
         <Grid
           container
-          display="flex"
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          paddingLeft={{ xs: 2, md: 3, xl: 8 }}
-          paddingRight={{ xs: 2, md: 3, xl: 8 }}
-          spacing={{ xs: 1, md: 4 }}
-          columns={{ xs: 4, sm: 6, md: 8, lg: 10, xl: 12 }}
+          sx={{
+            // justifyContent: "space-evenly",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            gap: 2,
+          }}
         >
           {lstVinyls.map((vinyl, key) => (
-            <Grid item xs={2} sm={2} md={2} key={key}>
+            <Grid key={key}>
               <Card
                 sx={{
-                  maxWidth: {
-                    xs: 180,
-                    sm: 230,
-                    md: 240,
-                    lg: 240,
-                  },
-                  minWidth: {
-                    xs: 180,
-                    sm: 230,
-                    md: 240,
-                    lg: 240,
-                  },
-                  maxHeight: {
-                    xs: 350,
-                    sm: 310,
-                    md: 330,
-                    lg: 330,
-                  },
+                  width: { xs: 200, sm: 220, md: 240 },
                   backgroundColor:
                     songPlaying && songPlaying.vinyl_id === vinyl.vinyl_id
                       ? "#3a3a3a"
                       : "#18181b",
                   color: "white",
-                  minHeight: 330,
+                  height: 330,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
@@ -175,7 +153,6 @@ function SectionVinyls({
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      // justifyContent: "space-between",
                       justifyContent: "start",
                       height: "auto",
                       padding: 2,
@@ -358,7 +335,7 @@ function SectionVinyls({
           ))}
         </Grid>
       </InfiniteScroll>
-    </div>
+    </Box>
   );
 }
 
