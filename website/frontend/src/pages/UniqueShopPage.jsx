@@ -6,6 +6,7 @@ import SectionFilter from "../components/SectionFilter";
 import useVinylsData from "../requests/UseVinylsData";
 import { getAxios } from "../requests/UtilsAxios";
 import SectionPagination from "../components/SectionPagination";
+import HeadPage from "../components/HeadPage";
 
 import "../App.css";
 
@@ -29,7 +30,6 @@ function UniqueShopPage() {
       // Fetch formats for the specific shop
       const formats = await getAxios(`/get_formats_by_shop/${shopId}`);
       setLstFormats(formats);
-      setLstFormatsSelected(formats.map((format) => format));
     } catch (error) {
       console.error("Error fetching shop data:", error);
       setLstShops([]);
@@ -56,6 +56,7 @@ function UniqueShopPage() {
     clickChangePage,
     clickApplyFilters,
     nbPages,
+    totalVinyls,
   } = useVinylsData(
     "uniqueShop/" + id_shop,
     lstShopsSelected,
@@ -63,32 +64,42 @@ function UniqueShopPage() {
   );
 
   return (
-    <Box className="main-content">
-      <Box>
-        <h1>Vinyls of the shop {lstShopsSelected}</h1>
-      </Box>
+    <>
+      {lstVinylsSelected.length === 1 ? (
+        <ResultEmpty />
+      ) : (
+        <Box className="main-content">
+          <SectionFilter
+            clickApplyFilters={clickApplyFilters}
+            lstShops={null}
+            lstShopsSelected={null}
+            setLstShopsSelected={null}
+            lstFormats={lstFormats}
+            lstFormatsSelected={lstFormatsSelected}
+            setLstFormatsSelected={setLstFormatsSelected}
+          />
 
-      <Box className="main-content-container">
-        <SectionFilter
-          clickApplyFilters={clickApplyFilters}
-          lstShops={null}
-          lstShopsSelected={null}
-          setLstShopsSelected={null}
-          lstFormats={lstFormats}
-          lstFormatsSelected={lstFormatsSelected}
-          setLstFormatsSelected={setLstFormatsSelected}
-        />
-        <AudioPlayer
-          lstSongs={lstSongsSelected}
-          lstVinyls={lstVinylsSelected}
-          lstFavoris={lstFavoris}
-          setLstFavoris={setLstFavoris}
-          loadMoreData={loadMoreData}
-          topLoadMore={topLoadMore}
-        />
-      </Box>
-      <SectionPagination nbPages={nbPages} clickChangePage={clickChangePage} />
-    </Box>
+          <Box className="main-content-container">
+            <HeadPage
+              text={`Vinyls of the shop ${lstShopsSelected}`}
+              totalVinyls={totalVinyls}
+            />
+            <AudioPlayer
+              lstSongs={lstSongsSelected}
+              lstVinyls={lstVinylsSelected}
+              lstFavoris={lstFavoris}
+              setLstFavoris={setLstFavoris}
+              loadMoreData={loadMoreData}
+              topLoadMore={topLoadMore}
+            />
+          </Box>
+          <SectionPagination
+            nbPages={nbPages}
+            clickChangePage={clickChangePage}
+          />
+        </Box>
+      )}
+    </>
   );
 }
 

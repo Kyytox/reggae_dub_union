@@ -3,7 +3,9 @@ import AudioPlayer from "../components/AudioPlayer";
 import Box from "@mui/material/Box";
 import SectionFilter from "../components/SectionFilter";
 import useVinylsData from "../requests/UseVinylsData";
+import HeadPage from "../components/HeadPage";
 import SectionPagination from "../components/SectionPagination";
+import ResultEmpty from "../errors/ResultEmpty";
 
 import { getAxios } from "../requests/UtilsAxios";
 
@@ -16,20 +18,18 @@ function RandomPage() {
   const [lstFormats, setLstFormats] = useState([]);
   const [lstFormatsSelected, setLstFormatsSelected] = useState([]);
 
-  const fetchDataHome = async () => {
+  const fetchDataRandom = async () => {
     try {
       // get all shops
       if (lstShops.length === 0) {
         const allShops = await getAxios("/get_all_shops");
         setLstShops(allShops);
-        // setLstShopsSelected(allShops.map((shop) => shop));
       }
 
       // get all formats
       if (lstFormats.length === 0) {
         const allFormats = await getAxios("/get_all_formats");
         setLstFormats(allFormats);
-        // setLstFormatsSelected(allFormats.map((format) => format));
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -37,8 +37,8 @@ function RandomPage() {
   };
 
   useEffect(() => {
-    console.log("UseEffect Home");
-    fetchDataHome();
+    console.log("UseEffect RandomPage");
+    fetchDataRandom();
   }, []);
 
   const {
@@ -51,35 +51,43 @@ function RandomPage() {
     clickChangePage,
     clickApplyFilters,
     nbPages,
+    totalVinyls,
   } = useVinylsData("random", lstShopsSelected, lstFormatsSelected);
 
   return (
-    <Box className="main-content">
-      <Box>
-        <h1>Random Vinyls</h1>
-      </Box>
+    <>
+      {lstVinylsSelected.length === 1 ? (
+        <ResultEmpty />
+      ) : (
+        <Box className="main-content">
+          <SectionFilter
+            clickApplyFilters={clickApplyFilters}
+            lstShops={lstShops}
+            lstShopsSelected={lstShopsSelected}
+            setLstShopsSelected={setLstShopsSelected}
+            lstFormats={lstFormats}
+            lstFormatsSelected={lstFormatsSelected}
+            setLstFormatsSelected={setLstFormatsSelected}
+          />
+          <Box className="main-content-container">
+            <HeadPage
+              text={`Random Vinyls`}
+              totalVinyls={lstVinylsSelected.length}
+            />
 
-      <Box className="main-content-container">
-        <SectionFilter
-          clickApplyFilters={clickApplyFilters}
-          lstShops={lstShops}
-          lstShopsSelected={lstShopsSelected}
-          setLstShopsSelected={setLstShopsSelected}
-          lstFormats={lstFormats}
-          lstFormatsSelected={lstFormatsSelected}
-          setLstFormatsSelected={setLstFormatsSelected}
-        />
-        <AudioPlayer
-          lstSongs={lstSongsSelected}
-          lstVinyls={lstVinylsSelected}
-          lstFavoris={lstFavoris}
-          setLstFavoris={setLstFavoris}
-          loadMoreData={loadMoreData}
-          topLoadMore={topLoadMore}
-        />
-      </Box>
-      {/*<SectionPagination nbPages={nbPages} clickChangePage={clickChangePage} />*/}
-    </Box>
+            <AudioPlayer
+              lstSongs={lstSongsSelected}
+              lstVinyls={lstVinylsSelected}
+              lstFavoris={lstFavoris}
+              setLstFavoris={setLstFavoris}
+              loadMoreData={loadMoreData}
+              topLoadMore={topLoadMore}
+            />
+          </Box>
+          {/*<SectionPagination nbPages={nbPages} clickChangePage={clickChangePage} />*/}
+        </Box>
+      )}
+    </>
   );
 }
 

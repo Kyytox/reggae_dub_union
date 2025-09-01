@@ -6,6 +6,7 @@ import SectionFilter from "../components/SectionFilter";
 import useVinylsData from "../requests/UseVinylsData";
 import { getAxios } from "../requests/UtilsAxios";
 import SectionPagination from "../components/SectionPagination";
+import HeadPage from "../components/HeadPage";
 
 import "../App.css";
 
@@ -51,35 +52,46 @@ function UniqueFormatPage() {
     clickChangePage,
     clickApplyFilters,
     nbPages,
+    totalVinyls,
   } = useVinylsData("uniqueFormat/" + formatName);
 
   return (
-    <Box className="main-content">
-      <Box>
-        <h1>Vinyls in {formatName}"</h1>
-      </Box>
+    <>
+      {lstVinylsSelected.length === 1 ? (
+        <ResultEmpty />
+      ) : (
+        <Box className="main-content">
+          <SectionFilter
+            clickApplyFilters={clickApplyFilters}
+            lstShops={lstShops}
+            lstShopsSelected={lstShopsSelected}
+            setLstShopsSelected={setLstShopsSelected}
+            lstFormats={null}
+            lstFormatsSelected={null}
+            setLstFormatsSelected={null}
+          />
 
-      <Box className="main-content-container">
-        <SectionFilter
-          clickApplyFilters={clickApplyFilters}
-          lstShops={lstShops}
-          lstShopsSelected={lstShopsSelected}
-          setLstShopsSelected={setLstShopsSelected}
-          lstFormats={null}
-          lstFormatsSelected={null}
-          setLstFormatsSelected={null}
-        />
-        <AudioPlayer
-          lstSongs={lstSongsSelected}
-          lstVinyls={lstVinylsSelected}
-          lstFavoris={lstFavoris}
-          setLstFavoris={setLstFavoris}
-          loadMoreData={loadMoreData}
-          topLoadMore={topLoadMore}
-        />
-      </Box>
-      <SectionPagination nbPages={nbPages} clickChangePage={clickChangePage} />
-    </Box>
+          <Box className="main-content-container">
+            <HeadPage
+              text={`Vinyls in ${formatName}"`}
+              totalVinyls={totalVinyls}
+            />
+            <AudioPlayer
+              lstSongs={lstSongsSelected}
+              lstVinyls={lstVinylsSelected}
+              lstFavoris={lstFavoris}
+              setLstFavoris={setLstFavoris}
+              loadMoreData={loadMoreData}
+              topLoadMore={topLoadMore}
+            />
+          </Box>
+          <SectionPagination
+            nbPages={nbPages}
+            clickChangePage={clickChangePage}
+          />
+        </Box>
+      )}
+    </>
   );
 }
 
