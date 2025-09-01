@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 from airflow.sdk import Variable, DAG, task, task_group, get_current_context
 from airflow.utils.task_group import TaskGroup
+from airflow.models.param import Param
 
 # Operators
 # from airflow.providers.standard.operators.bash import BashOperator
@@ -109,6 +110,9 @@ with DAG(
     schedule=None,
     tags=["etl"],
     catchup=False,
+    params={
+        "param_time_file_name": None,
+    },
 ) as dag:
     dag.doc_md = """
     # DAG for Extracting, Transforming and Loading vinyls from shops
@@ -132,16 +136,23 @@ with DAG(
 
     """
 
-    def init_variables():
+    def init_variables(**context):
         """
         Initialize and set Airflow Variables for the DAG.
 
         This function sets the connection ID and bucket name as Airflow Variables.
         """
-        # init time_file_name
-        time_file_name = datetime.now().strftime("%Y%m%d_%H%M")
-        # time_file_name = "data_base"
-        # time_file_name = "20250818_2252"
+        print(context["params"])
+        if context["params"]["param_time_file_name"] is not None:
+            time_file_name = context["params"]["param_time_file_name"]
+        else:
+            time_file_name = datetime.now().strftime("%Y%m%d_%H%M")
+            # time_file_name = "data_base"
+            # time_file_name = "20250818_2252"
+            # time_file_name = "20250823_0021"
+            # time_file_name = "20250827_2125"
+            # time_file_name = "20250831_2135"
+
         Variable.set("time_file_name", time_file_name)
 
     def get_shop_list(conn_id: str):
@@ -223,6 +234,7 @@ with DAG(
     )
 
     # Run all scrap tasks
-
     (tsk_init_variables >> tsk_gp >> tsk_transform_data >> tsk_load_data)
-    # (tsk_init_variables >> tsk_transform_data >> tsk_load_data)
+    # tsk_init_variables >> tsk_transform_data >> tsk_load_data
+    # tsk_init_variables
+    # (tsk_init_variables >> tsk_transform_data)
