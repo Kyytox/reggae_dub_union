@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import React from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../components/AuthContext";
 import SearchBar from "../components/SearchBar";
@@ -8,22 +7,21 @@ import Box from "@mui/material/Box";
 
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
 import "../App.css";
 
 function Navbar() {
   const { isLoggedIn, logout } = useContext(AuthContext);
-  const [anchorElShop, setAnchorElShop] = React.useState(null);
-  const [anchorElFormat, setAnchorElFormat] = React.useState(null);
+  const [anchorElShop, setAnchorElShop] = useState(null);
+  const [anchorElFormat, setAnchorElFormat] = useState(null);
 
   const shops = [
-    { name: "jahwaggysrecords", id: 1 },
-    { name: "onlyrootsreggae", id: 2 },
-    { name: "controltower", id: 3 },
-    { name: "pataterecords", id: 4 },
-    { name: "lionvibes", id: 5 },
+    { name: "Jah Waggys Records", id: 1 },
+    { name: "OnlyRoots Reggae", id: 2 },
+    { name: "Control Tower Records", id: 3 },
+    { name: "Patate Records", id: 4 },
+    { name: "Lion Vibes", id: 5 },
   ];
 
   const formats = [
@@ -96,32 +94,27 @@ function Navbar() {
           gap: { xs: 2, sm: 2, md: 3 },
         }}
       >
-        <Link to="/" className="hidden sm:inline mr-5">
-          Home
-        </Link>
-        <Link to="/random" className="hidden sm:inline">
-          Random
-        </Link>
+        <Button>
+          <Link to="/" className="hidden sm:inline mr-5">
+            Home
+          </Link>
+        </Button>
+        <Button>
+          <Link to="/random" className="hidden sm:inline">
+            Random
+          </Link>
+        </Button>
 
         {/* Menu items Formats */}
         <Box sx={{ flexGrow: 0 }}>
-          <Button
-            onClick={handleOpenFormatMenu}
-            sx={{
-              p: 0,
-              color: "white",
-              textTransform: "none",
-              width: "100%",
-            }}
-          >
+          <Button onClick={handleOpenFormatMenu} sx={{ color: "white" }}>
             Formats
           </Button>
           <Menu
-            sx={{ mt: "45px" }}
             id="menu-appbar"
             anchorEl={anchorElFormat}
             anchorOrigin={{
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "right",
             }}
             keepMounted
@@ -137,7 +130,6 @@ function Navbar() {
                 <Link
                   to={`/format/${item.name}`}
                   style={{
-                    textDecoration: "none",
                     color: "black",
                     width: "100%",
                   }}
@@ -150,18 +142,14 @@ function Navbar() {
         </Box>
         {/* Menu items Formats Shops */}
         <Box sx={{ flexGrow: 0 }}>
-          <Button
-            onClick={handleOpenShopMenu}
-            sx={{ p: 0, color: "white", textTransform: "none" }}
-          >
+          <Button onClick={handleOpenShopMenu} aria-controls="menu-appbar">
             Shops
           </Button>
           <Menu
-            sx={{ mt: "45px" }}
             id="menu-appbar"
             anchorEl={anchorElShop}
             anchorOrigin={{
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "right",
             }}
             keepMounted
@@ -189,15 +177,23 @@ function Navbar() {
 
         {isLoggedIn ? (
           <>
-            <Link to="/favoris">Favoris</Link>
-            <Link to="/" onClick={logout}>
-              Logout
-            </Link>
+            <Button>
+              <Link to="/favoris">Favoris</Link>
+            </Button>
+            <Button>
+              <Link to="/" onClick={logout}>
+                Logout
+              </Link>
+            </Button>
           </>
         ) : (
           <>
-            <Link to="/signup">Sign up</Link>
-            <Link to="/login">Login</Link>
+            <Button>
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button>
+              <Link to="/signup">Sign up</Link>
+            </Button>
           </>
         )}
         <Link
