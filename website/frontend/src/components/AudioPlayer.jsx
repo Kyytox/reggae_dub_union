@@ -103,13 +103,14 @@ function AudioPlayer({
         className="container-audioPlayer-ReactPlayer"
         sx={{
           position: "fixed",
+          left: 0,
           bottom: 0,
           zIndex: 10,
           width: "100%",
           display: "flex",
           flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "center",
+          flexWrap: "nowrap",
+          justifyContent: "start",
           alignItems: "center",
           padding: "10px",
           color: "white",
@@ -191,7 +192,7 @@ function AudioPlayer({
             alignItems: "center",
             paddingLeft: "10px",
             paddingRight: "10px",
-            width: "60%",
+            width: "100%",
             color: "white",
           }}
         >
@@ -220,7 +221,7 @@ function AudioPlayer({
                 display="flex"
                 flexDirection="row"
                 alignItems="center"
-                width="100%"
+                width="50%"
               >
                 <Typography variant="body2" sx={{ mr: 1 }}>
                   {formatTime(progress.playedSeconds)}

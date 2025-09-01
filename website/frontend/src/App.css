@@ -24,22 +24,23 @@
   font-size: 16px !important;
   font-family: var(--font-family);
   font-weight: 400;
+  text-transform: none !important;
 }
 
 /* ---------------- */
-/* Navber */
+/* Apge content  */
 /* ---------------- */
+
+.main-content-noresults {
+  margin-top: 8rem;
+  margin-left: 13%;
+  font-size: 1.2em;
+}
+
 .main-content {
-  width: 100%;
+  /* width: 100%; */
   margin-top: 6rem;
-}
-
-.main-content h1 {
-  font-size: 2.5em;
-  font-family: var(--font-family);
-  font-weight: 700;
-  text-align: left;
-  margin-left: 7em;
+  margin-left: 13%;
 }
 
 .main-content-container {
@@ -47,12 +48,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: start;
-  justify-content: center;
-  margin-top: 1em;
-}
-
-.read-the-docs {
-  color: #88;
+  /* justify-content: space-around; */
 }
 
 .container-lstVinyls .MuiCardActions-root button,
@@ -70,7 +66,7 @@
 .container-audioPlayer-controls svg {
   width: 1.4em;
   height: 1.4em;
-  margin-left: 0.5em;
+  margin-left: 0.3em;
   border-radius: 25%;
 }
 
@@ -82,7 +78,6 @@
 /* ---------------- */
 /* Login - Signup */
 /* ---------------- */
-
 #box-Login .MuiFormLabel-root,
 #box-Signup .MuiFormLabel-root {
   color: grey;
