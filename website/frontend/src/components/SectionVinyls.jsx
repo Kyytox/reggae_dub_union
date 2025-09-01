@@ -84,7 +84,7 @@ function SectionVinyls({
   };
 
   return (
-    <Box sx={{ flexGrow: 1, marginLeft: { xs: 0, sm: 2, md: "13%" } }}>
+    <Box sx={{ flexGrow: 1 }}>
       <InfiniteScroll
         dataLength={lstVinyls.length}
         next={loadMoreData}
@@ -186,7 +186,7 @@ function SectionVinyls({
                         color="#989898"
                         sx={isLoggedIn ? {} : { ml: "1em" }}
                       >
-                        {vinyl.shop_name}
+                        {vinyl.shop_real_name}
                       </Typography>
 
                       {/* Format */}
@@ -205,7 +205,9 @@ function SectionVinyls({
                         component="div"
                         color="white"
                       >
-                        {vinyl.vinyl_title}
+                        {vinyl.vinyl_title.length > 85
+                          ? vinyl.vinyl_title.slice(0, 85) + "..."
+                          : vinyl.vinyl_title}
                       </Typography>
                     </CardContent>
                   </StyledCardActionArea>

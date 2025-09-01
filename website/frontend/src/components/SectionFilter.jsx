@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
+
 import "../App.css";
 
 function SectionFilter({
@@ -103,7 +103,7 @@ function SectionFilter({
           >
             {lstShops.map((item) => {
               const value = item.shop_id;
-              const displayText = item.shop_name;
+              const displayText = item.shop_real_name;
 
               // is the item selected
               const isSelected = lstShopsSelected.includes(value);
@@ -117,6 +117,7 @@ function SectionFilter({
                   onClick={() => changeSelectedItems(value, "Shops")}
                   size="small"
                   color="primary"
+                  sx={{ textTransform: "none" }}
                 >
                   {displayText}
                 </Button>
