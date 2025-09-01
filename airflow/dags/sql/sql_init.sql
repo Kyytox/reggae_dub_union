@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS public.shops (
     shop_id integer,
     shop_name character varying(40),
     shop_function character varying(40),
+    shop_real_name character varying(40),
     shop_nb_min_pages integer, -- Minimum number of pages to scrap for the shop
     shop_nb_max_pages integer, -- Maximum number of pages to scrap for the shop
     PRIMARY KEY (shop_id)

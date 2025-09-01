@@ -8,7 +8,6 @@ from utils.utils_gcp_storage import (
     list_blobs_with_prefix,
 )
 
-
 from utils.libs import save_file
 from utils.variables import lst_formats_accepted
 
@@ -99,7 +98,7 @@ def update_price_currency(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def transform_data(bucket_name: str):
+def transform_data(bucket_name: str) -> None:
     """
     Transform data from a all shops present in folder extract_{time_file_name} in GCP Storage.
 
@@ -145,7 +144,6 @@ def transform_data(bucket_name: str):
     # df = pd.read_parquet("new_data_test.parquet")
     print(f"Transformed data shape: {df.shape}")
 
-    #
     # remove Unnamed: 0
     df = df.loc[:, ~df.columns.str.contains("Unnamed")]
 
@@ -155,25 +153,20 @@ def transform_data(bucket_name: str):
     # update vinyl_price and vinyl_currency
     df = update_price_currency(df)
 
-    #
     # if vinyl_ref is null, set the title
     df["vinyl_reference"] = df["vinyl_reference"].fillna(df["vinyl_title"])
     df["vinyl_reference"] = df["vinyl_reference"].str.strip()
 
-    #
     # for vinyl_title, song_title
     df["vinyl_title"] = df["vinyl_title"].str.strip()
     df["song_title"] = df["song_title"].str.strip()
 
-    #
     # convart date to datetime
     df = df.rename(columns={"date_extract": "vinyl_date_extract"})
     df["vinyl_date_extract"] = pd.to_datetime(df["vinyl_date_extract"], errors="coerce")
     df["vinyl_date_extract"] = df["vinyl_date_extract"].dt.strftime(
         "%Y-%m-%d %H:%M:%S.%f"
     )
-
-    print(df)
 
     save_file(
         df=df,

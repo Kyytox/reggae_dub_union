@@ -1,13 +1,13 @@
-INSERT INTO public.shops (shop_id, shop_name, shop_function, shop_nb_min_pages, shop_nb_max_pages)
+INSERT INTO public.shops (shop_id, shop_name, shop_function, shop_real_name, shop_nb_min_pages, shop_nb_max_pages)
 VALUES
-(1, 'jahwaggysrecords', 'scrap_jahwaggysrecords', 4, 400),
-(2, 'onlyrootsreggae', 'scrap_onlyrootsreggae', 4, 100),
-(3, 'controltower', 'scrap_controltower', 50, 3000),
--- (4, 'reggaefever', 'scrap_reggaefever', 4, 600), -- not used now
-(5, 'pataterecords', 'scrap_pataterecords', 4, 400),
-(6, 'lionvibes', 'scrap_lionvibes', 4, 100);
--- (7, 'toolboxrecords', 'scrap_toolboxrecords', 4, 55), -- not used now
--- (8, 'reggaemuseum', 'scrap_reggaemuseum', 4, 150); -- not used now
+(1, 'jahwaggysrecords', 'scrap_jahwaggysrecords', 'Jah Waggys Records', 4, 400),
+(2, 'onlyrootsreggae', 'scrap_onlyrootsreggae', 'OnlyRoots Reggae', 4, 100),
+(3, 'controltower', 'scrap_controltower', 'Control Tower Records', 50, 3000),
+-- (4, 'reggaefever', 'scrap_reggaefever', 'Reggae Fever,' 4, 600), -- not used now
+(5, 'pataterecords', 'scrap_pataterecords', 'Patate Records', 4, 400),
+(6, 'lionvibes', 'scrap_lionvibes', 'LionVibes', 4, 100);
+-- (7, 'toolboxrecords', 'scrap_toolboxrecords', 'Toolbox Records', 4, 55), -- not used now
+-- (8, 'reggaemuseum', 'scrap_reggaemuseum', 'Reggae Museum', 4, 150); -- not used now
 
 INSERT INTO public.shops_links (shop_id, shop_link)
 VALUES
