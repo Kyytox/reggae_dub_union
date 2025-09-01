@@ -32,9 +32,11 @@ class Shop(db.Model):
     __tablename__ = "shops"
     shop_id = db.Column(db.Integer, primary_key=True)
     shop_name = db.Column(db.String(40))
+    shop_real_name = db.Column(db.String(40))
 
-    def __init__(self, shop_name, shop_function, shop_nb_min_pages, shop_nb_max_pages):
+    def __init__(self, shop_name, shop_real_name):
         self.shop_name = shop_name
+        self.shop_real_name = shop_real_name
 
     def __repr__(self):
         return f"<Shop {self.shop_id} - {self.shop_name}>"
@@ -48,7 +50,14 @@ class Shop(db.Model):
             list: list of shops
         """
         req = cls.query.all()
-        data = [{"shop_id": shop.shop_id, "shop_name": shop.shop_name} for shop in req]
+        data = [
+            {
+                "shop_id": shop.shop_id,
+                "shop_name": shop.shop_name,
+                "shop_real_name": shop.shop_real_name,
+            }
+            for shop in req
+        ]
         return data
 
     @classmethod
@@ -63,7 +72,15 @@ class Shop(db.Model):
             Shop: Shop object
         """
         req = cls.query.filter_by(shop_id=shop_id).first()
-        data = {"shop_id": req.shop_id, "shop_name": req.shop_name} if req else None
+        data = (
+            {
+                "shop_id": req.shop_id,
+                "shop_name": req.shop_name,
+                "shop_real_name": req.shop_real_name,
+            }
+            if req
+            else None
+        )
         return data
 
     @classmethod
@@ -84,7 +101,14 @@ class Shop(db.Model):
             .distinct()
             .all()
         )
-        data = [{"shop_id": shop.shop_id, "shop_name": shop.shop_name} for shop in req]
+        data = [
+            {
+                "shop_id": shop.shop_id,
+                "shop_name": shop.shop_name,
+                "shop_real_name": shop.shop_real_name,
+            }
+            for shop in req
+        ]
         return data
 
 
@@ -173,7 +197,7 @@ class Vinyl(db.Model):
         return data
 
     @classmethod
-    def get_nb_vinyls(cls, shops=None, formats=None):
+    def get_nb_vinyls(cls, shops=None, formats=None, search=None):
         """
         Get number of vinyls in database.
 
@@ -185,6 +209,15 @@ class Vinyl(db.Model):
             req = req.filter(cls.shop_id.in_(shops))
         if formats:
             req = req.filter(cls.vinyl_format.in_(formats))
+        if search:
+            req = (
+                req.join(Song, Song.vinyl_id == cls.vinyl_id)
+                .filter(
+                    Vinyl.vinyl_title.ilike(f"%{search}%")
+                    | Song.song_title.ilike(f"%{search}%")
+                )
+                .distinct(Vinyl.vinyl_id)
+            )
 
         return req.count()
 

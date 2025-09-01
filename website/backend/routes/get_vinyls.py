@@ -17,12 +17,16 @@ def extract_request_data(request):
     Returns:
         tuple: (shops, formats, num_page)
     """
-    shops = request.args.getlist("shops[]")
-    formats = request.args.getlist("formats[]")
-    num_page = int(request.args.get("num_page", 1))
-    top_random = request.args.get("top_random")
+    data = {
+        "shops": request.args.getlist("shops[]"),
+        "formats": request.args.getlist("formats[]"),
+        "search": request.args.get("search", ""),
+        "num_page": int(request.args.get("num_page", 1)),
+        "top_random": request.args.get("top_random"),
+    }
+    print("Extracted data from request:", data)
 
-    return shops, formats, num_page, top_random
+    return data
 
 
 @app.route("/get_nb_vinyls", methods=["GET"])
@@ -34,9 +38,11 @@ def get_nb_vinyls():
         int: number of vinyls
     """
 
-    shops, formats, _, _ = extract_request_data(request)
+    data = extract_request_data(request)
 
-    nb_vinyls = Vinyl.get_nb_vinyls(shops=shops, formats=formats)
+    nb_vinyls = Vinyl.get_nb_vinyls(
+        shops=data["shops"], formats=data["formats"], search=data["search"]
+    )
     print("nb_vinyls", nb_vinyls)
     return {"nb_vinyls": nb_vinyls}
 
@@ -129,12 +135,13 @@ def query_vinyls_filters(shops, formats, nb_elem_page_min, nb_elem_page_max):
             s.song_id,
             s.song_title,
             s.song_mp3,
-            sh.shop_name
+            sh.shop_name,
+            sh.shop_real_name
         FROM vinyls_ranked v
         LEFT JOIN public.songs s ON s.vinyl_id = v.vinyl_id
         LEFT JOIN public.shops sh ON v.shop_id = sh.shop_id
         WHERE v.idx_elem BETWEEN %d AND %d
-        ORDER BY v.shop_link_id, v.vinyl_id DESC;
+        ORDER BY v.vinyl_id DESC;
         """ % (
         nb_elem_page_min,
         nb_elem_page_max,
@@ -165,21 +172,20 @@ def query_vinyls_random():
     Returns:
         str: SQL query
     """
-
-    base_query = """
-        WITH vinyls_ranked AS (
-            SELECT
-                v.*,
-                ROW_NUMBER() OVER (
-                    PARTITION BY v.shop_link_id
-                    ORDER BY RANDOM()
-                ) AS idx_elem
-            FROM public.vinyls v
-            LIMIT 200
-            """
-
+    #
+    # base_query = """
+    #     WITH vinyls_ranked AS (
+    #         SELECT
+    #             v.*,
+    #             ROW_NUMBER() OVER (
+    #                 PARTITION BY v.shop_link_id
+    #                 ORDER BY RANDOM()
+    #             ) AS idx_elem
+    #         FROM public.vinyls v
+    #         LIMIT 200
+    #         """
+    #
     end_query = """
-        )
         SELECT
             v.vinyl_id,
             v.shop_id,
@@ -194,12 +200,16 @@ def query_vinyls_random():
             s.song_id,
             s.song_title,
             s.song_mp3,
-            sh.shop_name
-        FROM vinyls_ranked v
+            sh.shop_name,
+            sh.shop_real_name 
+        FROM vinyls v
         LEFT JOIN public.songs s ON s.vinyl_id = v.vinyl_id
-        LEFT JOIN public.shops sh ON v.shop_id = sh.shop_id;
+        LEFT JOIN public.shops sh ON v.shop_id = sh.shop_id
+        ORDER BY RANDOM()
+        LIMIT 100;
         """
-    full_query = base_query + end_query
+    # full_query = base_query + end_query
+    full_query = end_query
 
     return full_query
 
@@ -212,20 +222,21 @@ def get_vinyls_songs():
     Returns:
         list: list of vinyls and songs
     """
-    shops, formats, num_page, top_random = extract_request_data(request)
+    # shops, formats, num_page, top_random = extract_request_data(request)
+    data = extract_request_data(request)
 
     nb_elem_page_min, nb_elem_page_max = determine_nb_elem_page(
-        shops, formats, num_page
+        data["shops"], data["formats"], data["num_page"]
     )
     print(f"nb_elem_page_min: {nb_elem_page_min}")
     print(f"nb_elem_page_max: {nb_elem_page_max}")
 
-    print(f"order_by: {top_random}")
-    if top_random == "true":
+    print(f"order_by: {data["top_random"]}")
+    if data["top_random"] == "true":
         full_query = query_vinyls_random()
     else:
         full_query = query_vinyls_filters(
-            shops, formats, nb_elem_page_min, nb_elem_page_max
+            data["shops"], data["formats"], nb_elem_page_min, nb_elem_page_max
         )
 
     df = pd.read_sql(full_query, con=app.config["SQLALCHEMY_DATABASE_URI"])
