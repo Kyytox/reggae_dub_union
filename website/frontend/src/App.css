@@ -31,18 +31,31 @@
 /* Apge content  */
 /* ---------------- */
 
-.main-content-noresults {
-  margin-top: 8rem;
-  margin-left: 13%;
-  font-size: 1.2em;
-}
-
 .main-content {
   /* width: 100%; */
+  width: -webkit-fill-available;
   margin-top: 6rem;
   margin-left: 13%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+@media (max-width: 720px) {
+  .main-content {
+    margin-top: 8rem;
+  }
 }
 
+@media (max-width: 885px) {
+  .main-content {
+    margin-left: 0;
+  }
+}
+@media (min-width: 915px) {
+  .main-content {
+    margin-top: 6rem;
+  }
+}
 .main-content-container {
   display: flex;
   flex-direction: row;
