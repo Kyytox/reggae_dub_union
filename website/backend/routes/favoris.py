@@ -27,7 +27,7 @@ def parse_request(request):
 @app.route("/get_list_favoris/<id_user>", methods=["GET"])
 def get_list_favoris(id_user):
     """
-    Get all favoris from database.
+    Get all favoris from database for a user only with a favoirs table
 
     Returns:
         list: list of favoris
@@ -61,7 +61,7 @@ def get_list_favoris(id_user):
 @app.route("/get_favoris/<id_user>", methods=["GET"])
 def get_favoris(id_user):
     """
-    Get all favoris from database for a user.
+    Get all favoris from database for a user with vinyls and songs.
 
     Returns:
         list: list of favoris

@@ -57,38 +57,18 @@ def determine_nb_elem_page(shops, formats, num_page):
     Returns:
         int: number of elements per page
     """
+    len_shop = len(shops)
+    len_format = len(formats)
 
-    nb_elem_page_base = 25
+    if len_shop == 0 and len_format == 0:
+        nb_elem_page_base = 15
+    elif len_shop == 1 or len_format == 0:
+        nb_elem_page_base = min(100, 50 + ((max(len_shop, len_format)) * 6))
+    elif len_shop == 0 or len_format == 1:
+        nb_elem_page_base = min(100, 30 + ((max(len_shop, len_format))))
+    else:
+        nb_elem_page_base = min(100, 70 + ((len_shop) * (len_format) * 4))
 
-    match (len(shops)):
-        case 0:
-            nb_elem_page_base = 25
-        case 1:
-            nb_elem_page_base = 50
-        case 2:
-            nb_elem_page_base = 75
-        case 3:
-            nb_elem_page_base = 100
-        case 4:
-            nb_elem_page_base = 125
-        case 5:
-            nb_elem_page_base = 150
-
-    match (len(formats)):
-        case 0:
-            nb_elem_page_base = nb_elem_page_base
-        case 1:
-            nb_elem_page_base = int(nb_elem_page_base * 1.5)
-        case 2:
-            nb_elem_page_base = nb_elem_page_base * 2
-        case 3:
-            nb_elem_page_base = int(nb_elem_page_base * 2.5)
-        case 4:
-            nb_elem_page_base = nb_elem_page_base * 3
-        case 5:
-            nb_elem_page_base = int(nb_elem_page_base * 3.5)
-
-    print(f"nb_elem_page_base: {nb_elem_page_base}")
     nb_elem_page_max = num_page * nb_elem_page_base
     nb_elem_page_min = (nb_elem_page_max - nb_elem_page_base) + 1
 
@@ -172,19 +152,6 @@ def query_vinyls_random():
     Returns:
         str: SQL query
     """
-    #
-    # base_query = """
-    #     WITH vinyls_ranked AS (
-    #         SELECT
-    #             v.*,
-    #             ROW_NUMBER() OVER (
-    #                 PARTITION BY v.shop_link_id
-    #                 ORDER BY RANDOM()
-    #             ) AS idx_elem
-    #         FROM public.vinyls v
-    #         LIMIT 200
-    #         """
-    #
     end_query = """
         SELECT
             v.vinyl_id,
@@ -208,10 +175,8 @@ def query_vinyls_random():
         ORDER BY RANDOM()
         LIMIT 100;
         """
-    # full_query = base_query + end_query
-    full_query = end_query
 
-    return full_query
+    return end_query
 
 
 @app.route("/get_vinyls_songs", methods=["GET"])
@@ -228,10 +193,7 @@ def get_vinyls_songs():
     nb_elem_page_min, nb_elem_page_max = determine_nb_elem_page(
         data["shops"], data["formats"], data["num_page"]
     )
-    print(f"nb_elem_page_min: {nb_elem_page_min}")
-    print(f"nb_elem_page_max: {nb_elem_page_max}")
 
-    print(f"order_by: {data["top_random"]}")
     if data["top_random"] == "true":
         full_query = query_vinyls_random()
     else:
