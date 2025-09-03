@@ -4,6 +4,7 @@ import { AuthContext } from "../components/AuthContext";
 import SearchBar from "../components/SearchBar";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
@@ -55,12 +56,19 @@ function Navbar() {
         backgroundColor: "#222222",
         width: "100%",
         display: "flex",
+        flexWrap: { xs: "wrap", md: "nowrap" },
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: { xs: "space-around", md: "space-between" },
         zIndex: 100,
-        padding: { xs: "5px 10px", sm: "5px 20px", md: "5px 30px" },
+        padding: {
+          xs: "5px 10px",
+          sm: "5px 10px",
+          md: "5px 10px",
+          lg: "5px 25px",
+        },
       }}
     >
+      {/*
       <Link
         to="/"
         style={{
@@ -74,7 +82,7 @@ function Navbar() {
           width="50px"
         />
       </Link>
-      {/*<a
+      <a
           href="https://www.facebook.com/association.tunguska/"
           target="_blank"
           style={{
@@ -86,23 +94,34 @@ function Navbar() {
         >
           Created by <br /> Tunguska Sound System
         </a>*/}
+      <Typography
+        variant="h5"
+        component="div"
+        sx={{
+          color: "white",
+          fontWeight: "bold",
+          letterSpacing: ".1rem",
+          textDecoration: "none",
+        }}
+      >
+        <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+          Reggae Dub Union
+        </Link>
+      </Typography>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: { xs: 2, sm: 2, md: 3 },
+          flexWrap: "wrap",
+          gap: { xs: 0, lg: 2 },
         }}
       >
         <Button>
-          <Link to="/" className="hidden sm:inline mr-5">
-            Home
-          </Link>
+          <Link to="/">Home</Link>
         </Button>
         <Button>
-          <Link to="/random" className="hidden sm:inline">
-            Random
-          </Link>
+          <Link to="/random">Random</Link>
         </Button>
 
         {/* Menu items Formats */}

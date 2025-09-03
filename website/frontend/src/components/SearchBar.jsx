@@ -28,7 +28,7 @@ function SearchBar() {
     <Box
       sx={{
         margin: { xs: "0 10px 0 0", sm: "0 20px 0 0", md: "0 25px 0 1px" },
-        width: { xs: "170px", sm: "300px", md: "300px" },
+        width: { xs: "170px", sm: "200px", md: "250px", lg: "300px" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

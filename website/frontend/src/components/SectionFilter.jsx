@@ -34,8 +34,9 @@ function SectionFilter({
 
   return (
     <Box
-      className="container-sectionFilter left-0 fixed"
+      className="container-sectionFilter left-0"
       sx={{
+        position: { xs: "static", md: "fixed" },
         width: { xs: "100%", md: "12%", lg: "12%", xl: "12%" },
         display: "flex",
         flexDirection: "row",
