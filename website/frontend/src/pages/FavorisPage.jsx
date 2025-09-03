@@ -39,10 +39,12 @@ function FavorisPage() {
           shopsMap.set(vinyl.shop_id, {
             shop_id: vinyl.shop_id,
             shop_name: vinyl.shop_name,
+            shop_real_name: vinyl.shop_real_name,
           });
         });
         const shopsArray = Array.from(shopsMap.values());
         setLstShops(shopsArray);
+        console.log("lstShops", shopsArray);
 
         // get all formats from lstVinylsSelected
         const formatsSet = new Set(
@@ -63,7 +65,7 @@ function FavorisPage() {
 
   return (
     <>
-      {lstVinylsSelected.length === 1 ? (
+      {lstVinylsSelected.length === 0 ? (
         <ResultEmpty />
       ) : (
         <Box className="main-content">
@@ -77,10 +79,7 @@ function FavorisPage() {
             setLstFormatsSelected={setLstFormatsSelected}
           />
           <Box className="main-content-container">
-            <HeadPage
-              text={`Search results for "${search}"`}
-              totalVinyls={totalVinyls}
-            />
+            <HeadPage text={`Your Favorites`} totalVinyls={totalVinyls} />
             <SectionPagination
               nbPages={nbPages}
               clickChangePage={clickChangePage}

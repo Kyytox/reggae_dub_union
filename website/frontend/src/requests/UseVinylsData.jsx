@@ -82,16 +82,22 @@ function useVinylsData(
         }
 
         // get favoris from user
-        const data_nb_vinyls = await getAxios("/get_nb_vinyls", data_filters);
-        nbVinylsTotal = data_nb_vinyls.nb_vinyls;
         vinylsSongs = await getAxiosAuth("/get_favoris", idUser);
         const favoris = vinylsSongs.favoris || [];
-        setLstFavoris(favoris);
-
+        console.log("favoris", favoris);
         if (vinylsSongs.error) {
           logout();
           navigate("/login");
         }
+
+        if (favoris.length === 0) {
+          nbVinylsTotal = 0;
+        } else {
+          nbVinylsTotal = favoris.length;
+        }
+        console.log("nbVinylsTotal", nbVinylsTotal);
+
+        setLstFavoris(favoris);
       } else if (apiEndpoint.includes("uniqueShop")) {
         //
         // prepare data
@@ -157,7 +163,11 @@ function useVinylsData(
       setLstSongsSelected(initialSongs);
 
       // Calculate number of pages
-      setNbPages(Math.ceil(nbVinylsTotal / vinyls.length));
+      if (nbVinylsTotal === 0) {
+        setNbPages(1);
+      } else {
+        setNbPages(Math.ceil(nbVinylsTotal / vinyls.length));
+      }
 
       // Check if all vinyls are selected
       if (parseInt(vinyls.length, 10) <= nbVinyls) {
@@ -211,6 +221,8 @@ function useVinylsData(
       setTopLoadMore(true);
     }
   };
+  console.log("lstVinylsSelected", lstVinylsSelected.length);
+  console.log("totalVinyls", totalVinyls);
 
   return {
     lstVinylsSelected,
