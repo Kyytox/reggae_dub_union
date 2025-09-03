@@ -25,7 +25,7 @@ function UniqueFormatPage() {
       const shopDetails = await getAxios(`/get_shops_by_format/${formatName}`);
       //
       setLstShops(shopDetails);
-      setLstShopsSelected(shopDetails.map((shop) => shop));
+      // setLstShopsSelected(shopDetails.map((shop) => shop));
     } catch (error) {
       console.error("Error fetching shop data:", error);
       setLstShops([]);
@@ -53,7 +53,11 @@ function UniqueFormatPage() {
     clickApplyFilters,
     nbPages,
     totalVinyls,
-  } = useVinylsData("uniqueFormat/" + formatName);
+  } = useVinylsData(
+    "uniqueFormat/" + formatName,
+    lstShopsSelected,
+    lstFormatsSelected,
+  );
 
   return (
     <>
