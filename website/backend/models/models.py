@@ -288,6 +288,7 @@ class Favori(db.Model):
                     "favori_id": favori.favori_id,
                     "shop_id": vinyl.shop_id,
                     "shop_name": shop.shop_name,
+                    "shop_real_name": shop.shop_real_name,
                     "vinyl_id": favori.vinyl_id,
                     "vinyl_title": vinyl.vinyl_title,
                     "vinyl_image": vinyl.vinyl_image,
