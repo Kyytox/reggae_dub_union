@@ -1,7 +1,5 @@
 from google.cloud import storage
 
-from airflow.models import Variable
-
 
 def upload_blob(bucket_name, df, destination_blob_name):
     """

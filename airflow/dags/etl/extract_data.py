@@ -12,7 +12,8 @@ import httpx
 from selectolax.parser import HTMLParser
 
 
-from airflow.sdk import Variable
+# from airflow.sdk import Variable
+from airflow import models
 
 from utils.db_connect import db_connect_postgres
 from utils.db_process import get_shop_infos
@@ -48,7 +49,7 @@ def get_max_pages_to_scrap(df: pd.DataFrame, vinyl_reference: str) -> int:
         vinyl_reference (str): Vinyl reference to check
 
     Returns:
-        int: Maximum number of pages to scrap
+        int: Maximum number of pages to scraP
     """
     if vinyl_reference is not None:
         return df["shop_nb_min_pages"].iloc[0]
@@ -161,7 +162,7 @@ def scrap_jahwaggysrecords(name_shop: str, conn_id: str, bucket_name: str) -> No
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -243,7 +244,7 @@ def scrap_jahwaggysrecords(name_shop: str, conn_id: str, bucket_name: str) -> No
                 if dict_data["vinyl_reference"] == vinyl_reference:
                     top_break = True
                     print(
-                        f"Data already exists for { dict_data["vinyl_reference"] }. Stop scrapping."
+                        f"Data already exists for {dict_data['vinyl_reference']}. Stop scrapping."
                     )
                     break
 
@@ -251,7 +252,7 @@ def scrap_jahwaggysrecords(name_shop: str, conn_id: str, bucket_name: str) -> No
                 lst_audio = html_vinyl.css_first("div#mp3player")
 
                 if not lst_audio:
-                    print(f"No audio found for {dict_data["vinyl_title"]}")
+                    print(f"No audio found for {dict_data['vinyl_title']}")
                     continue
 
                 # Get mp3 Titles
@@ -299,7 +300,7 @@ def scrap_onlyrootsreggae(name_shop: str, conn_id: str, bucket_name: str) -> Non
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -436,7 +437,7 @@ def scrap_controltower(name_shop: str, conn_id: str, bucket_name: str) -> None:
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -552,7 +553,7 @@ def scrap_reggaefever(name_shop: str, conn_id: str, bucket_name: str) -> None:
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -719,7 +720,7 @@ def scrap_pataterecords(name_shop: str, conn_id: str, bucket_name: str) -> None:
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -878,7 +879,7 @@ def scrap_lionvibes(name_shop: str, conn_id: str, bucket_name: str) -> None:
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -1040,7 +1041,7 @@ def scrap_toolboxrecords(name_shop: str, conn_id: str, bucket_name: str) -> None
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # Get shop infos from DB
@@ -1196,7 +1197,7 @@ def scrap_reggaemuseum(name_shop: str, conn_id: str, bucket_name: str) -> None:
     """
     print(f"Scrapping {name_shop}...")
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
     df_results = pd.DataFrame()
 
     # dict_pages = {

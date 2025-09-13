@@ -13,7 +13,7 @@ from utils.variables import lst_formats_accepted
 
 lst_formats_accepted = ["7", "10", "12", "LP", "TEST PRESS"]
 
-from airflow.sdk import Variable
+from airflow import models
 
 
 def update_format(df: pd.DataFrame) -> pd.DataFrame:
@@ -108,7 +108,7 @@ def transform_data(bucket_name: str) -> None:
 
     df = pd.DataFrame()
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
 
     # Get the list of files with prefix
     prefix = f"extract_{time_file_name}/"

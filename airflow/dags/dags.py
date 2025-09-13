@@ -1,20 +1,21 @@
 import pandas as pd
 from datetime import datetime, timedelta
 
-from airflow.sdk import Variable, DAG, task, task_group, get_current_context
+
+from airflow import models
 from airflow.utils.task_group import TaskGroup
-from airflow.models.param import Param
 
 # Operators
-# from airflow.providers.standard.operators.bash import BashOperator
 from airflow.providers.standard.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
-
-
-from utils.variables import (
-    BUCKET_NAME,
-    CONNECTION_DB,
+from airflow.providers.google.cloud.operators.cloud_sql import (
+    CloudSQLCreateInstanceDatabaseOperator,
+    CloudSQLCreateInstanceOperator,
+    CloudSQLDeleteInstanceOperator,
+    CloudSQLExecuteQueryOperator,
 )
+
 
 from etl.extract_data import (
     scrap_jahwaggysrecords,
@@ -46,7 +47,7 @@ default_args = {
 }
 
 
-with DAG(
+with models.DAG(
     dag_id="init_database",
     default_args=default_args,
     description="DAG for initializing the database",
@@ -63,23 +64,23 @@ with DAG(
     - Insert data in the shops table
     """
 
+    conn_id = models.Variable.get("CONN_ID")
+
     init_db = SQLExecuteQueryOperator(
         task_id="init_db",
-        conn_id="con_reggae_dub_union_db",
+        conn_id=conn_id,
         sql="sql/sql_init.sql",
     )
     insert_shops = SQLExecuteQueryOperator(
         task_id="insert_shops",
-        conn_id="con_reggae_dub_union_db",
+        conn_id=conn_id,
         sql="sql/insert_shops.sql",
     )
 
     init_db >> insert_shops
 
-    # init_db
 
-
-with DAG(
+with models.DAG(
     dag_id="dump_database",
     default_args=default_args,
     description="DAG for dumping the database",
@@ -93,17 +94,18 @@ with DAG(
 
     - Delete Tables in the database
     """
+    conn_id = models.Variable.get("CONN_ID")
 
     delete_db = SQLExecuteQueryOperator(
         task_id="dump_db",
-        conn_id="con_reggae_dub_union_db",
+        conn_id=conn_id,
         sql="sql/dump_db.sql",
     )
 
     delete_db
 
 
-with DAG(
+with models.DAG(
     dag_id="etl_vinyls_from_shops",
     default_args=default_args,
     description="DAG for Extracting, Transforming and Loading vinyls from shops",
@@ -133,27 +135,21 @@ with DAG(
 
     ### Load
     - Load transformed data in Cloud SQL
-
     """
 
     def init_variables(**context):
         """
-        Initialize and set Airflow Variables for the DAG.
+        Initialize and set Airflow models.Variables for the DAG.
 
-        This function sets the connection ID and bucket name as Airflow Variables.
+        This function sets the connection ID and bucket name as Airflow models.Variables.
         """
         print(context["params"])
         if context["params"]["param_time_file_name"] is not None:
             time_file_name = context["params"]["param_time_file_name"]
         else:
             time_file_name = datetime.now().strftime("%Y%m%d_%H%M")
-            # time_file_name = "data_base"
-            # time_file_name = "20250818_2252"
-            # time_file_name = "20250823_0021"
-            # time_file_name = "20250827_2125"
-            # time_file_name = "20250831_2135"
 
-        Variable.set("time_file_name", time_file_name)
+        models.Variable.set("time_file_name", time_file_name)
 
     def get_shop_list(conn_id: str):
         """
@@ -172,6 +168,7 @@ with DAG(
         # Check if Table shops exists
         query = "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'shops');"
         result = pd.read_sql(query, conn).iloc[0, 0]
+        print(f"Table shops exists: {result}")
 
         if not result:
             return pd.DataFrame()
@@ -181,8 +178,8 @@ with DAG(
         conn.close()
         return df
 
-    conn_id = Variable.get("conn_id", default=CONNECTION_DB)
-    bucket_name = Variable.get("bucket_name", default=BUCKET_NAME)
+    conn_id = models.Variable.get("CONN_ID")
+    bucket_name = models.Variable.get("BUCKET_NAME")
 
     #########
     # TASKS
@@ -235,6 +232,3 @@ with DAG(
 
     # Run all scrap tasks
     (tsk_init_variables >> tsk_gp >> tsk_transform_data >> tsk_load_data)
-    # tsk_init_variables >> tsk_transform_data >> tsk_load_data
-    # tsk_init_variables
-    # (tsk_init_variables >> tsk_transform_data)

@@ -3,8 +3,8 @@ from os import path
 import pandas as pd
 
 from airflow.exceptions import AirflowSkipException
-from airflow.sdk import Variable
 
+from airflow import models
 
 from utils.utils_gcp_storage import (
     download_blob_into_memory,
@@ -31,7 +31,7 @@ def load_data_to_db(bucket_name: str, conn_id: str) -> None:
         conn_id (str): Airflow connection ID for the PostgreSQL database.
     """
 
-    time_file_name = Variable.get("time_file_name")
+    time_file_name = models.Variable.get("time_file_name")
 
     # Download the blob into memory
     prefix = f"extract_{time_file_name}/"
