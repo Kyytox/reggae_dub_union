@@ -171,7 +171,6 @@ marshmallow-sqlalchemy==0.28.2
 mdit-py-plugins==0.4.2
 mdurl==0.1.2
 methodtools==0.4.7
-mkl-service==2.4.0
 more-itertools==10.6.0
 msgpack==1.1.1
 multidict==6.1.0
