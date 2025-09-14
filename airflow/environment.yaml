@@ -1,4 +1,4 @@
-name: reg_dub_union
+name: env_reg_dub_airflow
 channels:
   - defaults
 dependencies:

@@ -1,4 +1,4 @@
-name: reg_dub_union_back
+name: env_reg_dub_back
 channels:
   - defaults
 dependencies:
