@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 
 # from flask_migrate import Migrate
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask
 
 from flask_cors import CORS
 from utils.config import config
