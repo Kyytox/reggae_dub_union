@@ -33,14 +33,18 @@ app = create_app("development")
 
 db = SQLAlchemy(app)
 
-# CORS(app, origins=["http://localhost:5173"])
-# cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 CORS(
     app,
-    # supports_credentials=True,
-    # expose_headers="Authorization",
-    # allow_headers=["Authorization", "Content-Type"],
+    origins=["http://localhost:3000", "https://reggaedubunion.fr"],
+    supports_credentials=True,
 )
+# cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+# CORS(
+# app,
+# supports_credentials=True,
+# expose_headers="Authorization",
+# allow_headers=["Authorization", "Content-Type"],
+# )
 
 
 from routes import get_vinyls
@@ -59,4 +63,4 @@ def index():
 
 if __name__ == "__main__":
     print("Starting Flask app...")
-    app.run(host="0.0.0.0", debug=True)
+    app.run(debug=True)
