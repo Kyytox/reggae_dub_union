@@ -2,7 +2,7 @@ from app import app
 from models.models import Shop
 
 
-@app.route("/get_all_shops", methods=["GET"])
+@app.route("/api/get_all_shops", methods=["GET"])
 def get_all_shops():
     """
     Get all shops from database.
