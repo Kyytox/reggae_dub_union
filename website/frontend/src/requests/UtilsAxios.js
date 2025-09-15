@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:5001";
+// const baseURL = "http://localhost:5001";
+const baseURL = "/api";
 
 export async function postAxios(route, data) {
   try {
     const response = await axios.post(`${baseURL}${route}`, {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Credentials": true,
       },
       body: data,
     });
@@ -24,8 +25,8 @@ export async function getAxios(route, data = {}) {
     const response = await axios.get(`${baseURL}${route}`, {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Credentials": true,
       },
       params: data,
     });
