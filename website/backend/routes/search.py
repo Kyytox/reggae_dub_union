@@ -5,7 +5,7 @@ from models.models import Vinyl, Song, Shop
 from utils.libs import format_return_data
 
 
-@app.route("/search/<search>", methods=["GET"])
+@app.route("/api/search/<search>", methods=["GET"])
 def search(search):
     """
     Search for vinyls and songs in the database.

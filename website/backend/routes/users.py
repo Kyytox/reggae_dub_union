@@ -1,7 +1,7 @@
 from app import app
 
 
-@app.route("/users", methods=["GET"])
+@app.route("/api/users", methods=["GET"])
 def get_users():
     """
     Get a list of users.

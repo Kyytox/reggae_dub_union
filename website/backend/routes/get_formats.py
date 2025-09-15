@@ -2,7 +2,7 @@ from app import app
 from models.models import Vinyl
 
 
-@app.route("/get_all_formats", methods=["GET"])
+@app.route("/api/get_all_formats", methods=["GET"])
 def get_all_formats():
     """
     Get all vinyl formats from database.
@@ -19,7 +19,7 @@ def get_all_formats():
     return lst_formats
 
 
-@app.route("/get_formats_by_shop/<int:shop_id>", methods=["GET"])
+@app.route("/api/get_formats_by_shop/<int:shop_id>", methods=["GET"])
 def get_formats_by_shop(shop_id):
     """
     Get a formats from database by shop id.

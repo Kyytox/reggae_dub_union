@@ -17,7 +17,7 @@ from routes.auth_utils import encode_auth_token, decode_auth_token
 from models.models import User
 
 
-@app.route("/signup", methods=["POST"])
+@app.route("/api/signup", methods=["POST"])
 def Signup():
     """
     Signup a new user.
@@ -53,7 +53,7 @@ def Signup():
     return {"id": new_user.user_id, "user": name, "isAuth": True, "token": token}
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def Login():
     """
     Logging in an existing user.

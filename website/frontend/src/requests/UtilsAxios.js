@@ -45,8 +45,8 @@ export async function postAxiosAuth(route, data) {
       {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
+          // "Access-Control-Allow-Origin": "*",
+          // "Access-Control-Allow-Credentials": true,
           Authorization: "Bearer " + sessionStorage.getItem("token"),
         },
       },
@@ -56,13 +56,14 @@ export async function postAxiosAuth(route, data) {
     throw error;
   }
 }
+
 export async function getAxiosAuth(route, id) {
   try {
     const response = await axios.get(`${baseURL}${route}/${id}`, {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Credentials": true,
         Authorization: "Bearer " + sessionStorage.getItem("token"),
       },
     });

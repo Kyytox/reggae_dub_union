@@ -35,7 +35,7 @@ db = SQLAlchemy(app)
 
 CORS(
     app,
-    origins=["http://localhost:3000", "https://reggaedubunion.fr"],
+    origins=["https://reggaedubunion.fr"],
     supports_credentials=True,
 )
 # cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
@@ -56,11 +56,11 @@ from routes import get_formats
 
 
 #
-@app.route("/")
+@app.route("/api/")
 def index():
     return "Hello World!"
 
 
 if __name__ == "__main__":
     print("Starting Flask app...")
-    app.run(debug=True)
+    app.run()

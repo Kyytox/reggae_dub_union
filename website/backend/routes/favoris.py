@@ -24,7 +24,7 @@ def parse_request(request):
     return topAuth
 
 
-@app.route("/get_list_favoris/<id_user>", methods=["GET"])
+@app.route("/api/get_list_favoris/<id_user>", methods=["GET"])
 def get_list_favoris(id_user):
     """
     Get all favoris from database for a user only with a favoirs table
@@ -58,7 +58,7 @@ def get_list_favoris(id_user):
     return data
 
 
-@app.route("/get_favoris/<id_user>", methods=["GET"])
+@app.route("/api/get_favoris/<id_user>", methods=["GET"])
 def get_favoris(id_user):
     """
     Get all favoris from database for a user with vinyls and songs.
@@ -83,7 +83,7 @@ def get_favoris(id_user):
     return data
 
 
-@app.route("/toggle_favori", methods=["POST"])
+@app.route("/api/toggle_favori", methods=["POST"])
 def toggle_favori():
     """
     Toogle a favori to database.

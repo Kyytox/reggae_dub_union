@@ -29,7 +29,7 @@ def extract_request_data(request):
     return data
 
 
-@app.route("/get_nb_vinyls", methods=["GET"])
+@app.route("/api/get_nb_vinyls", methods=["GET"])
 def get_nb_vinyls():
     """
     Get number of vinyls in database.
@@ -179,7 +179,7 @@ def query_vinyls_random():
     return end_query
 
 
-@app.route("/get_vinyls_songs", methods=["GET"])
+@app.route("/api/get_vinyls_songs", methods=["GET"])
 def get_vinyls_songs():
     """
     Get all vinyls and songs from database.

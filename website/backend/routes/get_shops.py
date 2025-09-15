@@ -2,7 +2,7 @@ from app import app
 from models.models import Shop
 
 
-@app.route("/api/get_all_shops", methods=["GET"])
+@app.route("/api/api/get_all_shops", methods=["GET"])
 def get_all_shops():
     """
     Get all shops from database.
@@ -19,7 +19,7 @@ def get_all_shops():
     return lst_shops
 
 
-@app.route("/get_shop_by_id/<int:shop_id>", methods=["GET"])
+@app.route("/api/get_shop_by_id/<int:shop_id>", methods=["GET"])
 def get_shop_by_id(shop_id):
     """
     Get a shop from database by id.
@@ -41,7 +41,7 @@ def get_shop_by_id(shop_id):
     return shop
 
 
-@app.route("/get_shops_by_format/<string:vinyl_format>", methods=["GET"])
+@app.route("/api/get_shops_by_format/<string:vinyl_format>", methods=["GET"])
 def get_shops_by_format(vinyl_format):
     """
     Get shops from database by vinyl format.
