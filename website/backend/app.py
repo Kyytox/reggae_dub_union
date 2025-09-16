@@ -1,50 +1,46 @@
+import os
 from flask_sqlalchemy import SQLAlchemy
 
 # from flask_migrate import Migrate
 from flask import Flask
+from dotenv import load_dotenv
 
 from flask_cors import CORS
-from utils.config import config
 
 
-def create_app(config_mode):
+load_dotenv()
+
+
+def create_app():
     """
     Create and configure an instance of the Flask application.
-
-    Args:
-        config_mode (str): The configuration mode to use.
 
     Returns:
         Flask: The Flask application instance.
     """
     app = Flask(__name__)
 
+    app.config["FLASK_ENV"] = os.environ.get("FLASK_ENV")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
+
     # Initialize the database and migration
     # migrate = Migrate()
-
-    # create and configure the app
-    app.config.from_object(config[config_mode])
     # migrate.init_app(app, db)
 
     return app
 
 
-app = create_app("development")
+# Create the Flask application
+app = create_app()
 
+# Initialize the database
 db = SQLAlchemy(app)
 
 CORS(
     app,
-    origins=["https://reggaedubunion.fr"],
+    origins=["https://reggaedubunion.fr", "http://localhost:5173"],
     supports_credentials=True,
 )
-# cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
-# CORS(
-# app,
-# supports_credentials=True,
-# expose_headers="Authorization",
-# allow_headers=["Authorization", "Content-Type"],
-# )
 
 
 from routes import get_vinyls
@@ -55,12 +51,6 @@ from routes import get_shops
 from routes import get_formats
 
 
-#
 @app.route("/api/")
 def index():
     return "Hello World!"
-
-
-if __name__ == "__main__":
-    print("Starting Flask app...")
-    app.run()
