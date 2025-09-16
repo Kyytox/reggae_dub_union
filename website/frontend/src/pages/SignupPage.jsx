@@ -128,7 +128,7 @@ function SignupPage() {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-content-auth">
       <Box
         sx={{
           display: "flex",
@@ -138,7 +138,6 @@ function SignupPage() {
           padding: "4rem",
           paddingTop: "2rem",
           marginTop: "5rem",
-          // border: "1px solid black",
           borderRadius: "1rem",
           backgroundColor: "#18181b",
         }}

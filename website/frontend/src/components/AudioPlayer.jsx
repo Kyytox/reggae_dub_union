@@ -234,14 +234,12 @@ function AudioPlayer({
                   step={1}
                   onChange={handleSeek}
                   sx={{
-                    "& .MuiSlider-thumb": {
-                      color: "white",
-                    },
                     "& .MuiSlider-rail": {
                       backgroundColor: "#555555",
                     },
                     "& .MuiSlider-thumb": {
                       display: "none", // Hide the thumb
+                      color: "white",
                     },
                   }}
                 />
