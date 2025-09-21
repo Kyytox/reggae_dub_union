@@ -118,23 +118,16 @@ with models.DAG(
 ) as dag:
     dag.doc_md = """
     # DAG for Extracting, Transforming and Loading vinyls from shops
-
-        # df = df.json()
-        # return df
-    ## Tasks
-
-    ### Extract
-    - Collect shops to scrap
-    - Browse shops
-    - Scrap shop
-    - Save data in cloud Storage in parquet format
     
-    ### Transform
-    - Get data from cloud Storage
-    - Transform data
+    ## Parameters
+    - param_time_file_name: Time string to append to file names (format: YYYYMM
 
-    ### Load
-    - Load transformed data in Cloud SQL
+    ## Tasks
+    - Initialize Variables
+    - Extract Data from shops (one task per shop) and save it to GCS
+    - Transform Data
+    - Load Data to Database
+
     """
 
     def init_variables(**context):
