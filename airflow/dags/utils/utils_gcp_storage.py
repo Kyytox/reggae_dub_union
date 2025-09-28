@@ -1,4 +1,5 @@
-from google.cloud import storage
+from airflow import models
+from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
 def upload_blob(bucket_name, df, destination_blob_name):
@@ -11,14 +12,17 @@ def upload_blob(bucket_name, df, destination_blob_name):
         destination_blob_name (str): The name of the blob in the bucket.
     """
 
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
+    # get variables
+    conn_id = models.Variable.get("GCP_STORAGE_CONN")
 
-    generation_match_precondition = 0
-
-    blob.upload_from_string(
-        df.to_csv(), "text/csv", if_generation_match=generation_match_precondition
+    # use GCSHook to upload the file
+    hook = GCSHook(gcp_conn_id=conn_id)
+    hook.upload(
+        bucket_name=bucket_name,
+        object_name=destination_blob_name,
+        data=df.to_csv(),
+        mime_type="text/csv",
+        encoding="utf-8",
     )
 
     print(f"File {destination_blob_name} uploaded to {bucket_name}.")
@@ -35,12 +39,12 @@ def download_blob_into_memory(bucket_name, blob_name):
         bytes: The contents of the blob as bytes.
     """
 
-    storage_client = storage.Client()
+    # get variables
+    conn_id = models.Variable.get("GCP_STORAGE_CONN")
 
-    bucket = storage_client.bucket(bucket_name)
-
-    blob = bucket.blob(blob_name)
-    contents = blob.download_as_bytes()
+    # use GCSHook to download the file
+    hook = GCSHook(gcp_conn_id=conn_id)
+    contents = hook.download(bucket_name=bucket_name, object_name=blob_name)
 
     print(f"Blob {blob_name} downloaded from bucket {bucket_name}.")
 
@@ -55,17 +59,12 @@ def delete_blob(bucket_name, blob_name):
         bucket_name (str): The name of the bucket to delete from.
         blob_name (str): The name of the blob to delete.
     """
+    # get variables
+    conn_id = models.Variable.get("GCP_STORAGE_CONN")
 
-    storage_client = storage.Client()
-
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(blob_name)
-    generation_match_precondition = None
-
-    blob.reload()  # Fetch blob metadata to use in generation_match_precondition.
-    generation_match_precondition = blob.generation
-
-    blob.delete(if_generation_match=generation_match_precondition)
+    # use GCSHook to delete the file
+    hook = GCSHook(gcp_conn_id=conn_id)
+    hook.delete(bucket_name=bucket_name, object_name=blob_name)
 
     print(f"Blob {blob_name} deleted.")
 
@@ -85,19 +84,17 @@ def list_blobs_with_prefix(
 
     doc: https://cloud.google.com/storage/docs/listing-objects?hl=fr&authuser=1#storage-list-objects-python
     """
+    # get variables
+    conn_id = models.Variable.get("GCP_STORAGE_CONN")
 
-    storage_client = storage.Client()
-
-    # List blobs with the specified prefix and delimiter
-    print(f"List blobs in {bucket_name} with '{prefix}' and delimiter '{delimiter}'.")
-    blobs = storage_client.list_blobs(bucket_name, prefix=prefix, delimiter=delimiter)
+    # use GCSHook to list the files
+    hook = GCSHook(gcp_conn_id=conn_id)
+    blobs = hook.list(bucket_name=bucket_name, prefix=prefix)
+    print(f"Blobs: {blobs}")
 
     # Stock the blobs and prefixes
     return [
-        blob.name
+        blob
         for blob in blobs
-        if (
-            blob.name.split("/")[-1].startswith(start_string)
-            and blob.name.endswith(".csv")
-        )
+        if (blob.split("/")[-1].startswith(start_string) and blob.endswith(".csv"))
     ]
