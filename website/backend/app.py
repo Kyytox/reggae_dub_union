@@ -38,10 +38,11 @@ db = SQLAlchemy(app)
 
 CORS(
     app,
-    origins=["https://reggaedubunion.fr", "http://localhost:5173"],
+    resources={
+        r"/api/*": {"origins": ["https://reggaedubunion.fr", "http://localhost:5173"]}
+    },
     supports_credentials=True,
 )
-
 
 from routes import get_vinyls
 from routes import auth
