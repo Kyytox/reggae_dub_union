@@ -121,7 +121,7 @@ function SectionVinyls({
             <Grid key={key}>
               <Card
                 sx={{
-                  width: { xs: 200, sm: 220, md: 240 },
+                  width: { xs: 200, sm: 220, md: 230 },
                   backgroundColor:
                     songPlaying && songPlaying.vinyl_id === vinyl.vinyl_id
                       ? "#3a3a3a"
