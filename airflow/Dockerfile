@@ -17,6 +17,10 @@ RUN conda env create -f environment.yaml \
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x entrypoint.sh
 
+# Copy Credentials GCP
+COPY gcp/gcp_sa_key.json /opt/airflow/gcp/gcp_sa_key.json
+RUN chmod 755 /opt/airflow/gcp/gcp_sa_key.json
+
 # Give airflow ownership of AIRFLOW_HOME
 RUN mkdir -p ${AIRFLOW_HOME}
 RUN chown -R airflow:airflow ${AIRFLOW_HOME}
@@ -33,6 +37,3 @@ EXPOSE 8080
 
 # Execute the entrypoint script
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
-
-# Start the web server
-# CMD ["conda", "run", "-n", "env_reg_dub_airflow", "airflow", "webserver"]
