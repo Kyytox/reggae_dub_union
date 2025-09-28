@@ -29,9 +29,11 @@ services:
       - "5001:5001"
     environment:
       FLASK_ENV: ${FLASK_ENV}
-      DATABASE_URL: postgresql://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
+      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
     depends_on:
       - postgres
+    volumes:
+      - ./website/backend:/app
     networks:
       - reg_dub_union_network
 
@@ -44,6 +46,8 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+    volumes:
+      - ./website/frontend:/app
     networks:
       - reg_dub_union_network
 
@@ -60,7 +64,9 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
 
       # Custom Env
-      AIRFLOW_CONN_REG_DUB_UNION_CONN: postgresql+psycopg2://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/gcp/gcp_sa_key.json
+      AIRFLOW_CONN_REG_DUB_UNION_CONN: postgresql://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
+      AIRFLOW_CONN_GCP_STORAGE_CONN: google-cloud-platform://?keyfile_path=/opt/airflow/gcp/gcp_sa_key.json&project_id=${GCP_PROJECT_ID}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
@@ -89,9 +95,11 @@ services:
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
 
       # Custom Env
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/gcp/gcp_sa_key.json
       AIRFLOW_VAR_BUCKET_NAME: ${AIRFLOW_VAR_BUCKET_NAME}
       AIRFLOW_VAR_CONN_ID: ${AIRFLOW_VAR_CONN_ID}
-      AIRFLOW_CONN_REG_DUB_UNION_CONN: postgresql+psycopg2://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
+      AIRFLOW_CONN_REG_DUB_UNION_CONN: postgresql://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
+      AIRFLOW_CONN_GCP_STORAGE_CONN: google-cloud-platform://?keyfile_path=/opt/airflow/gcp/gcp_sa_key.json&project_id=${GCP_PROJECT_ID}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
