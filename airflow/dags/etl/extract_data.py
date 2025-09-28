@@ -12,7 +12,6 @@ import httpx
 from selectolax.parser import HTMLParser
 
 
-# from airflow.sdk import Variable
 from airflow import models
 
 from utils.db_connect import db_connect_postgres
