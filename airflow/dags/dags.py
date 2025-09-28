@@ -7,8 +7,6 @@ from airflow.utils.task_group import TaskGroup
 
 # Operators
 from airflow.providers.standard.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
-from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.providers.google.cloud.operators.cloud_sql import (
     CloudSQLCreateInstanceDatabaseOperator,
     CloudSQLCreateInstanceOperator,
@@ -48,68 +46,9 @@ default_args = {
 
 
 with models.DAG(
-    dag_id="init_database",
-    default_args=default_args,
-    description="DAG for initializing the database",
-    tags=["database", "initialization"],
-    catchup=False,
-) as dag:
-    dag.doc_md = """
-    # DAG for initializing the database
-
-    ## Tasks
-
-    - Create the connection to the database
-    - Create tables in the database
-    - Insert data in the shops table
-    """
-
-    conn_id = models.Variable.get("CONN_ID")
-
-    init_db = SQLExecuteQueryOperator(
-        task_id="init_db",
-        conn_id=conn_id,
-        sql="sql/sql_init.sql",
-    )
-    insert_shops = SQLExecuteQueryOperator(
-        task_id="insert_shops",
-        conn_id=conn_id,
-        sql="sql/insert_shops.sql",
-    )
-
-    init_db >> insert_shops
-
-
-with models.DAG(
-    dag_id="dump_database",
-    default_args=default_args,
-    description="DAG for dumping the database",
-    tags=["database", "dump"],
-    catchup=False,
-) as dag:
-    dag.doc_md = """
-    # DAG for dumping the database
-
-    ## Tasks
-
-    - Delete Tables in the database
-    """
-    conn_id = models.Variable.get("CONN_ID")
-
-    delete_db = SQLExecuteQueryOperator(
-        task_id="dump_db",
-        conn_id=conn_id,
-        sql="sql/dump_db.sql",
-    )
-
-    delete_db
-
-
-with models.DAG(
     dag_id="etl_vinyls_from_shops",
     default_args=default_args,
     description="DAG for Extracting, Transforming and Loading vinyls from shops",
-    schedule=None,
     tags=["etl"],
     catchup=False,
     params={
