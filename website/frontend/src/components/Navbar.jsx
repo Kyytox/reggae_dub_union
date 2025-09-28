@@ -21,8 +21,8 @@ function Navbar() {
     { name: "Jah Waggys Records", id: 1 },
     { name: "OnlyRoots Reggae", id: 2 },
     { name: "Control Tower Records", id: 3 },
-    { name: "Patate Records", id: 4 },
-    { name: "Lion Vibes", id: 5 },
+    { name: "Patate Records", id: 5 },
+    { name: "Lion Vibes", id: 6 },
   ];
 
   const formats = [
