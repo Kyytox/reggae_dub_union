@@ -107,20 +107,23 @@ function AudioPlayer({
           bottom: 0,
           zIndex: 10,
           width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "nowrap",
-          justifyContent: "start",
-          alignItems: "center",
           padding: "10px",
           color: "white",
+          gap: { xs: 0, md: 2 },
+          backgroundColor: "#191919",
+
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          justifyContent: { xs: "center", md: "left" },
+          flexWrap: { xs: "wrap", md: "nowrap" },
         }}
       >
         <ReactPlayer
           ref={playerRef}
           url={songPlaying ? songPlaying.song_mp3 : null}
           playing={isPlaying}
-          volume={1}
+          volume={0.3}
           width="0px"
           height="0px"
           onEnded={() => {
@@ -133,14 +136,20 @@ function AudioPlayer({
           onProgress={(progress) => setProgress(progress)}
           onDuration={(duration) => setDuration(duration)}
         />
+
         <Box
           className="container-audioPlayer-controls"
           sx={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "end",
+            alignItems: "center",
             gap: 2,
-            marginRight: "20px",
+            width: { xs: "100%", md: "auto" },
+            justifyContent: { xs: "center", md: "flex-start" }, // Align to the left on desktop
+            order: { xs: 3, md: 1 }, // <--- KEY: Controls are first on desktop (1) and last on mobile (3)
+            "& .MuiSvgIcon-root": {
+              fontSize: { xs: "1.5rem", md: "1.8rem" },
+            },
           }}
         >
           <SkipPreviousIcon
@@ -157,6 +166,7 @@ function AudioPlayer({
                 setIsPlaying(false);
               }}
               cursor="pointer"
+              sx={{ fontSize: { xs: "2rem", md: "2.5rem" } }}
             />
           ) : (
             <PlayArrowIcon
@@ -165,6 +175,7 @@ function AudioPlayer({
                 setIsPlaying(true);
               }}
               cursor="pointer"
+              sx={{ fontSize: { xs: "2rem", md: "2.5rem" } }}
             />
           )}
           <SkipNextIcon
@@ -181,75 +192,93 @@ function AudioPlayer({
               playShuffleSong();
             }}
             cursor="pointer"
+            color={isShuffle ? "primary" : "inherit"}
           />
         </Box>
-        <Box
-          className="container-audioPlayer-song-info"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingLeft: "10px",
-            paddingRight: "10px",
-            width: "100%",
-            color: "white",
-          }}
-        >
-          {songPlaying ? (
-            <>
-              <Box display="flex" alignItems="center" flexDirection="column">
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  {songPlaying.vinyl_title}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "13px",
-                    textAlign: "center",
-                  }}
-                >
-                  {songPlaying.song_title}
-                </Typography>
-              </Box>
-              <Box
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-                width="50%"
+
+        {songPlaying ? (
+          <Box
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            width={{ xs: "95%", md: "35%" }} // Increased width for the slider on desktop
+            order={{ xs: 2, md: 2 }} // <--- KEY: Slider is second on both
+            gap={1}
+            sx={{ minWidth: { md: "250px" } }}
+          >
+            <Typography variant="body2">
+              {formatTime(progress.playedSeconds)}
+            </Typography>
+            <Slider
+              aria-label="time-slider"
+              value={progress.played}
+              min={0}
+              max={1}
+              step={0.0001}
+              onChange={handleSeek}
+              sx={{
+                "& .MuiSlider-rail": {
+                  backgroundColor: "#555555",
+                },
+                "& .MuiSlider-thumb": {
+                  display: "block",
+                  color: "white",
+                  width: 12,
+                  height: 12,
+                },
+                flexGrow: 1,
+              }}
+            />
+            <Typography variant="body2">{formatTime(duration)}</Typography>
+          </Box>
+        ) : null}
+
+        {songPlaying ? (
+          <Box
+            className="container-audioPlayer-song-info"
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: { xs: "100%", md: "40%" },
+              justifyContent: { xs: "center", md: "flex-end" },
+              order: { xs: 1, md: 3 },
+              gap: { xs: 1, md: 3 },
+              minWidth: { md: "200px" },
+              "& > .MuiBox-root": {
+                textAlign: { xs: "center", md: "left" }, // Align text to the right on desktop
+              },
+            }}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width={{ xs: "90%", md: "100%" }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
               >
-                <Typography variant="body2" sx={{ mr: 1 }}>
-                  {formatTime(progress.playedSeconds)}
-                </Typography>
-                <Slider
-                  aria-label="time-slider"
-                  value={progress.played}
-                  min={0}
-                  max={1}
-                  step={1}
-                  onChange={handleSeek}
-                  sx={{
-                    "& .MuiSlider-rail": {
-                      backgroundColor: "#555555",
-                    },
-                    "& .MuiSlider-thumb": {
-                      display: "none", // Hide the thumb
-                      color: "white",
-                    },
-                  }}
-                />
-                <Typography variant="body2" sx={{ ml: 1 }}>
-                  {formatTime(duration)}
-                </Typography>
-              </Box>
-            </>
-          ) : null}
-        </Box>
+                {songPlaying.vinyl_title}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "11px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {songPlaying.song_title}
+              </Typography>
+            </Box>
+          </Box>
+        ) : null}
       </Box>
 
       <div className="container-audioPlayer-lstVinyls">
