@@ -10,7 +10,6 @@ def get_all_formats():
     Returns:
         list: list of vinyl formats
     """
-
     lst_formats = Vinyl.get_all_formats()
 
     if not lst_formats:
@@ -30,9 +29,7 @@ def get_formats_by_shop(shop_id):
     Returns:
         dict: formats data
     """
-
     shop = Vinyl.get_formats_by_shop(shop_id)
-    print("shop", shop)
 
     if not shop:
         return {"error": "Shop not found"}, 404

@@ -1,6 +1,7 @@
 import pandas as pd
 from app import app
 from app import db
+from app import logger
 from models.models import Vinyl, Song, Shop
 from utils.libs import format_return_data
 
@@ -20,6 +21,8 @@ def search(search):
     # search = search.strip()
     if not search or len(search) > 100:
         return {"error": "Search term is too short or too long"}
+
+    logger.info(f"Search term: {search}")
 
     try:
         # get vinyls and songs from database with search in title, song title

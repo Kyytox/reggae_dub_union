@@ -11,6 +11,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import app
+from app import logger
 
 # Utils
 from routes.auth_utils import encode_auth_token, decode_auth_token
@@ -22,9 +23,7 @@ def Signup():
     """
     Signup a new user.
     """
-    print("-------------------------------------------")
     body = request.get_json()["body"]
-    print(f"Received body: {body}")
 
     # Get form information.
     name = body["username"]
@@ -50,6 +49,8 @@ def Signup():
     # generate token
     token = encode_auth_token(name)
 
+    logger.info(f"New user created: {name}")
+
     return {"id": new_user.user_id, "user": name, "isAuth": True, "token": token}
 
 
@@ -59,7 +60,6 @@ def Login():
     Logging in an existing user.
     """
     body = request.get_json()["body"]
-    print(f"Received body: {body}")
 
     # Get form information.
     name = body["username"]
@@ -74,9 +74,10 @@ def Login():
         return "User does not exist"
     if not check_password_hash(user.user_password, password):
         return "Password is incorrect"
-    print(user.user_id)
 
     # generate token
     token = encode_auth_token(name)
+
+    logger.info(f"User logged in: {name}")
 
     return {"id": user.user_id, "user": name, "isAuth": True, "token": token}
