@@ -36,14 +36,13 @@ function SectionFilter({
     <Box
       className="container-sectionFilter left-0"
       sx={{
-        position: { xs: "static", md: "fixed" },
-        width: { xs: "100%", md: "12%", lg: "12%", xl: "12%" },
+        marginBottom: { xs: "45px", md: "50px" },
         display: "flex",
         flexDirection: "row",
-        alignItems: "center",
+        alignItems: "end",
         flexWrap: "wrap",
-        p: 2,
-        ml: 1,
+        pl: 2,
+        ml: 3,
         gap: 3,
       }}
     >

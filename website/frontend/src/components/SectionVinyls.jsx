@@ -111,7 +111,6 @@ function SectionVinyls({
         <Grid
           container
           sx={{
-            // justifyContent: "space-evenly",
             justifyContent: "center",
             alignItems: "flex-start",
             gap: 2,
@@ -121,13 +120,13 @@ function SectionVinyls({
             <Grid key={key}>
               <Card
                 sx={{
-                  width: { xs: 200, sm: 220, md: 230 },
+                  width: { xs: 173, sm: 220, md: 230 },
                   backgroundColor:
                     songPlaying && songPlaying.vinyl_id === vinyl.vinyl_id
                       ? "#3a3a3a"
                       : "#18181b",
                   color: "white",
-                  height: 330,
+                  height: { xs: 355, sm: 330 },
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",

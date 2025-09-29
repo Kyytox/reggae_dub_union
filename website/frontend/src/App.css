@@ -33,24 +33,24 @@
 .main-content {
   width: -webkit-fill-available;
   margin-top: 6rem;
-  margin-left: 13%;
   display: flex;
   flex-direction: column;
+  padding: 0 10px;
 }
-@media (max-width: 720px) {
+@media (max-width: 906px) {
   .main-content {
-    margin-top: 8rem;
+    margin-top: 8.5rem;
+  }
+}
+@media (max-width: 633px) {
+  .main-content {
+    margin-top: 10rem;
   }
 }
 
 @media (max-width: 885px) {
   .main-content {
     margin-left: 0;
-  }
-}
-@media (min-width: 915px) {
-  .main-content {
-    margin-top: 6rem;
   }
 }
 .main-content-container {
