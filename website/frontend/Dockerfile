@@ -18,7 +18,7 @@ RUN npm run build
 # Set Nginx to serve the built application
 # Uncomment the following lines if you want to use Nginx to serve the built files
 FROM nginx:alpine
-COPY --from=0 ./dist /usr/share/nginx/html
+COPY --from=0 /app/dist /usr/share/nginx/html
 
 
 
