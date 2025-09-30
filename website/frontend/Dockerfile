@@ -11,10 +11,22 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
-# RUN npm run build
+
+# Build the application
+RUN npm run build
+
+# Set Nginx to serve the built application
+# Uncomment the following lines if you want to use Nginx to serve the built files
+FROM nginx:alpine
+COPY --from=0 /dist /usr/share/nginx/html
+
+
 
 # Expose the port the app runs on
-EXPOSE 5173
+EXPOSE 80
 
 # Command to run the application
-CMD ["npm", "run", "dev", "--", "--host=0.0.0.0"]
+# CMD ["npm", "run", "dev", "--", "--host=0.0.0.0"]
+
+# Use the following command if using Nginx
+CMD ["nginx", "-g", "daemon off;"]
