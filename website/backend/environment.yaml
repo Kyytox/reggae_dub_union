@@ -65,6 +65,7 @@ dependencies:
   - xz=5.6.4=h5eee18b_1
   - zlib=1.2.13=h5eee18b_1
   - pip:
+      - gunicorn==23.0.0
       - cffi==1.17.1
       - cryptography==45.0.6
       - flask-cors==6.0.1
