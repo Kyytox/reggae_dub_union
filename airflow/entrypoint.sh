@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# wait for Postgres to be ready
-# while ! nc -z postgres 5433; do
-# 	sleep 1
-# done
-
 # Activate conda environment
 source /opt/conda/bin/activate env_reg_dub_airflow
 
@@ -14,12 +9,12 @@ airflow db upgrade
 
 # Create admin user if not exists
 airflow users create \
-	--username admin \
+	--username ${AIRFLOW_USERNAME} \
 	--firstname Admin \
 	--lastname User \
 	--role Admin \
 	--email admin@example.com \
-	--password admin ||
+	--password ${AIRFLOW_PASSWORD} ||
 	true # Ignore error if user already exists
 
 # Start Service according to the command line in the docker-compose file
