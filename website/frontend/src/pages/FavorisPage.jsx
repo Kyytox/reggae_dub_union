@@ -44,7 +44,6 @@ function FavorisPage() {
         });
         const shopsArray = Array.from(shopsMap.values());
         setLstShops(shopsArray);
-        console.log("lstShops", shopsArray);
 
         // get all formats from lstVinylsSelected
         const formatsSet = new Set(

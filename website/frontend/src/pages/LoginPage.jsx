@@ -39,7 +39,6 @@ function LoginPage() {
     event.preventDefault();
   };
 
-  // TODO: Add form validation
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -72,7 +71,6 @@ function LoginPage() {
 
       try {
         const response = await postAxios("/login", data);
-        console.log(response);
 
         if (response.isAuth === true) {
           login(response.id, response.token);

@@ -72,7 +72,6 @@ function useVinylsData(
           false,
           endpointValue,
         );
-        console.log("data_filters", data_filters);
         const data_nb_vinyls = await getAxios("/get_nb_vinyls", data_filters);
         nbVinylsTotal = data_nb_vinyls.nb_vinyls;
         vinylsSongs = await getAxios("/search/" + endpointValue);
@@ -84,7 +83,6 @@ function useVinylsData(
         // get favoris from user
         vinylsSongs = await getAxiosAuth("/get_favoris", idUser);
         const favoris = vinylsSongs.favoris || [];
-        console.log("favoris", favoris);
         if (vinylsSongs.error) {
           logout();
           navigate("/login");
@@ -95,7 +93,6 @@ function useVinylsData(
         } else {
           nbVinylsTotal = favoris.length;
         }
-        console.log("nbVinylsTotal", nbVinylsTotal);
 
         setLstFavoris(favoris);
       } else if (apiEndpoint.includes("uniqueShop")) {
@@ -221,8 +218,6 @@ function useVinylsData(
       setTopLoadMore(true);
     }
   };
-  console.log("lstVinylsSelected", lstVinylsSelected.length);
-  console.log("totalVinyls", totalVinyls);
 
   return {
     lstVinylsSelected,
