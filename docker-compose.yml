@@ -45,8 +45,8 @@ services:
     build:
       context: ./website/frontend
       dockerfile: Dockerfile
-    # ports:
-    # - "5173:5173"
+    ports:
+      - "5173:80"
     depends_on:
       - backend
     volumes:
@@ -122,19 +122,6 @@ services:
     networks:
       - reg_dub_union_network
     command: "webserver --host=0.0.0.0"
-
-  nginx:
-    container_name: reg_dub_union_nginx
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - reg_dub_union_network
 
 volumes:
   reg_dub_union_data:
