@@ -42,6 +42,7 @@ def search(search):
                 Song.song_title,
                 Song.song_mp3,
                 Shop.shop_name,
+                Shop.shop_real_name,
             )
             .outerjoin(Song, Song.vinyl_id == Vinyl.vinyl_id)
             .outerjoin(Shop, Vinyl.shop_id == Shop.shop_id)
@@ -69,6 +70,7 @@ def search(search):
             song_title,
             song_mp3,
             shop_name,
+            shop_real_name,
         ) in req:
             result.append(
                 {
@@ -86,6 +88,7 @@ def search(search):
                     "song_title": song_title,
                     "song_mp3": song_mp3,
                     "shop_name": shop_name,
+                    "shop_real_name": shop_real_name,
                 }
             )
 
@@ -96,5 +99,5 @@ def search(search):
         data = format_return_data(df)
         return data
     except Exception as e:
-        print(f"Error during search: {e}")
+        logger.error(f"Error during search: {e}")
         return {"error": "An error occurred during the search. Please try again later."}
