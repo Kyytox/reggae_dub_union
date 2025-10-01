@@ -32,12 +32,12 @@ services:
       SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://${PROJECT_DB_USER}:${PROJECT_DB_PASSWORD}@postgres:5432/${PROJECT_DB_NAME}
     depends_on:
       - postgres
+    ports:
+      - "5001:5001"
     volumes:
       - ./website/backend:/app
     networks:
       - reg_dub_union_network
-    # ports:
-    # - "5001:5001"
 
   # Frontend Vite/ReactJS
   frontend:

@@ -20,8 +20,6 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=0 /app/dist /usr/share/nginx/html
 
-
-
 # Expose the port the app runs on
 EXPOSE 80
 
