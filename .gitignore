@@ -13,7 +13,7 @@ airflow/airflow.cfg
 airflow/airflow-webserver.pid
 airflow/logs/
 
-airflow/gcp/gc_sa_key.json
+airflow/gcp/gcp_sa_key.json
 airflow/configs/vars_env.sh
 config_server.txt
 data/
