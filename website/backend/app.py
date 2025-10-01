@@ -55,7 +55,8 @@ db = SQLAlchemy(app)
 CORS(
     app,
     resources={
-        r"/api/*": {"origins": ["https://reggaedubunion.fr", "http://localhost:5173"]}
+        # r"/api/*": {"origins": ["https://reggaedubunion.fr", "http://localhost:5173"]}
+        r"/api/*": {"origins": ["https://reggaedubunion.fr"]}
     },
     supports_credentials=True,
 )
