@@ -44,6 +44,7 @@ function SearchPage() {
           shopsMap.set(vinyl.shop_id, {
             shop_id: vinyl.shop_id,
             shop_name: vinyl.shop_name,
+            shop_real_name: vinyl.shop_real_name,
           });
         });
         const shopsArray = Array.from(shopsMap.values());
