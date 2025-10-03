@@ -3,7 +3,6 @@ import { AuthContext } from "../components/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getAxiosAuth, getAxios } from "../requests/UtilsAxios";
 
-import ResultEmpty from "../errors/ResultEmpty";
 import PageNotFound from "../errors/PageNotFound";
 
 import "../App.css";
@@ -21,6 +20,7 @@ function useVinylsData(
   const [totalVinyls, setTotalVinyls] = useState(0);
   const [numPage, setNumPage] = useState(1);
   const [nbPages, setNbPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [lstVinyls, setLstVinyls] = useState([]);
   const [lstVinylsSelected, setLstVinylsSelected] = useState([]);
@@ -66,6 +66,7 @@ function useVinylsData(
       } else if (apiEndpoint.includes("search")) {
         //
         // get search results
+        setIsLoading(true);
         const data_filters = prepareDataFilters(
           null,
           null,
@@ -75,6 +76,7 @@ function useVinylsData(
         const data_nb_vinyls = await getAxios("/get_nb_vinyls", data_filters);
         nbVinylsTotal = data_nb_vinyls.nb_vinyls;
         vinylsSongs = await getAxios("/search/" + endpointValue);
+        setIsLoading(false);
       } else if (apiEndpoint === "favoris") {
         if (!isLoggedIn) {
           navigate("/login");
@@ -230,6 +232,7 @@ function useVinylsData(
     clickApplyFilters: clickApplyFilters,
     nbPages,
     totalVinyls,
+    isLoading,
   };
 }
 

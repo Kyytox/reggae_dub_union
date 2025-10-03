@@ -33,6 +33,7 @@ function SearchPage() {
     clickApplyFilters,
     nbPages,
     totalVinyls,
+    isLoading,
   } = useVinylsData(`search/${search}`, lstShopsSelected, lstFormatsSelected);
 
   const fetchDataSearch = async () => {
@@ -63,16 +64,13 @@ function SearchPage() {
   };
 
   useEffect(() => {
-    console.log("UseEffect SearchPage");
     fetchDataSearch();
-  }, [lstVinylsSelected]);
+  }, [lstVinylsSelected, search]);
 
   return (
     <>
       {lstVinylsSelected.length === 0 ? (
-        <>
-          <ResultEmpty />
-        </>
+        <>{isLoading ? null : <ResultEmpty />}</>
       ) : (
         <Box className="main-content">
           <SectionFilter
