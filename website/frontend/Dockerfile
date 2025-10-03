@@ -1,4 +1,4 @@
-FROM node:current-alpine3.22
+FROM node:current-alpine3.22 as build
 
 # Set the working directory
 WORKDIR /app
@@ -18,7 +18,7 @@ RUN npm run build
 # Set Nginx to serve the built application
 # Uncomment the following lines if you want to use Nginx to serve the built files
 FROM nginx:alpine
-COPY --from=0 /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose the port the app runs on
 EXPOSE 80
