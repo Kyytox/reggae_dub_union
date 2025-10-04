@@ -49,8 +49,8 @@ services:
       - "5173:80"
     depends_on:
       - backend
-    volumes:
-      - ./website/frontend:/app
+    # volumes:
+    # - ./website/frontend:/app
     networks:
       - reg_dub_union_network
 
